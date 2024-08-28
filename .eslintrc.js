@@ -14,7 +14,8 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
   ],
   rules: {
-    singlequote: false,
+    singlequote: 0,
+    "prettier/prettier": ["error", { endOfLine: "auto" }],
     "linebreak-style": 0,
     "import/prefer-default-export": 0,
     "import/extensions": 0,
