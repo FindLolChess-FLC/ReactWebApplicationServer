@@ -18,6 +18,7 @@ module.exports = {
     "prettier/prettier": ["error", { endOfLine: "auto" }],
     "linebreak-style": 0,
     "import/prefer-default-export": 0,
+    "react/require-default-props": 0,
     "import/extensions": 0,
     "no-use-before-define": 0,
     "import/no-unresolved": 0,
@@ -31,6 +32,7 @@ module.exports = {
     ],
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
+    "react/jsx-props-no-spreading": 0,
   },
   settings: {
     "import/resolver": {
