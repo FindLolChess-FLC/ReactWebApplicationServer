@@ -5,8 +5,8 @@ export default function useNumberInput() {
   const schema = yup.object().shape({
     emailNumber: yup
       .number()
-      .min(1, "인증번호는 4자 입니다.")
-      .max(4, "인증번호는 4자 입니다.")
+      .min(1111, "인증번호는 4자 입니다.")
+      .max(9999, "인증번호는 4자 입니다.")
       .required("숫자을 입력해주세요."),
   });
   return schema;

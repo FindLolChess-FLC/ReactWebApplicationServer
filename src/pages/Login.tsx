@@ -27,9 +27,9 @@ export default function Login() {
           labelname="아이디"
           type="text"
           placeholder="이메일 형식을 맞춰서 입력해주세요."
-          register={register("id")}
+          register={register("email")}
         />
-        {errors.id && <p>{errors.id.message}</p>}
+        {errors.email && <p>{errors.email.message}</p>}
         <InputBox
           inputBox="password"
           labelname="비밀번호"

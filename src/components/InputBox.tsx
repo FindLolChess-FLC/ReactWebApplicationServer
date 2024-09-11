@@ -26,12 +26,12 @@ export default function InputBox({
       <p>{labelname}</p>
       <div>
         <input
-          {...register}
           type={type}
           id={inputBox}
           placeholder={placeholder}
           min={min}
           max={max}
+          {...register}
           readOnly={readOnly}
         />
       </div>

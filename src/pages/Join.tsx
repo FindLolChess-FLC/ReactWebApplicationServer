@@ -4,6 +4,7 @@ import * as yup from "yup";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
 import InputBox from "../components/InputBox";
+import { signupUser } from "../apis/user";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -20,33 +21,32 @@ export default function Join() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(combinedSchema),
-  });
+  } = useForm({ mode: "onBlur", resolver: yupResolver(combinedSchema) });
   // 임시
   const onSubmit = (data: any) => {
     console.log(data);
+    signupUser(data);
   };
   return (
     <div>
       <p>Join</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputBox
-          inputBox="name"
+          inputBox="nickname"
           labelname="새 닉네임"
           type="text"
           placeholder="닉네임을 2글자 이상으로 입력해주세요."
-          register={register("name")}
+          register={register("nickname")}
         />
         <div>
           <InputBox
-            inputBox="id"
+            inputBox="email"
             labelname="새 아이디"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
-            register={register("id")}
+            register={register("email")}
           />
-          {errors.id && <p>{errors.id.message}</p>}
+          {errors.email && <p>{errors.email.message}</p>}
           <button type="button">이메일 확인</button>
           <InputBox
             inputBox="emailNumber"
