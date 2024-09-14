@@ -24,7 +24,6 @@ export default function Join() {
   } = useForm({ mode: "onBlur", resolver: yupResolver(combinedSchema) });
   // 임시
   const onSubmit = (data: any) => {
-    console.log(data);
     signupUser(data);
   };
   return (
@@ -66,6 +65,7 @@ export default function Join() {
         {errors.password && <p>{errors.password.message}</p>}
         <button type="submit">회원가입</button>
       </form>
+      <a href="/">메인으로 돌아가기</a>
     </div>
   );
 }

@@ -6,6 +6,11 @@ type SignupForm = {
   name: string;
 };
 
+type SigninForm = {
+  email: string;
+  password: string;
+};
+
 // 회원가입 URL
 export async function signupUser(userData: SignupForm) {
   try {
@@ -13,16 +18,36 @@ export async function signupUser(userData: SignupForm) {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json",
-        "Corss-origin-Opener-Policy": "unsafe-none",
       }),
       body: JSON.stringify(userData),
     });
-    console.log(response);
     if (!response.ok) {
       // 올바르지 않은 응답 시 전부 error 취급
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
+    return data; // 성공 시 반환 데이터
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; // 에러 발생 시 호출하는 쪽에서 처리
+  }
+}
+
+// 로그인 URL
+export async function signinUser(userData: SigninForm) {
+  try {
+    const response = await fetch(url.concat("signin/"), {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+      body: JSON.stringify(userData),
+    });
+    if (!response.ok) {
+      // 올바르지 않은 응답 시 전부 error 취급
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json(); // response는 promise타입 -> data는 json
     return data; // 성공 시 반환 데이터
   } catch (error) {
     console.error("Error:", error);
