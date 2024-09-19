@@ -13,7 +13,7 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    console.log(getCookie("token"));
+    // console.log(getCookie("token"));
     signoutUser();
     // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
     document.cookie = "token=; max-age=0; path=/;";
