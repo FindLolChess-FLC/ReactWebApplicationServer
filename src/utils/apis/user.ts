@@ -1,3 +1,5 @@
+import getCookie from "../getCookie";
+
 const url = "http://127.0.0.1:8000/user/";
 
 type SignupForm = {
@@ -56,13 +58,13 @@ export async function signinUser(userData: SigninForm) {
 }
 
 // 로그아웃 URL
-export async function signoutUser(userData: SigninForm) {
+export async function signoutUser() {
   try {
     const response = await fetch(url.concat("signout/"), {
       method: "DELETE",
       headers: new Headers({
         "Content-Type": "application/json",
-        Authorization: "Bearer Token",
+        Authorization: `Bearer ${getCookie("token")}`,
       }),
     });
     return response;

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
 import InputBox from "../components/InputBox";
 import { signinUser } from "../utils/apis/user";
+import setCookie from "../utils/setCookie";
 
 export default function Login() {
   // useUserInput에서 input validation schema
@@ -16,13 +17,6 @@ export default function Login() {
   } = useForm({ mode: "onBlur", resolver: yupResolver(loginSchema) });
 
   const navigate = useNavigate();
-
-  // setCookie 함수
-  function setCookie(name: string, value: string, hours: number) {
-    const date = new Date();
-    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; Secure;`;
-  }
 
   async function onSubmit(data: any) {
     const loginData = await signinUser(data);
