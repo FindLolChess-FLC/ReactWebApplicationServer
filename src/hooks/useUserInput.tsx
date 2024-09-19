@@ -3,7 +3,10 @@ import * as yup from "yup"; // yup 전체를 불러오기 위해 * as 별칭 사
 export default function useUserInput() {
   // validation
   const schema = yup.object().shape({
-    nickname: yup.string().min(2, "닉네임을 2글자 이상으로 입력해주세요."),
+    nickname: yup
+      .string()
+      .min(2, "닉네임을 2~12글자로 입력해주세요.")
+      .max(12, "닉네임을 2~12글자로 입력해주세요."),
     email: yup
       .string()
       .email("이메일 형식을 맞춰서 입력해주세요.")

@@ -1,31 +1,43 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
 import InputBox from "../components/InputBox";
-import { signinUser } from "../apis/user";
+import { signinUser } from "../utils/apis/user";
 
 export default function Login() {
   // useUserInput에서 input validation schema
   const loginSchema = useUserInput();
-  // useForm으로 form 관리
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur", resolver: yupResolver(loginSchema) });
-  // 임시
-  const onSubmit = async (data: any) => {
+
+  const navigate = useNavigate();
+
+  // setCookie 함수
+  function setCookie(name: string, value: string, hours: number) {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+    document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/; Secure;`;
+  }
+
+  async function onSubmit(data: any) {
     const loginData = await signinUser(data);
     console.log(loginData.access); // 토큰이 있는 장소
-    document.cookie = `token=${loginData.access}; max-age=86400 httpOnly`; // 24시간 뒤 쿠키 삭제
-  };
+    setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
+    navigate("/");
+  }
+
   return (
     <div>
       <p>Login</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputBox
           inputBox="email"
-          labelname="아이디"
+          labelname="이메일"
           type="text"
           placeholder="이메일 형식을 맞춰서 입력해주세요."
           register={register("email")}
@@ -39,9 +51,9 @@ export default function Login() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">로그인</button>
+        <button type="submit">이메일로 로그인</button>
       </form>
-      <a href="/join">회원가입 하러가기</a>
+      <Link to="/join">회원가입 하기</Link>
     </div>
   );
 }

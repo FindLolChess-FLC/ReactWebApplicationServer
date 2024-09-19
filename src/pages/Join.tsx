@@ -1,10 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
 import InputBox from "../components/InputBox";
-import { signupUser } from "../apis/user";
+import { signupUser } from "../utils/apis/user";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -22,38 +23,43 @@ export default function Join() {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur", resolver: yupResolver(combinedSchema) });
-  // 임시
-  const onSubmit = (data: any) => {
+
+  const navigate = useNavigate();
+
+  function onSubmit(data: any) {
     signupUser(data);
-  };
+    navigate("/login");
+  }
   return (
     <div>
       <p>Join</p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputBox
           inputBox="nickname"
-          labelname="새 닉네임"
+          labelname="닉네임"
           type="text"
-          placeholder="닉네임을 2글자 이상으로 입력해주세요."
+          placeholder="닉네임을 2~12글자로 입력해주세요."
           register={register("nickname")}
         />
         <div>
           <InputBox
             inputBox="email"
-            labelname="새 아이디"
+            labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
             register={register("email")}
           />
-          {errors.email && <p>{errors.email.message}</p>}
-          <button type="button">이메일 확인</button>
+          <button type="button">인증번호</button>
+        </div>
+        {errors.email && <p>{errors.email.message}</p>}
+        <div>
           <InputBox
             inputBox="emailNumber"
-            labelname="인증 번호"
             type="number"
             placeholder="이메일로 받은 인증번호를 입력해주세요."
             register={register("emailNumber")}
           />
+          <button type="button">확인</button>
         </div>
         <InputBox
           inputBox="password"
@@ -63,9 +69,9 @@ export default function Join() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">회원가입</button>
+        <button type="submit">가입하기</button>
       </form>
-      <a href="/">메인으로 돌아가기</a>
+      <Link to="/">메인으로 가기</Link>
     </div>
   );
 }
