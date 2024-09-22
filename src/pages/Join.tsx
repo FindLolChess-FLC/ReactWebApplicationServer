@@ -1,11 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import * as yup from "yup";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
 import InputBox from "../components/InputBox";
-import { signupUser } from "../utils/apis/user";
+import { Api } from "../utils/apis/Api";
+import { JoinForm } from "../types/Join";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -13,10 +13,7 @@ export default function Join() {
   // useUserInput에서 input validation schema
   const joinSchema = useNumberInput();
   // Schema 통합
-  const combinedSchema = yup.object().shape({
-    ...loginSchema.fields, // loginSchema의 필드 추가
-    ...joinSchema.fields, // joinSchema의 필드 추가
-  });
+  const combinedSchema = loginSchema.concat(joinSchema);
   // useForm으로 form 관리
   const {
     register,
@@ -26,8 +23,12 @@ export default function Join() {
 
   const navigate = useNavigate();
 
-  function onSubmit(data: any) {
-    signupUser(data);
+  function onSubmit(data: JoinForm) {
+    Api({
+      data,
+      method: "POST",
+      lastUrl: "user/signup/",
+    });
     navigate("/login");
   }
   return (

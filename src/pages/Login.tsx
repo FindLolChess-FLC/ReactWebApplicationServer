@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
 import InputBox from "../components/InputBox";
-import { signinUser } from "../utils/apis/user";
+import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
+import { LoginForm } from "../types/Login";
 
 export default function Login() {
   // useUserInput에서 input validation schema
@@ -18,8 +19,12 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  async function onSubmit(data: any) {
-    const loginData = await signinUser(data);
+  async function onSubmit(data: LoginForm) {
+    const loginData = await Api({
+      data,
+      method: "POST",
+      lastUrl: "user/signin/",
+    });
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
     navigate("/");
