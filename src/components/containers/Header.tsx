@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getCookie from "../utils/getCookie";
-import { Api } from "../utils/apis/Api";
+import getCookie from "../../utils/getCookie";
+import { Api } from "../../utils/apis/Api";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -25,7 +25,6 @@ export default function Header() {
 
   return (
     <div>
-      <p>header</p>
       <button
         type="button"
         onClick={() => (token === "" ? handleLogin() : handleLogout())}

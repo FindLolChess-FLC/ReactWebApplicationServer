@@ -1,10 +1,10 @@
-import Header from "../components/Header";
+import Header from "../components/containers/Header";
 
 export default function Main() {
   return (
     <div>
-      <p>main</p>
       <header>
+        <h2>Logo</h2>
         <Header />
       </header>
     </div>

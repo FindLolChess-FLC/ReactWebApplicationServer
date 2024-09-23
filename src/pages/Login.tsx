@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
-import InputBox from "../components/InputBox";
+import InputBox from "../components/common/InputBox";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";

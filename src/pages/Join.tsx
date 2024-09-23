@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
-import InputBox from "../components/InputBox";
+import InputBox from "../components/common/InputBox";
 import { Api } from "../utils/apis/Api";
 import { JoinForm } from "../types/Join";
 import checkDuplicate from "../utils/checkDuplicate";
