@@ -21,7 +21,7 @@ export default function Login() {
 
   async function onSubmit(data: LoginForm) {
     const loginData = await Api({
-      data,
+      bodyData: data,
       method: "POST",
       lastUrl: "user/signin/",
     });
@@ -32,7 +32,7 @@ export default function Login() {
 
   return (
     <div>
-      <p>Login</p>
+      <h1>Logo</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputBox
           inputBox="email"

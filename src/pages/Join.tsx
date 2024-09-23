@@ -18,6 +18,7 @@ export default function Join() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({ mode: "onBlur", resolver: yupResolver(combinedSchema) });
 
@@ -25,30 +26,54 @@ export default function Join() {
 
   function onSubmit(data: JoinForm) {
     Api({
-      data,
+      bodyData: data,
       method: "POST",
       lastUrl: "user/signup/",
     });
     navigate("/login");
   }
+
   return (
     <div>
-      <p>Join</p>
+      <h1>회원가입</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputBox
           inputBox="nickname"
           labelname="닉네임"
           type="text"
           placeholder="닉네임을 2~12글자로 입력해주세요."
-          register={register("nickname")}
+          register={register("nickname", {
+            onBlur: async data => {
+              const response = await Api({
+                bodyData: { nickname: data.target.value },
+                method: "POST",
+                lastUrl: "user/nickduplicate/",
+              });
+              if (response.resultcode !== "SUCCESS") {
+                setError("nickname", { message: response });
+              }
+            },
+          })}
         />
+        {errors.nickname && <p>{errors.nickname.message}</p>}
         <div>
           <InputBox
             inputBox="email"
             labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
-            register={register("email")}
+            register={register("email", {
+              onBlur: async data => {
+                const response = await Api({
+                  bodyData: { email: data.target.value },
+                  method: "POST",
+                  lastUrl: "user/emailduplicate/",
+                });
+                if (response.resultcode !== "SUCCESS") {
+                  setError("email", { message: response });
+                }
+              },
+            })}
           />
           <button type="button">인증번호</button>
         </div>

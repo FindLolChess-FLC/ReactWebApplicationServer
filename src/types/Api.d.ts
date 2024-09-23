@@ -1,5 +1,5 @@
 export type ApiForm = {
-  data?: object;
+  bodyData?: object;
   method: "POST" | "PUT" | "PATCH" | "GET" | "DELETE";
   lastUrl: string;
   token?: string;
