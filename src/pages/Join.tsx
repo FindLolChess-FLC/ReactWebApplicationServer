@@ -6,6 +6,7 @@ import useNumberInput from "../hooks/useNumberInput";
 import InputBox from "../components/InputBox";
 import { Api } from "../utils/apis/Api";
 import { JoinForm } from "../types/Join";
+import checkDuplicate from "../utils/checkDuplicate";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -44,10 +45,9 @@ export default function Join() {
           placeholder="닉네임을 2~12글자로 입력해주세요."
           register={register("nickname", {
             onBlur: async data => {
-              const response = await Api({
-                bodyData: { nickname: data.target.value },
-                method: "POST",
-                lastUrl: "user/nickduplicate/",
+              const response = await checkDuplicate({
+                key: "nickname",
+                value: data.target.value,
               });
               if (response.resultcode !== "SUCCESS") {
                 setError("nickname", { message: response });
@@ -64,10 +64,9 @@ export default function Join() {
             placeholder="이메일 형식을 맞춰서 입력해주세요."
             register={register("email", {
               onBlur: async data => {
-                const response = await Api({
-                  bodyData: { email: data.target.value },
-                  method: "POST",
-                  lastUrl: "user/emailduplicate/",
+                const response = await checkDuplicate({
+                  key: "email",
+                  value: data.target.value,
                 });
                 if (response.resultcode !== "SUCCESS") {
                   setError("email", { message: response });
