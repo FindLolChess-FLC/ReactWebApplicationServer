@@ -7,6 +7,8 @@ import InputBox from "../components/common/InputBox";
 import { Api } from "../utils/apis/Api";
 import { JoinForm } from "../types/Join";
 import checkDuplicate from "../utils/checkDuplicate";
+import { VerificationCodeForm } from "../types/VerificationCode";
+import CountDown from "../components/CountDown";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -21,10 +23,14 @@ export default function Join() {
     handleSubmit,
     setError,
     formState: { errors },
+    watch,
   } = useForm({ mode: "onBlur", resolver: yupResolver(combinedSchema) });
 
   const navigate = useNavigate();
+  const codeEmail = watch("email");
+  const codeData = watch("code");
 
+  // 가입하기 버튼 누르면 동작
   function onSubmit(data: JoinForm) {
     Api({
       bodyData: data,
@@ -32,6 +38,23 @@ export default function Join() {
       lastUrl: "user/signup/",
     });
     navigate("/login");
+  }
+
+  // 인증번호 버튼 누르면 동작
+  function handleReceiveVerificationCode() {
+    Api({
+      method: "GET",
+      lastUrl: `user/verification/?email=${codeEmail}`,
+    });
+  }
+
+  // 확인 버튼 누르면 동작
+  function handleSendVerificationCode(data: VerificationCodeForm) {
+    Api({
+      bodyData: data,
+      method: "POST",
+      lastUrl: "user/verification/",
+    });
   }
 
   return (
@@ -44,6 +67,7 @@ export default function Join() {
           type="text"
           placeholder="닉네임을 2~12글자로 입력해주세요."
           register={register("nickname", {
+            // 닉네임 중복 체크
             onBlur: async data => {
               const response = await checkDuplicate({
                 key: "nickname",
@@ -63,6 +87,7 @@ export default function Join() {
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
             register={register("email", {
+              // 이메일 중복 체크
               onBlur: async data => {
                 const response = await checkDuplicate({
                   key: "email",
@@ -74,17 +99,27 @@ export default function Join() {
               },
             })}
           />
-          <button type="button">인증번호</button>
+          <button type="button" onClick={handleReceiveVerificationCode}>
+            인증번호
+          </button>
         </div>
         {errors.email && <p>{errors.email.message}</p>}
         <div>
           <InputBox
-            inputBox="emailNumber"
+            inputBox="code"
             type="number"
             placeholder="이메일로 받은 인증번호를 입력해주세요."
-            register={register("emailNumber")}
+            register={register("code")}
           />
-          <button type="button">확인</button>
+          <CountDown />
+          <button
+            type="button"
+            onClick={() =>
+              handleSendVerificationCode({ email: codeEmail, code: codeData })
+            }
+          >
+            확인
+          </button>
         </div>
         <InputBox
           inputBox="password"
