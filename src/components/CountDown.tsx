@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function CountDown() {
-  const [count, setCount] = useState(180);
+  const countRef = useRef(180);
+  const displayRef = useRef<HTMLDivElement>(null); // 화면상 숫자는 바뀌어야하니 dom 요소에 접근하기 위한 ref
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount(count => count - 1);
-      if (count === 0) {
-        setCount(0);
+      if (countRef.current > 0) {
+        countRef.current -= 1;
+        if (displayRef.current) {
+          displayRef.current.innerText = countRef.current.toString();
+        }
       }
     }, 1000);
 
@@ -16,5 +19,5 @@ export default function CountDown() {
     }, 180 * 1000);
   }, []);
 
-  return <div>{count}</div>;
+  return <div ref={displayRef}>{countRef.current}</div>;
 }
