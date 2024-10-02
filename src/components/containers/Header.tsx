@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import getCookie from "../utils/getCookie";
-import { signoutUser } from "../utils/apis/user";
+import getCookie from "../../utils/getCookie";
+import { Api } from "../../utils/apis/Api";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -13,8 +13,11 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    // console.log(getCookie("token"));
-    signoutUser();
+    console.log(token);
+    Api({
+      method: "DELETE",
+      lastUrl: "user/signout/",
+    });
     // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
     document.cookie = "token=; max-age=0; path=/;";
     setToken(""); // 토큰 상태 초기화
@@ -22,7 +25,6 @@ export default function Header() {
 
   return (
     <div>
-      <p>header</p>
       <button
         type="button"
         onClick={() => (token === "" ? handleLogin() : handleLogout())}
