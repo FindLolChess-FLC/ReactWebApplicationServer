@@ -111,7 +111,7 @@ export default function Join() {
             placeholder="이메일로 받은 인증번호를 입력해주세요."
             register={register("code")}
           />
-          <CountDown />
+          {CountDown(180)}
           <button
             type="button"
             onClick={() =>
