@@ -1,17 +1,37 @@
-export default function toggle(a: any) {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+export default function Toggle({ a }: { a: () => void }) {
+  // 상태 관리: 목록이 보이는지 여부를 결정하는 state
+  const [isOpen, setIsOpen] = useState(false);
+
+  // 토글 함수
+  const handleToggle = () => {
+    setIsOpen(!isOpen); // 상태를 반전시켜 목록을 토글
+  };
+
   return (
-    // update info에서 가져오기
     <div>
-      <button type="button">변지인님 환영합니다.</button>
-      <ul>
-        <li>마이페이지</li>
-        <li>나의 즐겨찾기</li>
-        <li>
-          <button type="button" onClick={a}>
-            로그아웃
-          </button>
-        </li>
-      </ul>
+      {/* 토글 버튼 */}
+      <button type="button" onClick={handleToggle}>
+        변지인님 환영합니다.
+      </button>
+      {/* 상태에 따라 목록 표시 */}
+      {isOpen && (
+        <ul>
+          <li>
+            <Link to="/mypage">마이페이지</Link>
+          </li>
+          <li>
+            <Link to="/favorites">나의 즐겨찾기</Link>
+          </li>
+          <li>
+            <button type="button" onClick={a}>
+              로그아웃
+            </button>
+          </li>
+        </ul>
+      )}
     </div>
   );
 }
