@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getCookie from "../../utils/getCookie";
 import { Api } from "../../utils/apis/Api";
+import Toggle from "./Toggle";
+import logoImg from "../../assets/img/logo.png";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -25,12 +27,17 @@ export default function Header() {
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => (token === "" ? handleLogin() : handleLogout())}
-      >
-        {token === "" ? "로그인" : "로그아웃"}
-      </button>
+      <img src={logoImg} alt="로고 이미지" />
+      {token === "" ? (
+        <button
+          type="button"
+          onClick={() => (token === "" ? handleLogin() : handleLogout())}
+        >
+          로그인
+        </button>
+      ) : (
+        <Toggle a={handleLogout} /> // 로그아웃 시
+      )}
     </div>
   );
 }
