@@ -1,15 +1,4 @@
-import { UseFormRegisterReturn } from "react-hook-form"; // props로 전달 받기 위해 UseFormRegisterReturn 사용
-
-type InputBoxProps = {
-  labelname?: string;
-  register: UseFormRegisterReturn;
-  type: string;
-  inputBox: string;
-  placeholder?: string;
-  min?: number | string;
-  max?: number | string;
-  readOnly?: boolean;
-};
+import { InputBoxProps } from "../../types/Input";
 
 export default function InputBox({
   labelname,

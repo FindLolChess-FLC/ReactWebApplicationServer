@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Join from "./pages/Join";
 import Favorites from "./pages/Favorites";
 import MyPage from "./pages/Mypage";
+import Social from "./pages/Social";
 
 function App() {
   return (
@@ -14,10 +15,11 @@ function App() {
           <Route index element={<Login />} />
           {/* <Route path="login" element={<Google />} /> */}
         </Route>
-        <Route path="join">
-          <Route index element={<Join />} />
-          {/* <Route path="join" element={<Google />} /> */}
+        <Route path="social">
+          <Route index element={<Social />} />
+          {/* <Route path="social" element={<Google />} /> */}
         </Route>
+        <Route path="join" index element={<Join />} />
         <Route path="mypage">
           <Route index element={<MyPage />} />
           {/* <Route element={<Google />} /> */}

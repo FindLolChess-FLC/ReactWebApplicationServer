@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getCookie from "../../utils/getCookie";
 import { Api } from "../../utils/apis/Api";
-import Toggle from "./Toggle";
+import Toggle from "../Toggle";
 import logoImg from "../../assets/img/logo.png";
 
 export default function Header() {

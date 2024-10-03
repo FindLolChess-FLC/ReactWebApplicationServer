@@ -108,7 +108,7 @@ export default function Join() {
           <InputBox
             inputBox="code"
             type="number"
-            placeholder="이메일로 받은 인증번호를 입력해주세요."
+            placeholder="인증번호를 입력해주세요."
             register={register("code")}
           />
           {CountDown(180)}
@@ -123,7 +123,7 @@ export default function Join() {
         </div>
         <InputBox
           inputBox="password"
-          labelname="새 비밀번호"
+          labelname="비밀번호"
           type="text"
           placeholder="비밀번호를 8~16글자로 입력해주세요."
           register={register("password")}
