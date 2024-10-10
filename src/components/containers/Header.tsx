@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getCookie from "../../utils/getCookie";
 import { Api } from "../../utils/apis/Api";
-import Toggle from "./Toggle";
+import Dropdown from "../Dropdown";
 import logoImg from "../../assets/img/logo.png";
 
 export default function Header() {
@@ -36,7 +36,7 @@ export default function Header() {
           로그인
         </button>
       ) : (
-        <Toggle a={handleLogout} /> // 로그아웃 시
+        <Dropdown handleLogout={handleLogout} /> // 로그아웃 시
       )}
     </div>
   );

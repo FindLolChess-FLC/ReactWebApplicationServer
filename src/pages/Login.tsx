@@ -19,7 +19,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  async function onSubmit(data: LoginForm) {
+  const onSubmit = async (data: LoginForm) => {
     const loginData = await Api({
       bodyData: data,
       method: "POST",
@@ -28,7 +28,7 @@ export default function Login() {
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
     navigate("/");
-  }
+  };
 
   return (
     <div>
@@ -52,7 +52,15 @@ export default function Login() {
         {errors.password && <p>{errors.password.message}</p>}
         <button type="submit">이메일로 로그인</button>
       </form>
-      <Link to="/join">회원가입 하기</Link>
+      <div>
+        <p>소셜 로그인하기</p>
+        <button type="button">K</button>
+        <button type="button">N</button>
+        <button type="button">G</button>
+      </div>
+      <span>
+        아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
+      </span>
     </div>
   );
 }
