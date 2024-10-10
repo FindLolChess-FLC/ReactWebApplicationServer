@@ -19,7 +19,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  async function onSubmit(data: LoginForm) {
+  const onSubmit = async (data: LoginForm) => {
     const loginData = await Api({
       bodyData: data,
       method: "POST",
@@ -28,7 +28,7 @@ export default function Login() {
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
     navigate("/");
-  }
+  };
 
   return (
     <div>
@@ -59,7 +59,7 @@ export default function Login() {
         <button type="button">G</button>
       </div>
       <span>
-        아직 FLC 회원이 아니세요? <Link to="/social">회원가입 하기</Link>
+        아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
       </span>
     </div>
   );

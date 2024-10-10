@@ -31,31 +31,31 @@ export default function Join() {
   const codeData = watch("code");
 
   // 가입하기 버튼 누르면 동작
-  function onSubmit(data: JoinForm) {
+  const onSubmit = (data: JoinForm) => {
     Api({
       bodyData: data,
       method: "POST",
       lastUrl: "user/signup/",
     });
     navigate("/login");
-  }
+  };
 
   // 인증번호 버튼 누르면 동작
-  function handleReceiveVerificationCode() {
+  const handleReceiveVerificationCode = () => {
     Api({
       method: "GET",
       lastUrl: `user/verification/?email=${codeEmail}`,
     });
-  }
+  };
 
   // 확인 버튼 누르면 동작
-  function handleSendVerificationCode(data: VerificationCodeForm) {
+  const handleSendVerificationCode = (data: VerificationCodeForm) => {
     Api({
       bodyData: data,
       method: "POST",
       lastUrl: "user/verification/",
     });
-  }
+  };
 
   return (
     <div>

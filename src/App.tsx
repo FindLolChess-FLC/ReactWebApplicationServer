@@ -13,16 +13,15 @@ function App() {
         <Route path="/" index element={<Main />} />
         <Route path="login">
           <Route index element={<Login />} />
-          {/* <Route path="login" element={<Google />} /> */}
         </Route>
-        <Route path="social">
+        <Route path="join">
+          {/* 회원가입 통합페이지 */}
           <Route index element={<Social />} />
-          {/* <Route path="social" element={<Google />} /> */}
+          {/* 이메일 회원가입 */}
+          <Route path="email-join" element={<Join />} />
         </Route>
-        <Route path="join" index element={<Join />} />
         <Route path="mypage">
           <Route index element={<MyPage />} />
-          {/* <Route element={<Google />} /> */}
         </Route>
         <Route path="favorites" index element={<Favorites />} />
       </Routes>

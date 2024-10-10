@@ -14,9 +14,9 @@ export default function SearchBar() {
 
   const [showHelp, setShowHelp] = useState(false);
 
-  function onSubmit(data: SearchForm) {
+  const onSubmit = (data: SearchForm) => {
     console.log(data);
-  }
+  };
 
   const handleHelp = () => {
     if (!watch("search")) {

@@ -11,7 +11,7 @@ export default function Social() {
         <button type="button">Google로 시작하기</button>
       </div>
       <p>또는</p>
-      <Link to="/join">
+      <Link to="/join/email-join">
         <button type="button">이메일로 회원가입</button>
       </Link>
     </div>
