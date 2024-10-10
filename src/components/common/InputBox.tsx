@@ -9,6 +9,7 @@ export default function InputBox({
   min,
   max,
   readOnly,
+  onFocus,
 }: InputBoxProps) {
   return (
     <label htmlFor={inputBox}>
@@ -22,6 +23,7 @@ export default function InputBox({
           max={max}
           {...register}
           readOnly={readOnly}
+          onFocus={onFocus}
         />
       </div>
     </label>

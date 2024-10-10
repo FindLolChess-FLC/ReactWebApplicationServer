@@ -9,4 +9,5 @@ export type InputBoxProps = {
   min?: number | string;
   max?: number | string;
   readOnly?: boolean;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
 };

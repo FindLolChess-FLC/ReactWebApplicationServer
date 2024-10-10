@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import InputBox from "./common/InputBox";
 import searchImg from "../assets/img/search.png";
 
@@ -7,21 +8,51 @@ type SearchForm = {
 };
 
 export default function SearchBar() {
-  const { register, handleSubmit } = useForm<SearchForm>({ mode: "onBlur" });
+  const { register, watch, handleSubmit } = useForm<SearchForm>({
+    mode: "onBlur",
+  });
+
+  const [showHelp, setShowHelp] = useState(false);
+
   function onSubmit(data: SearchForm) {
     console.log(data);
   }
+
+  const handleHelp = () => {
+    if (!watch("search")) {
+      setShowHelp(true);
+    }
+  };
+
   return (
     <div>
-      <img src={searchImg} alt="검색 이미지" />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputBox
-          inputBox="search"
-          type="text"
-          placeholder="Search.."
-          register={register("search")}
-        />
-      </form>
+      <div>
+        <img src={searchImg} alt="검색 이미지" />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <InputBox
+            inputBox="search"
+            type="text"
+            placeholder="Search.."
+            register={register("search", {
+              onBlur: () => {
+                setShowHelp(false);
+              },
+              onChange: data => {
+                if (data) {
+                  setShowHelp(false);
+                }
+              },
+            })}
+            onFocus={handleHelp}
+          />
+        </form>
+      </div>
+      {showHelp && (
+        <ul>
+          <li>여러 키워드로 검색이 필요하면 쉼표로 구분해 보세요.</li>
+          <li>최대 4개의 키워드를 검색할 수 있어요.</li>
+        </ul>
+      )}
     </div>
   );
 }
