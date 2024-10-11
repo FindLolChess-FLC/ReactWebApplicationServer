@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import InputBox from "./common/InputBox";
 import searchImg from "../assets/img/search.png";
+import { Api } from "../utils/apis/Api";
 
 type SearchForm = {
   search: string;
@@ -14,7 +15,13 @@ export default function SearchBar() {
 
   const [showHelp, setShowHelp] = useState(false);
 
+  // 검색버튼 누르면 동작
   const onSubmit = (data: SearchForm) => {
+    Api({
+      bodyData: data,
+      method: "POST",
+      lastUrl: "meta/metasearch/",
+    });
     console.log(data);
   };
 

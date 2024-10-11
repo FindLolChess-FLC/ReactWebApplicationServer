@@ -1,6 +1,5 @@
 import Footer from "../components/containers/Footer";
 import Header from "../components/containers/Header";
-import SearchBar from "../components/SearchBar";
 
 export default function Main() {
   return (
@@ -10,7 +9,6 @@ export default function Main() {
       </header>
       <hr />
       <main>
-        <SearchBar />
         <p>
           시즌 12 &lt; 마법 아수라장 &gt; FIND LOL CHESS 추천메타 top3 (캐러셀)
         </p>
