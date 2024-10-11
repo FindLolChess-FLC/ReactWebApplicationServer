@@ -3,10 +3,7 @@ import { useState } from "react";
 import InputBox from "./common/InputBox";
 import searchImg from "../assets/img/search.png";
 import { Api } from "../utils/apis/Api";
-
-type SearchForm = {
-  search: string;
-};
+import { SearchForm } from "../types/Search";
 
 export default function SearchBar() {
   const { register, watch, handleSubmit } = useForm<SearchForm>({
@@ -17,8 +14,10 @@ export default function SearchBar() {
 
   // 검색버튼 누르면 동작
   const onSubmit = (data: SearchForm) => {
+    console.log(data);
+
     Api({
-      bodyData: data,
+      bodyData: { data: data.search }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
       method: "POST",
       lastUrl: "meta/metasearch/",
     });
