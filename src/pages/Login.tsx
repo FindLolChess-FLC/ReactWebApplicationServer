@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
-import InputBox from "../components/common/InputBox";
+import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";
@@ -34,16 +34,16 @@ export default function Login() {
     <div>
       <h1>Logo</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputBox
-          inputBox="email"
+        <Input
+          input="email"
           labelname="이메일"
           type="text"
           placeholder="이메일 형식을 맞춰서 입력해주세요."
           register={register("email")}
         />
         {errors.email && <p>{errors.email.message}</p>}
-        <InputBox
-          inputBox="password"
+        <Input
+          input="password"
           labelname="비밀번호"
           type="text"
           placeholder="비밀번호를 8~16글자로 입력해주세요."

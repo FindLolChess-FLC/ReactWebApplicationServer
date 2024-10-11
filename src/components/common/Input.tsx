@@ -1,23 +1,23 @@
-import { InputBoxProps } from "../../types/Input";
+import { InputProps } from "../../types/Input";
 
-export default function InputBox({
+export default function Input({
   labelname,
   register,
   type,
-  inputBox,
+  input,
   placeholder,
   min,
   max,
   readOnly,
   onFocus,
-}: InputBoxProps) {
+}: InputProps) {
   return (
-    <label htmlFor={inputBox}>
+    <label htmlFor={input}>
       <p>{labelname}</p>
       <div>
         <input
           type={type}
-          id={inputBox}
+          id={input}
           placeholder={placeholder}
           min={min}
           max={max}
