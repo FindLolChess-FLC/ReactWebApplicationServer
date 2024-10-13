@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
-import InputBox from "../components/common/InputBox";
+import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import { JoinForm } from "../types/Join";
 import checkDuplicate from "../utils/checkDuplicate";
@@ -61,8 +61,8 @@ export default function Join() {
     <div>
       <h1>회원가입</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputBox
-          inputBox="nickname"
+        <Input
+          input="nickname"
           labelname="닉네임"
           type="text"
           placeholder="닉네임을 2~12글자로 입력해주세요."
@@ -81,8 +81,8 @@ export default function Join() {
         />
         {errors.nickname && <p>{errors.nickname.message}</p>}
         <div>
-          <InputBox
-            inputBox="email"
+          <Input
+            input="email"
             labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
@@ -105,8 +105,8 @@ export default function Join() {
         </div>
         {errors.email && <p>{errors.email.message}</p>}
         <div>
-          <InputBox
-            inputBox="code"
+          <Input
+            input="code"
             type="number"
             placeholder="인증번호를 입력해주세요."
             register={register("code")}
@@ -121,10 +121,10 @@ export default function Join() {
             확인
           </button>
         </div>
-        <InputBox
-          inputBox="password"
+        <Input
+          input="password"
           labelname="비밀번호"
-          type="text"
+          type="password"
           placeholder="비밀번호를 8~16글자로 입력해주세요."
           register={register("password")}
         />

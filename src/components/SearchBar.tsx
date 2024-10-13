@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import InputBox from "./common/InputBox";
+import { useNavigate } from "react-router-dom";
+import Input from "./common/Input";
+import { SearchForm } from "../types/Search";
 import searchImg from "../assets/img/search.png";
-
-type SearchForm = {
-  search: string;
-};
 
 export default function SearchBar() {
   const { register, watch, handleSubmit } = useForm<SearchForm>({
@@ -14,8 +12,11 @@ export default function SearchBar() {
 
   const [showHelp, setShowHelp] = useState(false);
 
+  const navigate = useNavigate();
+
+  // 검색버튼 누르면 동작
   const onSubmit = (data: SearchForm) => {
-    console.log(data);
+    navigate("/meta-list/search-list", { state: data.search }); // state : 검색창에 있는 값
   };
 
   const handleHelp = () => {
@@ -29,10 +30,11 @@ export default function SearchBar() {
       <div>
         <img src={searchImg} alt="검색 이미지" />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <InputBox
-            inputBox="search"
+          <Input
+            input="search"
             type="text"
             placeholder="Search.."
+            autoComplete="off"
             register={register("search", {
               onBlur: () => {
                 setShowHelp(false);
