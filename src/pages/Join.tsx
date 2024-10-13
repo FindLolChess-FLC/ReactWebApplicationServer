@@ -124,7 +124,7 @@ export default function Join() {
         <Input
           input="password"
           labelname="비밀번호"
-          type="text"
+          type="password"
           placeholder="비밀번호를 8~16글자로 입력해주세요."
           register={register("password")}
         />

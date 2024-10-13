@@ -34,6 +34,7 @@ export default function SearchBar() {
             input="search"
             type="text"
             placeholder="Search.."
+            autoComplete="off"
             register={register("search", {
               onBlur: () => {
                 setShowHelp(false);

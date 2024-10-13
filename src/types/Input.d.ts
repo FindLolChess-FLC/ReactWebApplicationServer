@@ -6,6 +6,7 @@ export type InputProps = {
   type: string;
   input: string;
   placeholder?: string;
+  autoComplete?: "on" | "off";
   min?: number | string;
   max?: number | string;
   readOnly?: boolean;

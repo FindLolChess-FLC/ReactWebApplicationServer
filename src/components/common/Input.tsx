@@ -6,6 +6,7 @@ export default function Input({
   type,
   input,
   placeholder,
+  autoComplete,
   min,
   max,
   readOnly,
@@ -19,6 +20,7 @@ export default function Input({
           type={type}
           id={input}
           placeholder={placeholder}
+          autoComplete={autoComplete}
           min={min}
           max={max}
           {...register}
