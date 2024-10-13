@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "./common/Input";
-import { Api } from "../utils/apis/Api";
 import { SearchForm } from "../types/Search";
 import searchImg from "../assets/img/search.png";
 
@@ -12,17 +11,12 @@ export default function SearchBar() {
   });
 
   const [showHelp, setShowHelp] = useState(false);
+
   const navigate = useNavigate();
 
   // 검색버튼 누르면 동작
   const onSubmit = (data: SearchForm) => {
-    Api({
-      bodyData: { data: data.search }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
-      method: "POST",
-      lastUrl: "meta/metasearch/",
-    });
-    console.log(data);
-    navigate("/meta-list/search-list");
+    navigate("/meta-list/search-list", { state: data.search }); // state : 검색창에 있는 값
   };
 
   const handleHelp = () => {
