@@ -6,6 +6,7 @@ import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";
+import Button from "../components/common/Button";
 
 export default function Login() {
   // useUserInput에서 input validation schema
@@ -50,7 +51,9 @@ export default function Login() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">이메일로 로그인</button>
+        <Button type="submit" id="login" name="login">
+          이메일로 로그인
+        </Button>
       </form>
       <div>
         <p>소셜 로그인하기</p>

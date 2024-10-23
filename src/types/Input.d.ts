@@ -3,7 +3,7 @@ import { UseFormRegisterReturn } from "react-hook-form"; // props로 전달 받�
 export type InputProps = {
   labelname?: string;
   register: UseFormRegisterReturn;
-  type: string;
+  type: string; // text, password, number 등 다양한 타입
   input: string;
   placeholder?: string;
   autoComplete?: "on" | "off";
