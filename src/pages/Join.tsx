@@ -101,8 +101,10 @@ export default function Join() {
             })}
           />
           <Button
+            width="7.5rem"
+            height="3.5rem"
             type="button"
-            button="verification"
+            id="verification"
             onClick={handleReceiveVerificationCode}
           >
             인증번호
@@ -118,8 +120,10 @@ export default function Join() {
           />
           {CountDown(180)}
           <Button
+            width="7.5rem"
+            height="3.5rem"
             type="button"
-            button="check"
+            id="check"
             onClick={() =>
               handleSendVerificationCode({ email: codeEmail, code: codeData })
             }
@@ -135,7 +139,7 @@ export default function Join() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <Button type="submit" button="join">
+        <Button type="submit" id="join" name="join">
           가입하기
         </Button>
       </form>

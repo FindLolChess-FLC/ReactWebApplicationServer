@@ -1,6 +1,10 @@
 export type ButtonProps = {
+  width?: string;
+  height?: string;
+  bgcolor?: string;
   type: "submit" | "button";
-  button: string;
+  id: string;
+  name?: string;
   disabled?: boolean;
   children?: React.ReactNode;
   onClick?: any;

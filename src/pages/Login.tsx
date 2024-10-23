@@ -51,7 +51,7 @@ export default function Login() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <Button type="submit" button="login">
+        <Button type="submit" id="login" name="login">
           이메일로 로그인
         </Button>
       </form>
