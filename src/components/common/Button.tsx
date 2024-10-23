@@ -18,29 +18,16 @@ const DefaultButton = styled.button`
     props.type === "submit" &&
     css`
       background: linear-gradient(90deg, #9600da 0%, #6200e0 50%, #33b1f5 100%);
-      overflow: hidden;
 
       &:hover {
-        background: #fff; /* 배경을 흰색으로 변경 */
-        color: transparent; /* 글자를 투명하게 */
-        border: 4px solid transparent;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-
-        background-image: linear-gradient(
-          90deg,
-          #9600da 0%,
-          #6200e0 50%,
-          #33b1f5 100%
-        );
-        border-image: linear-gradient(
-          90deg,
-          #9600da 0%,
-          #6200e0 50%,
-          #33b1f5 100%
-        );
-        border-image-slice: 1; /* 그라디언트를 테두리에 적용 */
+        border: 2px solid transparent;
+        border-radius: 8px;
+        background-image: linear-gradient(#fff, #fff),
+          linear-gradient(90deg, #9600da 0%, #6200e0 50%, #33b1f5 100%);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        font-size: 1rem;
+        color: #9600da;
       }
     `}
 `;
