@@ -9,6 +9,7 @@ import { JoinForm } from "../types/Join";
 import checkDuplicate from "../utils/checkDuplicate";
 import { VerificationCodeForm } from "../types/VerificationCode";
 import CountDown from "../components/CountDown";
+import Button from "../components/common/Button";
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -99,9 +100,13 @@ export default function Join() {
               },
             })}
           />
-          <button type="button" onClick={handleReceiveVerificationCode}>
+          <Button
+            type="button"
+            button="verification"
+            onClick={handleReceiveVerificationCode}
+          >
             인증번호
-          </button>
+          </Button>
         </div>
         {errors.email && <p>{errors.email.message}</p>}
         <div>
@@ -112,14 +117,15 @@ export default function Join() {
             register={register("code")}
           />
           {CountDown(180)}
-          <button
+          <Button
             type="button"
+            button="check"
             onClick={() =>
               handleSendVerificationCode({ email: codeEmail, code: codeData })
             }
           >
             확인
-          </button>
+          </Button>
         </div>
         <Input
           input="password"
@@ -129,7 +135,9 @@ export default function Join() {
           register={register("password")}
         />
         {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">가입하기</button>
+        <Button type="submit" button="join">
+          가입하기
+        </Button>
       </form>
       <Link to="/">메인으로 가기</Link>
     </div>
