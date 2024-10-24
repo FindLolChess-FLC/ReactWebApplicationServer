@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
 import { ButtonProps } from "../../types/Button";
 
-const DefaultButton = styled.button<ButtonProps>`
+const StyleButton = styled.button<ButtonProps>`
+  /* 기본 버튼 스타일 */
   width: ${props => props.width || `25.625rem`};
   height: ${props => props.height || `3.75rem`};
   background: ${props => props.bgcolor || `#5144ed`};
@@ -9,11 +10,10 @@ const DefaultButton = styled.button<ButtonProps>`
   color: #fff;
   font-size: 1rem;
 
-  /* 기본 버튼 hover 스타일 */
   &:hover {
     background: #6f63ff;
   }
-
+  /* submit 버튼 스타일 */
   ${props =>
     props.type === "submit" &&
     css`
@@ -31,6 +31,7 @@ const DefaultButton = styled.button<ButtonProps>`
       }
     `}
 
+  /* disabled 스타일 */
   ${props =>
     props.disabled === true &&
     css`
@@ -49,7 +50,7 @@ export default function Button({
   children,
 }: ButtonProps) {
   return (
-    <DefaultButton
+    <StyleButton
       width={width}
       height={height}
       bgcolor={bgcolor}
@@ -60,6 +61,6 @@ export default function Button({
       onClick={onClick}
     >
       {children}
-    </DefaultButton>
+    </StyleButton>
   );
 }

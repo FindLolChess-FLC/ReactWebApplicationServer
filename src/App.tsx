@@ -14,12 +14,12 @@ import Test from "./tests/Test";
 // global styled-component
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  * {
+  *, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-size: 16px;
-    font-family: 'Pretendard', sans-serif;
+    font-family: "Pretendard", sans-serif;
     letter-spacing: -0.048px;
     font-style: normal;
     font-weight: 600;
