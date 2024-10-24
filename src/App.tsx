@@ -27,7 +27,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a{
-    text-decoration: none;
+    color: #356EFF;
+    font-size: 14px;
+    font-weight: 500;
   }
 
   button {
