@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
 import Input from "../components/common/Input";
@@ -10,6 +11,12 @@ import checkDuplicate from "../utils/checkDuplicate";
 import { VerificationCodeForm } from "../types/VerificationCode";
 import CountDown from "../components/CountDown";
 import Button from "../components/common/Button";
+
+const StyleError = styled.p`
+  color: #fe2e00;
+  font-size: 12px;
+  font-weight: 300;
+`;
 
 export default function Join() {
   // useUserInput에서 input validation schema
@@ -63,6 +70,8 @@ export default function Join() {
       <h1>회원가입</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
+          width="28.125rem"
+          height="3.5rem"
           input="nickname"
           labelname="닉네임"
           type="text"
@@ -80,9 +89,11 @@ export default function Join() {
             },
           })}
         />
-        {errors.nickname && <p>{errors.nickname.message}</p>}
+        {errors.nickname && <StyleError>{errors.nickname.message}</StyleError>}
         <div>
           <Input
+            width="20rem"
+            height="3.5rem"
             input="email"
             labelname="이메일"
             type="text"
@@ -110,9 +121,11 @@ export default function Join() {
             인증번호
           </Button>
         </div>
-        {errors.email && <p>{errors.email.message}</p>}
+        {errors.email && <StyleError>{errors.email.message}</StyleError>}
         <div>
           <Input
+            width="20rem"
+            height="3.5rem"
             input="code"
             type="number"
             placeholder="인증번호를 입력해주세요."
@@ -132,14 +145,16 @@ export default function Join() {
           </Button>
         </div>
         <Input
+          width="28.125rem"
+          height="3.5rem"
           input="password"
           labelname="비밀번호"
           type="password"
           placeholder="비밀번호를 8~16글자로 입력해주세요."
           register={register("password")}
         />
-        {errors.password && <p>{errors.password.message}</p>}
-        <Button type="submit" id="join" name="join">
+        {errors.password && <StyleError>{errors.password.message}</StyleError>}
+        <Button width="28.125rem" type="submit" id="join" name="join">
           가입하기
         </Button>
       </form>

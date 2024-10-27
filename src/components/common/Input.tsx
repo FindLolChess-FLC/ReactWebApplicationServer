@@ -5,6 +5,7 @@ import "../../fonts/index.css";
 const StyleTitle = styled.p`
   color: #0d0d0d;
 `;
+
 const StyleInput = styled.input`
   /* 기본 input 스타일 */
   width: ${props => props.width || `25.625rem`};

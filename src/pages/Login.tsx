@@ -1,12 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import useUserInput from "../hooks/useUserInput";
 import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";
 import Button from "../components/common/Button";
+
+const StyleError = styled.p`
+  color: #fe2e00;
+  font-size: 12px;
+  font-weight: 300;
+`;
 
 export default function Login() {
   // useUserInput에서 input validation schema
@@ -42,7 +49,7 @@ export default function Login() {
           placeholder="이메일 형식을 맞춰서 입력해주세요."
           register={register("email")}
         />
-        {errors.email && <p>{errors.email.message}</p>}
+        {errors.email && <StyleError>{errors.email.message}</StyleError>}
         <Input
           input="password"
           labelname="비밀번호"
@@ -50,7 +57,7 @@ export default function Login() {
           placeholder="비밀번호를 8~16글자로 입력해주세요."
           register={register("password")}
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <StyleError>{errors.password.message}</StyleError>}
         <Button type="submit" id="login" name="login">
           이메일로 로그인
         </Button>
