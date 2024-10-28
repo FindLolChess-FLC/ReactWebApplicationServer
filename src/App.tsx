@@ -36,6 +36,16 @@ const GlobalStyle = createGlobalStyle`
     border: none;
     cursor: pointer;
     text-align: center;
+  }
+    
+  // number type input 화살표 없애기
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
   }`;
 
 function App() {
