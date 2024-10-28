@@ -8,15 +8,15 @@ const StyleTitle = styled.p`
 
 const StyleInput = styled.input`
   /* 기본 input 스타일 */
-  width: ${props => props.width || `25.625rem`};
-  height: ${props => props.height || `3.75rem`};
-  border-radius: 4px;
+  width: ${props => props.width || `25.625rem`}; // 410px
+  height: ${props => props.height || `3.75rem`}; // 60px
   border: 1px solid #bfbfbf;
+  border-radius: 4px;
   color: #0d0d0d;
-  font-size: 15px;
+  font-size: 0.9375rem; // 15px
   font-weight: 300;
-  padding: 13px 19px;
-  margin: 4px 0px;
+  padding: 0.8125rem 1.1875rem; // 13px 19px
+  margin: 0.25rem 0; // 4px
 
   &::placeholder {
     color: #888;
@@ -24,19 +24,32 @@ const StyleInput = styled.input`
 
   &:focus {
     border: 2px solid #17171b;
+    outline: none;
   }
+
+  /* input의 box가 사라지는 스타일 */
+  ${props =>
+    props.id === "code" &&
+    css`
+      border: none;
+      outline: none;
+
+      &:focus {
+        border: none;
+      }
+    `}
 
   /* password *(별) 스타일 */
   ${props =>
     props.type === "password" &&
     css`
       font-family: "Asterisk", sans-serif;
-      font-size: 9px;
-      padding-top: 16px;
+      font-size: 0.5625rem; // 9px
+      padding-top: 1rem; // 16px
 
       &::placeholder {
         font-family: "Pretendard", sans-serif;
-        font-size: 15px;
+        font-size: 0.9375rem; // 15px
       }
     `}
 
