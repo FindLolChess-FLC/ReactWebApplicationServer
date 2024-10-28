@@ -12,9 +12,73 @@ import { VerificationCodeForm } from "../types/VerificationCode";
 import CountDown from "../components/CountDown";
 import Button from "../components/common/Button";
 
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem; //14px
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4375rem; // 7px
+`;
+
+const Title = styled.h1`
+  color: #000;
+  text-align: center;
+  font-size: 2.5rem; // 40px
+`;
+
+const InputDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const EmailDiv = styled.div`
+  display: grid;
+  align-items: end;
+  column-gap: 10px;
+  > button {
+    grid-column-start: 2;
+    margin: 0.25rem 0; // 4px
+  }
+`;
+
+const CodeDiv = styled.div`
+  display: grid;
+  align-items: end;
+  column-gap: 10px;
+
+  // grid
+  > button {
+    grid-column-start: 2;
+  }
+`;
+
+const CountDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 20rem;
+  height: 3.5rem;
+  border: 1px solid #bfbfbf;
+  border-radius: 4px;
+
+  &:focus {
+    border: 2px solid #17171b;
+  }
+
+  &:focus-within {
+    border: 2px solid #17171b;
+  }
+`;
+
 const StyleError = styled.p`
   color: #fe2e00;
-  font-size: 12px;
+  font-size: 0.75rem; // 12px
   font-weight: 300;
 `;
 
@@ -66,34 +130,38 @@ export default function Join() {
   };
 
   return (
-    <div>
-      <h1>회원가입</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          width="28.125rem"
-          height="3.5rem"
-          input="nickname"
-          labelname="닉네임"
-          type="text"
-          placeholder="닉네임을 2~12글자로 입력해주세요."
-          register={register("nickname", {
-            // 닉네임 중복 체크
-            onBlur: async data => {
-              const response = await checkDuplicate({
-                key: "nickname",
-                value: data.target.value,
-              });
-              if (response.resultcode !== "SUCCESS") {
-                setError("nickname", { message: response });
-              }
-            },
-          })}
-        />
-        {errors.nickname && <StyleError>{errors.nickname.message}</StyleError>}
-        <div>
+    <Main>
+      <Title>회원가입</Title>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <InputDiv>
           <Input
-            width="20rem"
-            height="3.5rem"
+            width="28.125rem" // 450px
+            height="3.5rem" // 56px
+            input="nickname"
+            labelname="닉네임"
+            type="text"
+            placeholder="닉네임을 2~12글자로 입력해주세요."
+            register={register("nickname", {
+              // 닉네임 중복 체크
+              onBlur: async data => {
+                const response = await checkDuplicate({
+                  key: "nickname",
+                  value: data.target.value,
+                });
+                if (response.resultcode !== "SUCCESS") {
+                  setError("nickname", { message: response });
+                }
+              },
+            })}
+          />
+          {errors.nickname && (
+            <StyleError>{errors.nickname.message}</StyleError>
+          )}
+        </InputDiv>
+        <EmailDiv>
+          <Input
+            width="20rem" // 320px
+            height="3.5rem" // 56px
             input="email"
             labelname="이메일"
             type="text"
@@ -112,29 +180,31 @@ export default function Join() {
             })}
           />
           <Button
-            width="7.5rem"
-            height="3.5rem"
+            width="7.5rem" // 120px
+            height="3.5rem" // 56px
             type="button"
             id="verification"
             onClick={handleReceiveVerificationCode}
           >
             인증번호
           </Button>
-        </div>
-        {errors.email && <StyleError>{errors.email.message}</StyleError>}
-        <div>
-          <Input
-            width="20rem"
-            height="3.5rem"
-            input="code"
-            type="number"
-            placeholder="인증번호를 입력해주세요."
-            register={register("code")}
-          />
-          {CountDown(180)}
+          {errors.email && <StyleError>{errors.email.message}</StyleError>}
+        </EmailDiv>
+        <CodeDiv>
+          <CountDiv tabIndex={0}>
+            <Input
+              width="17rem" // 272px
+              height="3rem" // 48px
+              input="code"
+              type="number"
+              placeholder="인증번호를 입력해주세요."
+              register={register("code")}
+            />
+            {CountDown(180)}
+          </CountDiv>
           <Button
-            width="7.5rem"
-            height="3.5rem"
+            width="7.5rem" // 120px
+            height="3.5rem" // 56px
             type="button"
             id="check"
             onClick={() =>
@@ -143,22 +213,26 @@ export default function Join() {
           >
             확인
           </Button>
-        </div>
-        <Input
-          width="28.125rem"
-          height="3.5rem"
-          input="password"
-          labelname="비밀번호"
-          type="password"
-          placeholder="비밀번호를 8~16글자로 입력해주세요."
-          register={register("password")}
-        />
-        {errors.password && <StyleError>{errors.password.message}</StyleError>}
+        </CodeDiv>
+        <InputDiv>
+          <Input
+            width="28.125rem" // 450px
+            height="3.5rem" // 56px
+            input="password"
+            labelname="비밀번호"
+            type="password"
+            placeholder="비밀번호를 8~16글자로 입력해주세요."
+            register={register("password")}
+          />
+          {errors.password && (
+            <StyleError>{errors.password.message}</StyleError>
+          )}
+        </InputDiv>
         <Button width="28.125rem" type="submit" id="join" name="join">
           가입하기
         </Button>
-      </form>
+      </Form>
       <Link to="/">메인으로 가기</Link>
-    </div>
+    </Main>
   );
 }
