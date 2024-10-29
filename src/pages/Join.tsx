@@ -17,6 +17,8 @@ const Main = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.875rem; //14px
+  height: 100vh;
+  padding: 5rem; // 80px
 `;
 
 const Form = styled.form`
@@ -27,7 +29,7 @@ const Form = styled.form`
 `;
 
 const Title = styled.h1`
-  color: #000;
+  color: #0d0d0d;
   text-align: center;
   font-size: 2.5rem; // 40px
 `;
@@ -40,7 +42,7 @@ const InputDiv = styled.div`
 const EmailDiv = styled.div`
   display: grid;
   align-items: end;
-  column-gap: 10px;
+  column-gap: 0.625rem; // 10px
   > button {
     grid-column-start: 2;
     margin: 0.25rem 0; // 4px
@@ -50,9 +52,7 @@ const EmailDiv = styled.div`
 const CodeDiv = styled.div`
   display: grid;
   align-items: end;
-  column-gap: 10px;
-
-  // grid
+  column-gap: 0.625rem; // 10px
   > button {
     grid-column-start: 2;
   }

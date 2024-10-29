@@ -14,6 +14,11 @@ const Main = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2.875rem; // 46px
+  width: 43.75rem; // 700px
+  height: 100vh;
+  margin: auto;
+  padding: 5rem; // 80px
+  box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
 `;
 
 const Form = styled.form`
