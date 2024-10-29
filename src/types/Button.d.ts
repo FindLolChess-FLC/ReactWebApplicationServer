@@ -7,5 +7,5 @@ export type ButtonProps = {
   name?: string;
   disabled?: boolean;
   children?: React.ReactNode;
-  onClick?: any;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
 };

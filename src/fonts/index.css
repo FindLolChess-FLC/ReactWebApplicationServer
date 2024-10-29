@@ -1,0 +1,9 @@
+@font-face {
+  font-family: "Asterisk";
+  src:
+    url("./asterisk/fontello.ttf") format("ttf"),
+    url("./asterisk/fontello.eot") format("eot"),
+    url("./asterisk/fontello.svg") format("svg"),
+    url("./asterisk/fontello.woff") format("woff"),
+    url("./asterisk/fontello.woff2") format("woff2");
+}

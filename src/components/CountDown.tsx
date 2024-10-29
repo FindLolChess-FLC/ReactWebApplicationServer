@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
+import styled from "styled-components";
 import useTimeFormat from "../hooks/useTimeFormat";
 
 export default function CountDown(n: number) {
+  const CountDiv = styled.div`
+    color: #5144ed;
+    font-weight: 400;
+    font-size: 0.9375rem; // 15px
+  `;
   const countRef = useRef(n);
   const displayRef = useRef<HTMLDivElement>(null); // 화면상 숫자는 바뀌어야하니 dom 요소에 접근하기 위한 ref
 
@@ -20,5 +26,8 @@ export default function CountDown(n: number) {
     }, n * 1000);
   }, []);
 
-  return <div ref={displayRef}>{useTimeFormat(countRef.current)}</div>; // 처음 1번을 위해 여기에도 useTimeFormat을 해줘야함
+  return (
+    // 처음 1번을 위해 여기에도 useTimeFormat을 해줘야함
+    <CountDiv ref={displayRef}>{useTimeFormat(countRef.current)}</CountDiv>
+  );
 }

@@ -14,12 +14,12 @@ import Test from "./tests/Test";
 // global styled-component
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  * {
+  *, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-size: 16px;
-    font-family: 'Pretendard', sans-serif;
+    font-family: "Pretendard", sans-serif;
     letter-spacing: -0.048px;
     font-style: normal;
     font-weight: 600;
@@ -27,13 +27,25 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a{
-    text-decoration: none;
+    color: #356EFF;
+    font-size: 14px;
+    font-weight: 500;
   }
 
   button {
     border: none;
     cursor: pointer;
     text-align: center;
+  }
+    
+  // number type input 화살표 없애기
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
   }`;
 
 function App() {
