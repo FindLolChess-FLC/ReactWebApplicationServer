@@ -18,14 +18,14 @@ const Main = styled.div`
   align-items: center;
   gap: 0.875rem; //14px
   height: 100vh;
-  padding: 5rem; // 80px
+  padding: 7.875rem; // 126px
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4375rem; // 7px
+  gap: 0.875rem; // 14px
 `;
 
 const Title = styled.h1`
@@ -45,7 +45,7 @@ const EmailDiv = styled.div`
   column-gap: 0.625rem; // 10px
   > button {
     grid-column-start: 2;
-    margin: 0.25rem 0; // 4px
+    margin: 0.1875rem 0 0.8125rem 0; // 3px 13px
   }
 `;
 

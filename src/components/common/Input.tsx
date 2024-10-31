@@ -16,7 +16,7 @@ const StyleInput = styled.input`
   font-size: 0.9375rem; // 15px
   font-weight: 300;
   padding: 0.8125rem 1.1875rem; // 13px 19px
-  margin: 0.25rem 0; // 4px
+  margin: 0.1875rem 0 0.8125rem 0; // 3px 13px
 
   &::placeholder {
     color: #888;
@@ -33,6 +33,7 @@ const StyleInput = styled.input`
     css`
       border: none;
       outline: none;
+      margin: 0;
 
       &:focus {
         border: none;

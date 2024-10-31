@@ -17,7 +17,7 @@ const Main = styled.div`
   width: 43.75rem; // 700px
   height: 100vh;
   margin: auto;
-  padding: 5rem; // 80px
+  padding: 7rem; // 112px
   box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
 `;
 
@@ -37,6 +37,12 @@ const Title = styled.h1`
 const InputDiv = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const TextSpan = styled.span`
+  color: #333;
+  font-size: 0.875rem; //14px
+  font-weight: 500;
 `;
 
 const StyleError = styled.p`
@@ -99,16 +105,16 @@ export default function Login() {
         </Button>
       </Form>
       <div>
-        <span>소셜 로그인하기</span>
+        <TextSpan>소셜 로그인하기</TextSpan>
         <div>
           <button type="button">K</button>
           <button type="button">N</button>
           <button type="button">G</button>
         </div>
       </div>
-      <span>
+      <TextSpan>
         아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
-      </span>
+      </TextSpan>
     </Main>
   );
 }

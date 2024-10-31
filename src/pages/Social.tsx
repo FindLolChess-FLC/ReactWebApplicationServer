@@ -6,11 +6,10 @@ export default function Social() {
     display: flex;
     flex-direction: column;
     gap: 6rem; // 96px
-    width: 43.75rem; // 700px
+    width: 25.625rem; // 410px
     height: 100vh;
     margin: auto;
-    padding: 6rem; // 96px
-    box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
+    justify-content: center;
   `;
 
   const Header = styled.header`
