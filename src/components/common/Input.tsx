@@ -53,14 +53,6 @@ const StyleInput = styled.input`
         font-size: 0.9375rem; // 15px
       }
     `}
-
-  /* disabled 스타일 */
-  ${props =>
-    props.disabled === true &&
-    css`
-      border: 1px solid #d4d4d8;
-      background: #d4d4d8;
-    `}
 `;
 export default function Input({
   width,
@@ -74,6 +66,7 @@ export default function Input({
   min,
   max,
   readOnly,
+  disabled,
   onFocus,
 }: InputProps) {
   return (
@@ -91,6 +84,7 @@ export default function Input({
           max={max}
           {...register}
           readOnly={readOnly}
+          disabled={disabled}
           onFocus={onFocus}
         />
       </div>

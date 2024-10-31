@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styled from "styled-components";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
@@ -101,6 +102,9 @@ export default function Join() {
   const navigate = useNavigate();
   const codeEmail = watch("email");
   const codeData = watch("code");
+  const [hidden, useHidden] = useState(false);
+  const success = true;
+  const fail = false;
 
   // 가입하기 버튼 누르면 동작
   const onSubmit = (data: JoinForm) => {
@@ -113,11 +117,16 @@ export default function Join() {
   };
 
   // 인증번호 버튼 누르면 동작
-  const handleReceiveVerificationCode = () => {
-    Api({
+  const handleReceiveVerificationCode = async () => {
+    const getCode = await Api({
       method: "GET",
       lastUrl: `user/verification/?email=${codeEmail}`,
     });
+    // 버튼이 정상작동하면 아래 div가 보임
+    console.log("aaa");
+    if (getCode.resultcode === "SUCCESS") {
+      useHidden(true);
+    }
   };
 
   // 확인 버튼 누르면 동작
@@ -166,6 +175,7 @@ export default function Join() {
             labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
+            disabled={hidden ? success : fail}
             register={register("email", {
               // 이메일 중복 체크
               onBlur: async data => {
@@ -184,36 +194,40 @@ export default function Join() {
             height="3.5rem" // 56px
             type="button"
             id="verification"
-            onClick={handleReceiveVerificationCode}
+            disabled={codeEmail ? fail : success}
+            onClick={() => handleReceiveVerificationCode()}
           >
             인증번호
           </Button>
           {errors.email && <StyleError>{errors.email.message}</StyleError>}
         </EmailDiv>
-        <CodeDiv>
-          <CountDiv tabIndex={0}>
-            <Input
-              width="17rem" // 272px
-              height="3rem" // 48px
-              input="code"
-              type="number"
-              placeholder="인증번호를 입력해주세요."
-              register={register("code")}
-            />
-            {CountDown(180)}
-          </CountDiv>
-          <Button
-            width="7.5rem" // 120px
-            height="3.5rem" // 56px
-            type="button"
-            id="check"
-            onClick={() =>
-              handleSendVerificationCode({ email: codeEmail, code: codeData })
-            }
-          >
-            확인
-          </Button>
-        </CodeDiv>
+        {hidden && (
+          <CodeDiv>
+            <CountDiv tabIndex={0}>
+              <Input
+                width="17rem" // 272px
+                height="3rem" // 48px
+                input="code"
+                type="number"
+                placeholder="인증번호를 입력해주세요."
+                register={register("code")}
+              />
+              <CountDown duration={180} />
+            </CountDiv>
+            <Button
+              width="7.5rem" // 120px
+              height="3.5rem" // 56px
+              type="button"
+              id="check"
+              disabled={codeData ? fail : success}
+              onClick={() =>
+                handleSendVerificationCode({ email: codeEmail, code: codeData })
+              }
+            >
+              확인
+            </Button>
+          </CodeDiv>
+        )}
         <InputDiv>
           <Input
             width="28.125rem" // 450px
