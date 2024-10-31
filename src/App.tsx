@@ -2,6 +2,7 @@ import reset from "styled-reset";
 import { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
+import Loading from "./pages/Loading";
 import MetaList from "./pages/MetaList";
 import SearchList from "./pages/SearchList";
 import Login from "./pages/Login";
@@ -55,6 +56,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" index element={<Main />} />
+          <Route path="/loading" index element={<Loading />} />
           <Route path="/test" index element={<Test />} />
           <Route path="/meta-list">
             {/* 전체 메타 목록 */}
