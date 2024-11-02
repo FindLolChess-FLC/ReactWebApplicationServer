@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
@@ -103,8 +103,20 @@ export default function Join() {
   const codeEmail = watch("email");
   const codeData = watch("code");
   const [hidden, useHidden] = useState(false);
-  const success = true;
-  const fail = false;
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [change, setChange] = useState(false);
+
+  // disabled를 위한 timer 함수
+  const timer = startTime ? (Date.now() - startTime) / 1000 : 0; // 버튼을 누른 시간 - 현재시간을 초단위로 계산 = timer
+
+  useEffect(() => {
+    if (timer > 0 && timer <= 20) {
+      setChange(true);
+    } else if (timer < 1 || timer > 20) {
+      setChange(false);
+      console.log("aaa");
+    }
+  }, [timer]);
 
   // 가입하기 버튼 누르면 동작
   const onSubmit = (data: JoinForm) => {
@@ -123,9 +135,9 @@ export default function Join() {
       lastUrl: `user/verification/?email=${codeEmail}`,
     });
     // 버튼이 정상작동하면 아래 div가 보임
-    console.log("aaa");
     if (getCode.resultcode === "SUCCESS") {
       useHidden(true);
+      setStartTime(Date.now());
     }
   };
 
@@ -175,7 +187,7 @@ export default function Join() {
             labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
-            disabled={hidden ? success : fail}
+            disabled={hidden}
             register={register("email", {
               // 이메일 중복 체크
               onBlur: async data => {
@@ -194,7 +206,7 @@ export default function Join() {
             height="3.5rem" // 56px
             type="button"
             id="verification"
-            disabled={codeEmail ? fail : success}
+            disabled={!codeEmail || change}
             onClick={() => handleReceiveVerificationCode()}
           >
             인증번호
@@ -212,14 +224,14 @@ export default function Join() {
                 placeholder="인증번호를 입력해주세요."
                 register={register("code")}
               />
-              <CountDown duration={180} />
+              <CountDown duration={20} />
             </CountDiv>
             <Button
               width="7.5rem" // 120px
               height="3.5rem" // 56px
               type="button"
               id="check"
-              disabled={codeData ? fail : success}
+              disabled={!codeData}
               onClick={() =>
                 handleSendVerificationCode({ email: codeEmail, code: codeData })
               }
