@@ -102,19 +102,13 @@ export default function Join() {
   const navigate = useNavigate();
   const codeEmail = watch("email");
   const codeData = watch("code");
-  const [hidden, useHidden] = useState(false);
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [change, setChange] = useState(false);
-
-  // disabled를 위한 timer 함수
-  const timer = startTime ? (Date.now() - startTime) / 1000 : 0; // 버튼을 누른 시간 - 현재시간을 초단위로 계산 = timer
+  const [hidden, setHidden] = useState(false); // 인증번호 input을 숨김
+  const [timer, setTimer] = useState(10); // CountDown과 연결되는 시간
+  const [change, setChange] = useState(false); // disabled 여부
 
   useEffect(() => {
-    if (timer > 0 && timer <= 20) {
-      setChange(true);
-    } else if (timer < 1 || timer > 20) {
+    if (timer === 0) {
       setChange(false);
-      console.log("aaa");
     }
   }, [timer]);
 
@@ -136,8 +130,9 @@ export default function Join() {
     });
     // 버튼이 정상작동하면 아래 div가 보임
     if (getCode.resultcode === "SUCCESS") {
-      useHidden(true);
-      setStartTime(Date.now());
+      setHidden(true);
+      setChange(true);
+      setTimer(10);
     }
   };
 
@@ -224,7 +219,7 @@ export default function Join() {
                 placeholder="인증번호를 입력해주세요."
                 register={register("code")}
               />
-              <CountDown duration={20} />
+              <CountDown timer={timer} setTimer={setTimer} />
             </CountDiv>
             <Button
               width="7.5rem" // 120px

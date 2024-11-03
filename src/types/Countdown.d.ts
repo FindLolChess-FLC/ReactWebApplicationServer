@@ -1,3 +1,4 @@
 export type CountDownProps = {
-  duration: number;
+  timer: number;
+  setTimer: React.Dispatch<React.SetStateAction<number>>;
 };
