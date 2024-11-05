@@ -54,6 +54,7 @@ const CodeDiv = styled.div`
   display: grid;
   align-items: end;
   column-gap: 0.625rem; // 10px
+  row-gap: 0.8125rem; // 13px
   > button {
     grid-column-start: 2;
   }
@@ -103,12 +104,14 @@ export default function Join() {
   const codeEmail = watch("email");
   const codeData = watch("code");
   const [hidden, setHidden] = useState(false); // 인증번호 input을 숨김
-  const [timer, setTimer] = useState(10); // CountDown과 연결되는 시간
+  const [timer, setTimer] = useState(180); // CountDown과 연결되는 시간
   const [change, setChange] = useState(false); // disabled 여부
+  const [codeError, setCodeError] = useState(false); // 인증코드 에러 여부
 
   useEffect(() => {
     if (timer === 0) {
       setChange(false);
+      setHidden(false);
     }
   }, [timer]);
 
@@ -132,17 +135,21 @@ export default function Join() {
     if (getCode.resultcode === "SUCCESS") {
       setHidden(true);
       setChange(true);
-      setTimer(10);
+      setTimer(180);
     }
   };
 
   // 확인 버튼 누르면 동작
-  const handleSendVerificationCode = (data: VerificationCodeForm) => {
-    Api({
+  const handleSendVerificationCode = async (data: VerificationCodeForm) => {
+    const postCode = await Api({
       bodyData: data,
       method: "POST",
       lastUrl: "user/verification/",
     });
+    console.log(postCode);
+    if (!postCode.resultcode) {
+      setCodeError(true);
+    }
   };
 
   return (
@@ -206,7 +213,12 @@ export default function Join() {
           >
             인증번호
           </Button>
+          {/* 이메일 입력 조건이 틀릴 때 */}
           {errors.email && <StyleError>{errors.email.message}</StyleError>}
+          {/* 인증번호 시간이 지났을 때 */}
+          {timer === 0 && (
+            <StyleError>인증번호 시간이 지났습니다. 재시도해주세요.</StyleError>
+          )}
         </EmailDiv>
         {hidden && (
           <CodeDiv>
@@ -233,6 +245,9 @@ export default function Join() {
             >
               확인
             </Button>
+            {(errors.code || codeError) && (
+              <StyleError>잘못된 인증 코드 입니다.</StyleError>
+            )}
           </CodeDiv>
         )}
         <InputDiv>
