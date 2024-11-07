@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ImageButtonProps } from "../types/ImageButton";
+import kakaoImg from "../assets/icon/kakao.svg";
+import naverImg from "../assets/icon/naver.svg";
+import googleImg from "../assets/icon/google.svg";
 
 export default function Social() {
   const Body = styled.div`
@@ -73,9 +77,32 @@ export default function Social() {
   const ButtonDiv = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.25rem; // 20px
   `;
 
+  const ImageButton = styled.button<ImageButtonProps>`
+    position: relative;
+    width: 25.625rem; // 410px
+    height: 3.75rem; // 60px
+    background: ${props => props.bgcolor || `#fff`};
+    color: ${props => props.color || `##0d0d0d`};
+    border: ${props => props.border || `none`};
+    border-radius: 8px;
+
+    &:hover {
+      background: ${props => props.hovercolor || `#f2f2f2`};
+      border: ${props => props.hoverborder || `none`};
+    }
+  `;
+
+  const Image = styled.img`
+    width: 1rem; // 16px
+    height: 1rem; // 16px
+    position: absolute;
+    top: 1.375rem; // 22px
+    left: 2.25rem; // 36px
+  `;
   return (
     <Body>
       <Section>
@@ -85,13 +112,45 @@ export default function Social() {
         </Header>
         <Article>
           <ButtonDiv>
-            <button type="button">카카오로 시작하기</button>
-            <button type="button">네이버로 시작하기</button>
-            <button type="button">Google로 시작하기</button>
+            <ImageButton
+              id="kakao"
+              type="button"
+              bgcolor="#fee500"
+              hovercolor="#eed900"
+            >
+              <Image src={kakaoImg} alt="카카오 이미지" />
+              Kakao로 시작하기
+            </ImageButton>
+            <ImageButton
+              id="naver"
+              type="button"
+              bgcolor="#02c75a"
+              color="#fff"
+              hovercolor="#1cbe00"
+            >
+              <Image src={naverImg} alt="네이버 이미지" />
+              Naver로 시작하기
+            </ImageButton>
+            <ImageButton
+              id="google"
+              type="button"
+              bgcolor="#f2f2f2"
+              hovercolor="#e8e7eb"
+            >
+              <Image src={googleImg} alt="구글 이미지" />
+              Google로 시작하기
+            </ImageButton>
           </ButtonDiv>
           <Line>또는</Line>
           <Link to="/join/email-join">
-            <button type="button">이메일로 회원가입</button>
+            <ImageButton
+              id="join"
+              type="button"
+              border="1px solid #bfbfbf"
+              hoverborder="1px solid #bfbfbf"
+            >
+              이메일로 회원가입
+            </ImageButton>
           </Link>
         </Article>
       </Section>
