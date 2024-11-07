@@ -60,14 +60,15 @@ const CodeDiv = styled.div`
   }
 `;
 
-const CountDiv = styled.div`
+const CountDiv = styled.div<{ codeSuccess: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 20rem;
   height: 3.5rem;
-  border: 1px solid #bfbfbf;
+  border: ${props => (props.codeSuccess ? "none" : "1px solid #bfbfbf")};
   border-radius: 4px;
+  background-color: ${props => (props.codeSuccess ? "#D4D4D8" : "transparent")};
 
   &:focus {
     border: 2px solid #17171b;
@@ -80,6 +81,11 @@ const CountDiv = styled.div`
 
 const StyleError = styled.p`
   color: #fe2e00;
+  font-size: 0.75rem; // 12px
+  font-weight: 300;
+`;
+const StyleSuccess = styled.p`
+  color: #5144ed;
   font-size: 0.75rem; // 12px
   font-weight: 300;
 `;
@@ -106,6 +112,7 @@ export default function Join() {
   const [hidden, setHidden] = useState(false); // 인증번호 input을 숨김
   const [timer, setTimer] = useState(180); // CountDown과 연결되는 시간
   const [change, setChange] = useState(false); // disabled 여부
+  const [codeSuccess, setCodeSuccess] = useState(false); // 인증코드 성공 여부
   const [codeError, setCodeError] = useState(false); // 인증코드 에러 여부
 
   useEffect(() => {
@@ -146,9 +153,13 @@ export default function Join() {
       method: "POST",
       lastUrl: "user/verification/",
     });
-    console.log(postCode);
-    if (!postCode.resultcode) {
+    if (postCode.resultcode === "SUCCESS") {
+      setCodeSuccess(true);
+      console.log("codeSuccess set to true");
+      setCodeError(false);
+    } else {
       setCodeError(true);
+      setCodeSuccess(false);
     }
   };
 
@@ -222,23 +233,28 @@ export default function Join() {
         </EmailDiv>
         {hidden && (
           <CodeDiv>
-            <CountDiv tabIndex={0}>
+            <CountDiv codeSuccess={codeSuccess} tabIndex={0}>
               <Input
                 width="17rem" // 272px
                 height="3rem" // 48px
                 input="code"
                 type="number"
                 placeholder="인증번호를 입력해주세요."
+                disabled={codeSuccess}
                 register={register("code")}
               />
-              <CountDown timer={timer} setTimer={setTimer} />
+              <CountDown
+                timer={timer}
+                setTimer={setTimer}
+                codeSuccess={codeSuccess}
+              />
             </CountDiv>
             <Button
               width="7.5rem" // 120px
               height="3.5rem" // 56px
               type="button"
               id="check"
-              disabled={!codeData}
+              disabled={!codeData || codeSuccess}
               onClick={() =>
                 handleSendVerificationCode({ email: codeEmail, code: codeData })
               }
@@ -248,6 +264,7 @@ export default function Join() {
             {(errors.code || codeError) && (
               <StyleError>잘못된 인증 코드 입니다.</StyleError>
             )}
+            {codeSuccess && <StyleSuccess>인증을 성공했습니다. </StyleSuccess>}
           </CodeDiv>
         )}
         <InputDiv>
@@ -264,6 +281,7 @@ export default function Join() {
             <StyleError>{errors.password.message}</StyleError>
           )}
         </InputDiv>
+
         <Button width="28.125rem" type="submit" id="join" name="join">
           가입하기
         </Button>
