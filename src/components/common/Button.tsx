@@ -36,6 +36,8 @@ const StyleButton = styled.button<ButtonProps>`
     props.disabled === true &&
     css`
       background: #6c6c6c;
+      cursor: not-allowed; /* 비활성화 시 마우스 커서 */
+      pointer-events: none; /* 클릭 등 이벤트 차단 */
     `}
 `;
 export default function Button({

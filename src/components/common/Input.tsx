@@ -16,7 +16,7 @@ const StyleInput = styled.input`
   font-size: 0.9375rem; // 15px
   font-weight: 300;
   padding: 0.8125rem 1.1875rem; // 13px 19px
-  margin: 0.25rem 0; // 4px
+  margin: 0.1875rem 0 0.8125rem 0; // 3px 13px
 
   &::placeholder {
     color: #888;
@@ -33,6 +33,7 @@ const StyleInput = styled.input`
     css`
       border: none;
       outline: none;
+      margin: 0;
 
       &:focus {
         border: none;
@@ -52,14 +53,6 @@ const StyleInput = styled.input`
         font-size: 0.9375rem; // 15px
       }
     `}
-
-  /* disabled 스타일 */
-  ${props =>
-    props.disabled === true &&
-    css`
-      border: 1px solid #d4d4d8;
-      background: #d4d4d8;
-    `}
 `;
 export default function Input({
   width,
@@ -73,6 +66,7 @@ export default function Input({
   min,
   max,
   readOnly,
+  disabled,
   onFocus,
 }: InputProps) {
   return (
@@ -90,6 +84,7 @@ export default function Input({
           max={max}
           {...register}
           readOnly={readOnly}
+          disabled={disabled}
           onFocus={onFocus}
         />
       </div>

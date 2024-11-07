@@ -47,7 +47,22 @@ const GlobalStyle = createGlobalStyle`
   }
   input[type="number"] {
     -moz-appearance: textfield; /* Firefox */
-  }`;
+  }
+  // 자동 완성 배경색 제거
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+  }
+  // disabled 상태일 때 배경색 설정
+  input:disabled {
+    border: 1px solid #d4d4d8;
+    background: #d4d4d8;
+  }
+  // 자동 완성 + disabled 상태
+  input:disabled:-webkit-autofill {
+    border: 1px solid #d4d4d8;
+    -webkit-box-shadow: 0 0 0 1000px #d4d4d8 inset;
+  }
+  `;
 
 function App() {
   return (

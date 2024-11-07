@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useUserInput from "../hooks/useUserInput";
 import useNumberInput from "../hooks/useNumberInput";
@@ -18,14 +19,14 @@ const Main = styled.div`
   align-items: center;
   gap: 0.875rem; //14px
   height: 100vh;
-  padding: 5rem; // 80px
+  padding: 7.875rem; // 126px
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4375rem; // 7px
+  gap: 0.875rem; // 14px
 `;
 
 const Title = styled.h1`
@@ -45,7 +46,7 @@ const EmailDiv = styled.div`
   column-gap: 0.625rem; // 10px
   > button {
     grid-column-start: 2;
-    margin: 0.25rem 0; // 4px
+    margin: 0.1875rem 0 0.8125rem 0; // 3px 13px
   }
 `;
 
@@ -53,19 +54,21 @@ const CodeDiv = styled.div`
   display: grid;
   align-items: end;
   column-gap: 0.625rem; // 10px
+  row-gap: 0.8125rem; // 13px
   > button {
     grid-column-start: 2;
   }
 `;
 
-const CountDiv = styled.div`
+const CountDiv = styled.div<{ codeSuccess: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 20rem;
   height: 3.5rem;
-  border: 1px solid #bfbfbf;
+  border: ${props => (props.codeSuccess ? "none" : "1px solid #bfbfbf")};
   border-radius: 4px;
+  background-color: ${props => (props.codeSuccess ? "#D4D4D8" : "transparent")};
 
   &:focus {
     border: 2px solid #17171b;
@@ -78,6 +81,11 @@ const CountDiv = styled.div`
 
 const StyleError = styled.p`
   color: #fe2e00;
+  font-size: 0.75rem; // 12px
+  font-weight: 300;
+`;
+const StyleSuccess = styled.p`
+  color: #5144ed;
   font-size: 0.75rem; // 12px
   font-weight: 300;
 `;
@@ -101,6 +109,18 @@ export default function Join() {
   const navigate = useNavigate();
   const codeEmail = watch("email");
   const codeData = watch("code");
+  const [hidden, setHidden] = useState(false); // 인증번호 input을 숨김
+  const [timer, setTimer] = useState(180); // CountDown과 연결되는 시간
+  const [change, setChange] = useState(false); // disabled 여부
+  const [codeSuccess, setCodeSuccess] = useState(false); // 인증코드 성공 여부
+  const [codeError, setCodeError] = useState(false); // 인증코드 에러 여부
+
+  useEffect(() => {
+    if (timer === 0) {
+      setChange(false);
+      setHidden(false);
+    }
+  }, [timer]);
 
   // 가입하기 버튼 누르면 동작
   const onSubmit = (data: JoinForm) => {
@@ -113,20 +133,34 @@ export default function Join() {
   };
 
   // 인증번호 버튼 누르면 동작
-  const handleReceiveVerificationCode = () => {
-    Api({
+  const handleReceiveVerificationCode = async () => {
+    const getCode = await Api({
       method: "GET",
       lastUrl: `user/verification/?email=${codeEmail}`,
     });
+    // 버튼이 정상작동하면 아래 div가 보임
+    if (getCode.resultcode === "SUCCESS") {
+      setHidden(true);
+      setChange(true);
+      setTimer(180);
+    }
   };
 
   // 확인 버튼 누르면 동작
-  const handleSendVerificationCode = (data: VerificationCodeForm) => {
-    Api({
+  const handleSendVerificationCode = async (data: VerificationCodeForm) => {
+    const postCode = await Api({
       bodyData: data,
       method: "POST",
       lastUrl: "user/verification/",
     });
+    if (postCode.resultcode === "SUCCESS") {
+      setCodeSuccess(true);
+      console.log("codeSuccess set to true");
+      setCodeError(false);
+    } else {
+      setCodeError(true);
+      setCodeSuccess(false);
+    }
   };
 
   return (
@@ -166,6 +200,7 @@ export default function Join() {
             labelname="이메일"
             type="text"
             placeholder="이메일 형식을 맞춰서 입력해주세요."
+            disabled={hidden}
             register={register("email", {
               // 이메일 중복 체크
               onBlur: async data => {
@@ -184,36 +219,54 @@ export default function Join() {
             height="3.5rem" // 56px
             type="button"
             id="verification"
-            onClick={handleReceiveVerificationCode}
+            disabled={!codeEmail || change}
+            onClick={() => handleReceiveVerificationCode()}
           >
             인증번호
           </Button>
+          {/* 이메일 입력 조건이 틀릴 때 */}
           {errors.email && <StyleError>{errors.email.message}</StyleError>}
+          {/* 인증번호 시간이 지났을 때 */}
+          {timer === 0 && (
+            <StyleError>인증번호 시간이 지났습니다. 재시도해주세요.</StyleError>
+          )}
         </EmailDiv>
-        <CodeDiv>
-          <CountDiv tabIndex={0}>
-            <Input
-              width="17rem" // 272px
-              height="3rem" // 48px
-              input="code"
-              type="number"
-              placeholder="인증번호를 입력해주세요."
-              register={register("code")}
-            />
-            {CountDown(180)}
-          </CountDiv>
-          <Button
-            width="7.5rem" // 120px
-            height="3.5rem" // 56px
-            type="button"
-            id="check"
-            onClick={() =>
-              handleSendVerificationCode({ email: codeEmail, code: codeData })
-            }
-          >
-            확인
-          </Button>
-        </CodeDiv>
+        {hidden && (
+          <CodeDiv>
+            <CountDiv codeSuccess={codeSuccess} tabIndex={0}>
+              <Input
+                width="17rem" // 272px
+                height="3rem" // 48px
+                input="code"
+                type="number"
+                placeholder="인증번호를 입력해주세요."
+                disabled={codeSuccess}
+                register={register("code")}
+              />
+              <CountDown
+                timer={timer}
+                setTimer={setTimer}
+                codeSuccess={codeSuccess}
+              />
+            </CountDiv>
+            <Button
+              width="7.5rem" // 120px
+              height="3.5rem" // 56px
+              type="button"
+              id="check"
+              disabled={!codeData || codeSuccess}
+              onClick={() =>
+                handleSendVerificationCode({ email: codeEmail, code: codeData })
+              }
+            >
+              확인
+            </Button>
+            {(errors.code || codeError) && (
+              <StyleError>잘못된 인증 코드 입니다.</StyleError>
+            )}
+            {codeSuccess && <StyleSuccess>인증을 성공했습니다. </StyleSuccess>}
+          </CodeDiv>
+        )}
         <InputDiv>
           <Input
             width="28.125rem" // 450px
@@ -228,6 +281,7 @@ export default function Join() {
             <StyleError>{errors.password.message}</StyleError>
           )}
         </InputDiv>
+
         <Button width="28.125rem" type="submit" id="join" name="join">
           가입하기
         </Button>
