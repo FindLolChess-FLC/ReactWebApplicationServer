@@ -24,7 +24,6 @@ export default function CountDown({
       const interval = setInterval(() => {
         if (countRef.current > 0) {
           countRef.current -= 1;
-          console.log("a");
           if (displayRef.current) {
             displayRef.current.innerText = useTimeFormat(countRef.current); // useTimeFormat 자체가 string 형식
             // 타이머가 0이면 setTimer를 호출하여 타이머를 0으로 설정

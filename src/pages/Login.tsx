@@ -8,16 +8,19 @@ import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";
 import Button from "../components/common/Button";
+import kakaoImg from "../assets/icon/kakao_round.svg";
+import naverImg from "../assets/icon/naver_round.svg";
+import googleImg from "../assets/icon/google_round.svg";
 
-const Main = styled.div`
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.875rem; // 46px
+  gap: 3.375rem; // 54px
   width: 43.75rem; // 700px
   height: 100vh;
   margin: auto;
-  padding: 7rem; // 112px
+  padding: 10%;
   box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
 `;
 
@@ -51,6 +54,21 @@ const StyleError = styled.p`
   font-weight: 300;
 `;
 
+const A = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 11.25rem; // 180px
+  gap: 1.25rem; // 20px
+`;
+const ImgDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1.5rem; // 24px;
+  margin: auto;
+`;
+
 export default function Login() {
   // useUserInput에서 input validation schema
   const loginSchema = useUserInput();
@@ -75,8 +93,8 @@ export default function Login() {
   };
 
   return (
-    <Main>
-      <Title>FIND LOL CHESS</Title>
+    <Body>
+      <Title>LOGO</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputDiv>
           <Input
@@ -104,17 +122,17 @@ export default function Login() {
           이메일로 로그인
         </Button>
       </Form>
-      <div>
+      <A>
         <TextSpan>소셜 로그인하기</TextSpan>
-        <div>
-          <button type="button">K</button>
-          <button type="button">N</button>
-          <button type="button">G</button>
-        </div>
-      </div>
+        <ImgDiv>
+          <img src={kakaoImg} alt="카카오 이미지" />
+          <img src={naverImg} alt="네이버 이미지" />
+          <img src={googleImg} alt="구글 이미지" />
+        </ImgDiv>
+      </A>
       <TextSpan>
         아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
       </TextSpan>
-    </Main>
+    </Body>
   );
 }

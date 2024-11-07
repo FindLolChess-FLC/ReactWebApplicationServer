@@ -13,13 +13,13 @@ import { VerificationCodeForm } from "../types/VerificationCode";
 import CountDown from "../components/CountDown";
 import Button from "../components/common/Button";
 
-const Main = styled.div`
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.875rem; //14px
   height: 100vh;
-  padding: 7.875rem; // 126px
+  padding: 10%;
 `;
 
 const Form = styled.form`
@@ -164,7 +164,7 @@ export default function Join() {
   };
 
   return (
-    <Main>
+    <Body>
       <Title>회원가입</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputDiv>
@@ -287,6 +287,6 @@ export default function Join() {
         </Button>
       </Form>
       <Link to="/">메인으로 가기</Link>
-    </Main>
+    </Body>
   );
 }
