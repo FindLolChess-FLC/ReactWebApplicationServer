@@ -4,4 +4,5 @@ export type ImageButtonProps = {
   border?: string;
   hovercolor?: string;
   hoverborder?: string;
+  onClick?: React.MouseEventHandler<HTMLInputElement>;
 };

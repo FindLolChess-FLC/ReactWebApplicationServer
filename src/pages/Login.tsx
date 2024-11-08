@@ -54,19 +54,27 @@ const StyleError = styled.p`
   font-weight: 300;
 `;
 
-const A = styled.div`
+const Section = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 11.25rem; // 180px
   gap: 1.25rem; // 20px
 `;
+
 const ImgDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 1.5rem; // 24px;
   margin: auto;
+`;
+
+const ImgButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  width: 48px;
+  height: 48px;
 `;
 
 export default function Login() {
@@ -90,6 +98,13 @@ export default function Login() {
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
     navigate("/");
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    Api({
+      method: "GET",
+      lastUrl: `oauth/${provider}/login/`,
+    });
   };
 
   return (
@@ -122,14 +137,20 @@ export default function Login() {
           이메일로 로그인
         </Button>
       </Form>
-      <A>
+      <Section>
         <TextSpan>소셜 로그인하기</TextSpan>
         <ImgDiv>
-          <img src={kakaoImg} alt="카카오 이미지" />
-          <img src={naverImg} alt="네이버 이미지" />
-          <img src={googleImg} alt="구글 이미지" />
+          <ImgButton onClick={() => handleSocialLogin("kakao")} type="button">
+            <img src={kakaoImg} alt="카카오 이미지" />
+          </ImgButton>
+          <ImgButton onClick={() => handleSocialLogin("naver")} type="button">
+            <img src={naverImg} alt="네이버 이미지" />
+          </ImgButton>
+          <ImgButton onClick={() => handleSocialLogin("google")} type="button">
+            <img src={googleImg} alt="구글 이미지" />
+          </ImgButton>
         </ImgDiv>
-      </A>
+      </Section>
       <TextSpan>
         아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
       </TextSpan>

@@ -4,6 +4,7 @@ import { ImageButtonProps } from "../types/ImageButton";
 import kakaoImg from "../assets/icon/kakao.svg";
 import naverImg from "../assets/icon/naver.svg";
 import googleImg from "../assets/icon/google.svg";
+import { Api } from "../utils/apis/Api";
 
 export default function Social() {
   const Body = styled.div`
@@ -78,7 +79,7 @@ export default function Social() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem; // 20px
+    gap: 0.8125rem; // 13px
   `;
 
   const ImageButton = styled.button<ImageButtonProps>`
@@ -103,6 +104,14 @@ export default function Social() {
     top: 1.375rem; // 22px
     left: 2.25rem; // 36px
   `;
+
+  const handleSocialLogin = (provider: string) => {
+    Api({
+      method: "GET",
+      lastUrl: `oauth/${provider}/login/`,
+    });
+  };
+
   return (
     <Body>
       <Section>
@@ -117,6 +126,7 @@ export default function Social() {
               type="button"
               bgcolor="#fee500"
               hovercolor="#eed900"
+              onClick={() => handleSocialLogin("kakao")}
             >
               <Image src={kakaoImg} alt="카카오 이미지" />
               Kakao로 시작하기
@@ -127,6 +137,7 @@ export default function Social() {
               bgcolor="#02c75a"
               color="#fff"
               hovercolor="#1cbe00"
+              onClick={() => handleSocialLogin("naver")}
             >
               <Image src={naverImg} alt="네이버 이미지" />
               Naver로 시작하기
@@ -136,6 +147,7 @@ export default function Social() {
               type="button"
               bgcolor="#f2f2f2"
               hovercolor="#e8e7eb"
+              onClick={() => handleSocialLogin("google")}
             >
               <Image src={googleImg} alt="구글 이미지" />
               Google로 시작하기
