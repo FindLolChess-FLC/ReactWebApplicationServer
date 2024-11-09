@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import useUserInput from "../hooks/useUserInput";
 import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
@@ -85,6 +86,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ mode: "onBlur", resolver: yupResolver(loginSchema) });
 
   const navigate = useNavigate();
@@ -97,7 +99,19 @@ export default function Login() {
     });
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
-    navigate("/");
+    if (loginData.resultcode === "SUCCESS") {
+      navigate("/");
+    } else {
+      reset();
+      Swal.fire({
+        icon: "error",
+        title: "로그인에 실패했습니다.",
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        position: "top",
+      });
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
