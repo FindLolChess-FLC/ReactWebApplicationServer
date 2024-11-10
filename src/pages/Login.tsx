@@ -2,22 +2,26 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import useUserInput from "../hooks/useUserInput";
 import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/setCookie";
 import { LoginForm } from "../types/Login";
 import Button from "../components/common/Button";
+import kakaoImg from "../assets/icon/kakao_round.svg";
+import naverImg from "../assets/icon/naver_round.svg";
+import googleImg from "../assets/icon/google_round.svg";
 
-const Main = styled.div`
+const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.875rem; // 46px
+  gap: 3.375rem; // 54px
   width: 43.75rem; // 700px
   height: 100vh;
   margin: auto;
-  padding: 7rem; // 112px
+  padding: 10%;
   box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
 `;
 
@@ -51,6 +55,29 @@ const StyleError = styled.p`
   font-weight: 300;
 `;
 
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem; // 20px
+`;
+
+const ImgDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1.5rem; // 24px;
+  margin: auto;
+`;
+
+const ImgButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+`;
+
 export default function Login() {
   // useUserInput에서 input validation schema
   const loginSchema = useUserInput();
@@ -59,6 +86,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({ mode: "onBlur", resolver: yupResolver(loginSchema) });
 
   const navigate = useNavigate();
@@ -71,12 +99,34 @@ export default function Login() {
     });
     console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
-    navigate("/");
+    if (loginData.resultcode === "SUCCESS") {
+      navigate("/");
+    } else {
+      reset();
+      Swal.fire({
+        icon: "error",
+        title: "로그인에 실패했습니다.",
+        toast: true,
+        timer: 3000,
+        showConfirmButton: false,
+        position: "top",
+      });
+    }
+  };
+
+  const handleSocialLogin = async (provider: string) => {
+    const socialData = await Api({
+      method: "GET",
+      lastUrl: `oauth/${provider}/login/`,
+    });
+    if (socialData.resultcode === "SUCCESS") {
+      window.location.href = socialData.login_url;
+    }
   };
 
   return (
-    <Main>
-      <Title>FIND LOL CHESS</Title>
+    <Body>
+      <Title>LOGO</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputDiv>
           <Input
@@ -104,17 +154,23 @@ export default function Login() {
           이메일로 로그인
         </Button>
       </Form>
-      <div>
+      <Section>
         <TextSpan>소셜 로그인하기</TextSpan>
-        <div>
-          <button type="button">K</button>
-          <button type="button">N</button>
-          <button type="button">G</button>
-        </div>
-      </div>
+        <ImgDiv>
+          <ImgButton onClick={() => handleSocialLogin("kakao")} type="button">
+            <img src={kakaoImg} alt="카카오 이미지" />
+          </ImgButton>
+          <ImgButton onClick={() => handleSocialLogin("naver")} type="button">
+            <img src={naverImg} alt="네이버 이미지" />
+          </ImgButton>
+          <ImgButton onClick={() => handleSocialLogin("google")} type="button">
+            <img src={googleImg} alt="구글 이미지" />
+          </ImgButton>
+        </ImgDiv>
+      </Section>
       <TextSpan>
         아직 FLC 회원이 아니세요? <Link to="/join">회원가입 하기</Link>
       </TextSpan>
-    </Main>
+    </Body>
   );
 }

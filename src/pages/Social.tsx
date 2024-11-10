@@ -1,15 +1,32 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ImageButtonProps } from "../types/ImageButton";
+import kakaoImg from "../assets/icon/kakao.svg";
+import naverImg from "../assets/icon/naver.svg";
+import googleImg from "../assets/icon/google.svg";
+import { Api } from "../utils/apis/Api";
 
 export default function Social() {
-  const Main = styled.div`
+  const Body = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 6rem; // 96px
-    width: 25.625rem; // 410px
+    width: 692px; // 410px
     height: 100vh;
     margin: auto;
     justify-content: center;
+  `;
+
+  const Section = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 6rem; // 96px
+    padding: 20%;
+    width: 692px;
+    height: 824px;
+    border-radius: 8px;
+    box-shadow:
+      4px 4px 4px 0px rgba(0, 0, 0, 0.25),
+      0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   `;
 
   const Header = styled.header`
@@ -29,7 +46,7 @@ export default function Social() {
     font-size: 1.125rem; // 18px
   `;
 
-  const Section = styled.section`
+  const Article = styled.article`
     display: flex;
     flex-direction: column;
     gap: 2.4375rem; // 39px
@@ -61,26 +78,97 @@ export default function Social() {
   const ButtonDiv = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1.25rem; // 20px
+    align-items: center;
+    gap: 0.8125rem; // 13px
   `;
 
+  const ImageButton = styled.button<ImageButtonProps>`
+    position: relative;
+    width: 25.625rem; // 410px
+    height: 3.75rem; // 60px
+    background: ${props => props.bgcolor || `#fff`};
+    color: ${props => props.color || `##0d0d0d`};
+    border: ${props => props.border || `none`};
+    border-radius: 8px;
+
+    &:hover {
+      background: ${props => props.hovercolor || `#f2f2f2`};
+      border: ${props => props.hoverborder || `none`};
+    }
+  `;
+
+  const Image = styled.img`
+    width: 1rem; // 16px
+    height: 1rem; // 16px
+    position: absolute;
+    top: 1.375rem; // 22px
+    left: 2.25rem; // 36px
+  `;
+
+  const handleSocialLogin = async (provider: string) => {
+    const socialData = await Api({
+      method: "GET",
+      lastUrl: `oauth/${provider}/login/`,
+    });
+    if (socialData.resultcode === "SUCCESS") {
+      window.location.href = socialData.login_url;
+    }
+  };
+
   return (
-    <Main>
-      <Header>
-        <Title>회원가입하기</Title>
-        <Description>소셜 로그인 및 이메일로 가입할 수 있습니다.</Description>
-      </Header>
+    <Body>
       <Section>
-        <ButtonDiv>
-          <button type="button">카카오로 시작하기</button>
-          <button type="button">네이버로 시작하기</button>
-          <button type="button">Google로 시작하기</button>
-        </ButtonDiv>
-        <Line>또는</Line>
-        <Link to="/join/email-join">
-          <button type="button">이메일로 회원가입</button>
-        </Link>
+        <Header>
+          <Title>회원가입하기</Title>
+          <Description>소셜 로그인 및 이메일로 가입할 수 있습니다.</Description>
+        </Header>
+        <Article>
+          <ButtonDiv>
+            <ImageButton
+              id="kakao"
+              type="button"
+              bgcolor="#fee500"
+              hovercolor="#eed900"
+              onClick={() => handleSocialLogin("kakao")}
+            >
+              <Image src={kakaoImg} alt="카카오 이미지" />
+              Kakao로 시작하기
+            </ImageButton>
+            <ImageButton
+              id="naver"
+              type="button"
+              bgcolor="#02c75a"
+              color="#fff"
+              hovercolor="#1cbe00"
+              onClick={() => handleSocialLogin("naver")}
+            >
+              <Image src={naverImg} alt="네이버 이미지" />
+              Naver로 시작하기
+            </ImageButton>
+            <ImageButton
+              id="google"
+              type="button"
+              bgcolor="#f2f2f2"
+              hovercolor="#e8e7eb"
+              onClick={() => handleSocialLogin("google")}
+            >
+              <Image src={googleImg} alt="구글 이미지" />
+              Google로 시작하기
+            </ImageButton>
+          </ButtonDiv>
+          <Line>또는</Line>
+          <Link to="/join/email-join">
+            <ImageButton
+              id="join"
+              type="button"
+              border="1px solid #bfbfbf"
+              hoverborder="1px solid #bfbfbf"
+            >
+              이메일로 회원가입
+            </ImageButton>
+          </Link>
+        </Article>
       </Section>
-    </Main>
+    </Body>
   );
 }
