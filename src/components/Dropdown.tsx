@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DropdownProps } from "../types/Dropdown";
+import { DropdownForm } from "../types/Dropdown";
 import { Api } from "../utils/apis/Api";
 
-export default function Dropdown({ handleLogout }: DropdownProps) {
+export default function Dropdown({ handleLogout }: DropdownForm) {
   // 상태 관리: 목록이 보이는지 여부를 결정하는 state
   const [isOpen, setIsOpen] = useState(false);
   const [nickname, setNickname] = useState("");

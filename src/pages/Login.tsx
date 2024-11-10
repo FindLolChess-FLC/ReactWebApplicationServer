@@ -12,6 +12,7 @@ import Button from "../components/common/Button";
 import kakaoImg from "../assets/icon/kakao_round.svg";
 import naverImg from "../assets/icon/naver_round.svg";
 import googleImg from "../assets/icon/google_round.svg";
+import socialLogin from "../utils/socialLogin";
 
 const Body = styled.div`
   display: flex;
@@ -114,16 +115,6 @@ export default function Login() {
     }
   };
 
-  const handleSocialLogin = async (provider: string) => {
-    const socialData = await Api({
-      method: "GET",
-      lastUrl: `oauth/${provider}/login/`,
-    });
-    if (socialData.resultcode === "SUCCESS") {
-      window.location.href = socialData.login_url;
-    }
-  };
-
   return (
     <Body>
       <Title>LOGO</Title>
@@ -157,13 +148,13 @@ export default function Login() {
       <Section>
         <TextSpan>소셜 로그인하기</TextSpan>
         <ImgDiv>
-          <ImgButton onClick={() => handleSocialLogin("kakao")} type="button">
+          <ImgButton onClick={() => socialLogin("kakao")} type="button">
             <img src={kakaoImg} alt="카카오 이미지" />
           </ImgButton>
-          <ImgButton onClick={() => handleSocialLogin("naver")} type="button">
+          <ImgButton onClick={() => socialLogin("naver")} type="button">
             <img src={naverImg} alt="네이버 이미지" />
           </ImgButton>
-          <ImgButton onClick={() => handleSocialLogin("google")} type="button">
+          <ImgButton onClick={() => socialLogin("google")} type="button">
             <img src={googleImg} alt="구글 이미지" />
           </ImgButton>
         </ImgDiv>

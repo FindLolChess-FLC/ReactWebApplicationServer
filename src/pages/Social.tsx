@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { ImageButtonProps } from "../types/ImageButton";
+import { ImageButtonForm } from "../types/ImageButton";
 import kakaoImg from "../assets/icon/kakao.svg";
 import naverImg from "../assets/icon/naver.svg";
 import googleImg from "../assets/icon/google.svg";
-import { Api } from "../utils/apis/Api";
+import socialLogin from "../utils/socialLogin";
 
 export default function Social() {
   const Body = styled.div`
@@ -82,7 +82,7 @@ export default function Social() {
     gap: 0.8125rem; // 13px
   `;
 
-  const ImageButton = styled.button<ImageButtonProps>`
+  const ImageButton = styled.button<ImageButtonForm>`
     position: relative;
     width: 25.625rem; // 410px
     height: 3.75rem; // 60px
@@ -105,16 +105,6 @@ export default function Social() {
     left: 2.25rem; // 36px
   `;
 
-  const handleSocialLogin = async (provider: string) => {
-    const socialData = await Api({
-      method: "GET",
-      lastUrl: `oauth/${provider}/login/`,
-    });
-    if (socialData.resultcode === "SUCCESS") {
-      window.location.href = socialData.login_url;
-    }
-  };
-
   return (
     <Body>
       <Section>
@@ -129,7 +119,7 @@ export default function Social() {
               type="button"
               bgcolor="#fee500"
               hovercolor="#eed900"
-              onClick={() => handleSocialLogin("kakao")}
+              onClick={() => socialLogin("kakao")}
             >
               <Image src={kakaoImg} alt="카카오 이미지" />
               Kakao로 시작하기
@@ -140,7 +130,7 @@ export default function Social() {
               bgcolor="#02c75a"
               color="#fff"
               hovercolor="#1cbe00"
-              onClick={() => handleSocialLogin("naver")}
+              onClick={() => socialLogin("naver")}
             >
               <Image src={naverImg} alt="네이버 이미지" />
               Naver로 시작하기
@@ -150,7 +140,7 @@ export default function Social() {
               type="button"
               bgcolor="#f2f2f2"
               hovercolor="#e8e7eb"
-              onClick={() => handleSocialLogin("google")}
+              onClick={() => socialLogin("google")}
             >
               <Image src={googleImg} alt="구글 이미지" />
               Google로 시작하기

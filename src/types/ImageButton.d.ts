@@ -1,4 +1,4 @@
-export type ImageButtonProps = {
+export type ImageButtonForm = {
   bgcolor?: string;
   color?: string;
   border?: string;

@@ -1,3 +1,3 @@
-export type DropdownProps = {
+export type DropdownForm = {
   handleLogout: () => void;
 };

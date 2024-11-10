@@ -14,7 +14,6 @@ export default function UserStatus() {
   };
 
   const handleLogout = () => {
-    console.log(token);
     Api({
       method: "DELETE",
       lastUrl: "user/signout/",

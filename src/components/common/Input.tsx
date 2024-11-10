@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { InputProps } from "../../types/Input";
+import { InputForm } from "../../types/Input";
 import "../../fonts/index.css";
 
 const StyleTitle = styled.p`
@@ -68,7 +68,7 @@ export default function Input({
   readOnly,
   disabled,
   onFocus,
-}: InputProps) {
+}: InputForm) {
   return (
     <label htmlFor={input}>
       <StyleTitle>{labelname}</StyleTitle>
