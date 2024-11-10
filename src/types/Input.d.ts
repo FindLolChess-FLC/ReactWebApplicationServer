@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form"; // props로 전달 받기 위해 UseFormRegisterReturn 사용
 
-export type InputProps = {
+export type InputForm = {
   width?: string;
   height?: string;
   labelname?: string;

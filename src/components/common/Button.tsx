@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
-import { ButtonProps } from "../../types/Button";
+import { ButtonForm } from "../../types/Button";
 
-const StyleButton = styled.button<ButtonProps>`
+const StyleButton = styled.button<ButtonForm>`
   /* 기본 버튼 스타일 */
   width: ${props => props.width || `25.625rem`}; // 410px
   height: ${props => props.height || `3.75rem`}; // 60px
@@ -50,7 +50,7 @@ export default function Button({
   disabled,
   onClick,
   children,
-}: ButtonProps) {
+}: ButtonForm) {
   return (
     <StyleButton
       width={width}

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import useTimeFormat from "../hooks/useTimeFormat";
-import { CountDownProps } from "../types/Countdown";
+import { CountDownForm } from "../types/Countdown";
 
 export default function CountDown({
   timer,
   setTimer,
   codeSuccess,
-}: CountDownProps) {
+}: CountDownForm) {
   const CountDiv = styled.div`
     color: #5144ed;
     font-weight: 400;

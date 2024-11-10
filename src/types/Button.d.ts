@@ -1,4 +1,4 @@
-export type ButtonProps = {
+export type ButtonForm = {
   width?: string;
   height?: string;
   bgcolor?: string;
