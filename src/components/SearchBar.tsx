@@ -1,9 +1,26 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Input from "./common/Input";
 import { SearchForm } from "../types/Search";
-import searchImg from "../assets/img/search.png";
+import searchImg from "../assets/icon/search.svg";
+
+const Form = styled.form`
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem; // 5px
+`;
+
+const SearchButton = styled.button`
+  width: 3.5625rem; // 57px
+  height: 3.5625rem; // 57px
+  background: #5144ed;
+  border-radius: 3.125rem; // 50px
+  &:hover {
+    background: #6f63ff;
+  }
+`;
 
 export default function SearchBar() {
   const { register, watch, handleSubmit } = useForm<SearchForm>({
@@ -27,28 +44,28 @@ export default function SearchBar() {
 
   return (
     <div>
-      <div>
-        <img src={searchImg} alt="검색 이미지" />
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            input="search"
-            type="text"
-            placeholder="Search.."
-            autoComplete="off"
-            register={register("search", {
-              onBlur: () => {
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          input="search"
+          type="text"
+          placeholder="Search.."
+          autoComplete="off"
+          register={register("search", {
+            onBlur: () => {
+              setShowHelp(false);
+            },
+            onChange: data => {
+              if (data) {
                 setShowHelp(false);
-              },
-              onChange: data => {
-                if (data) {
-                  setShowHelp(false);
-                }
-              },
-            })}
-            onFocus={handleHelp}
-          />
-        </form>
-      </div>
+              }
+            },
+          })}
+          onFocus={handleHelp}
+        />
+        <SearchButton type="submit">
+          <img src={searchImg} alt="검색 이미지" />
+        </SearchButton>
+      </Form>
       {showHelp && (
         <ul>
           <li>여러 키워드로 검색이 필요하면 쉼표로 구분해 보세요.</li>

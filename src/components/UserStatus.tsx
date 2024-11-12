@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import getCookie from "../utils/getCookie";
 import { Api } from "../utils/apis/Api";
 import Dropdown from "./Dropdown";
+
+const LoginButton = styled.button`
+  background: transparent;
+`;
 
 export default function UserStatus() {
   const navigate = useNavigate();
@@ -26,12 +31,12 @@ export default function UserStatus() {
   return (
     <div>
       {token === "" ? (
-        <button
+        <LoginButton
           type="button"
           onClick={() => (token === "" ? handleLogin() : handleLogout())}
         >
           로그인
-        </button>
+        </LoginButton>
       ) : (
         <Dropdown handleLogout={handleLogout} /> // 로그아웃 시
       )}

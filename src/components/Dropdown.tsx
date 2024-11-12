@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { DropdownForm } from "../types/Dropdown";
 import { Api } from "../utils/apis/Api";
+
+const LoginButton = styled.button`
+  background: transparent;
+`;
+
+const LogoutButton = styled.button`
+  background: transparent;
+`;
 
 export default function Dropdown({ handleLogout }: DropdownForm) {
   // 상태 관리: 목록이 보이는지 여부를 결정하는 state
@@ -26,9 +35,9 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
   return (
     <div>
       {/* 토글 버튼 */}
-      <button type="button" onClick={handleDropdown}>
+      <LoginButton type="button" onClick={handleDropdown}>
         {`${nickname}님 환영합니다.`}
-      </button>
+      </LoginButton>
       {/* 상태에 따라 목록 표시 */}
       {isOpen && (
         <ul>
@@ -39,9 +48,9 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
             <Link to="/favorites">나의 즐겨찾기</Link>
           </li>
           <li>
-            <button type="button" onClick={handleLogout}>
+            <LogoutButton type="button" onClick={handleLogout}>
               로그아웃
-            </button>
+            </LogoutButton>
           </li>
         </ul>
       )}
