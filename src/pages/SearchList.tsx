@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Api } from "../utils/apis/Api";
-import { ChampionsForm, ListForm, MetaForm } from "../types/List";
+import { ChampionsForm, ListForm } from "../types/List";
+import Header from "../components/containers/Header";
 
 export default function SearchList() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
@@ -21,27 +22,32 @@ export default function SearchList() {
     };
     searchApi();
   }, [searchData]);
+  console.log("처음");
+  console.log(searchData);
   return (
     <div>
-      {metaData && metaData.length > 0 ? (
-        // item : meta, synerge
-        metaData.map((item: ListForm) => (
-          <div key={item?.meta.id}>
-            <div>{item?.meta.title}</div>
-            {item?.meta.champions &&
-              // data :
-              item?.meta.champions.map((data: ChampionsForm) => (
-                <div key={data.location}>
-                  <div>{data.champion.name}</div>
-                  <img src={data.champion.img.img_src} alt="챔피언" />
-                </div>
-              ))}
-            <hr />
-          </div>
-        ))
-      ) : (
-        <div>데이터가 없습니다</div> // 데이터가 없을 때
-      )}
+      <Header searchValue={typeof searchData === "string" ? searchData : ""} />
+      <main>
+        {metaData && metaData.length > 0 ? (
+          // item : meta, synerge
+          metaData.map((item: ListForm) => (
+            <div key={item?.meta.id}>
+              <div>{item?.meta.title}</div>
+              {item?.meta.champions &&
+                // data :
+                item?.meta.champions.map((data: ChampionsForm) => (
+                  <div key={data.location}>
+                    <div>{data.champion.name}</div>
+                    <img src={data.champion.img.img_src} alt="챔피언" />
+                  </div>
+                ))}
+              <hr />
+            </div>
+          ))
+        ) : (
+          <div>데이터가 없습니다</div> // 데이터가 없을 때
+        )}
+      </main>
     </div>
   );
 }

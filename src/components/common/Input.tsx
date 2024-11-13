@@ -64,6 +64,7 @@ const StyleInput = styled.input`
       width: 614px;
       height: 3.5625rem; // 57px
       border-radius: 3.125rem; // 50px
+      margin: 0;
 
       &:focus {
         border: 2px solid #5144ed;
