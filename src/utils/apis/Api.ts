@@ -1,7 +1,7 @@
 import { ApiForm } from "../../types/Api";
 import getCookie from "../getCookie";
 
-const url = "http://127.0.0.1:8000/";
+const url = process.env.REACT_APP_SITEURL;
 
 export async function Api({ bodyData, method, lastUrl }: ApiForm) {
   const token = getCookie("token");
