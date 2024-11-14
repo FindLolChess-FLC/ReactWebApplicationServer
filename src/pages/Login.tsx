@@ -71,12 +71,8 @@ const ImgDiv = styled.div`
   margin: auto;
 `;
 
-const ImgButton = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  width: 48px;
-  height: 48px;
+const Img = styled.img`
+  cursor: pointer;
 `;
 
 export default function Login() {
@@ -148,15 +144,24 @@ export default function Login() {
       <Section>
         <TextSpan>소셜 로그인하기</TextSpan>
         <ImgDiv>
-          <ImgButton onClick={() => socialLogin("kakao")} type="button">
-            <img src={kakaoImg} alt="카카오 이미지" />
-          </ImgButton>
-          <ImgButton onClick={() => socialLogin("naver")} type="button">
-            <img src={naverImg} alt="네이버 이미지" />
-          </ImgButton>
-          <ImgButton onClick={() => socialLogin("google")} type="button">
-            <img src={googleImg} alt="구글 이미지" />
-          </ImgButton>
+          <Img
+            src={kakaoImg}
+            alt="카카오 이미지"
+            onKeyDown={() => socialLogin("kakao")}
+            onClick={() => socialLogin("kakao")}
+          />
+          <Img
+            src={naverImg}
+            alt="네이버 이미지"
+            onKeyDown={() => socialLogin("naver")}
+            onClick={() => socialLogin("naver")}
+          />
+          <Img
+            src={googleImg}
+            alt="구글 이미지"
+            onKeyDown={() => socialLogin("google")}
+            onClick={() => socialLogin("google")}
+          />
         </ImgDiv>
       </Section>
       <TextSpan>

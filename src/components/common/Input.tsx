@@ -58,8 +58,8 @@ const StyleInput = styled.input`
   ${props =>
     props.id === "search" &&
     css`
-      font-size: 18px;
-      padding: 20px 33px;
+      font-size: 1.125rem; 18px
+      padding: 1.25rem 2.0625rem; // 20px 33px
       border: 1px solid #888;
       width: 614px;
       height: 3.5625rem; // 57px
