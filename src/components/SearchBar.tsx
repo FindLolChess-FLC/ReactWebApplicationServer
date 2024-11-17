@@ -14,8 +14,8 @@ const Form = styled.form`
 `;
 
 const SearchButton = styled.button`
-  width: 3.5625rem; // 57px
-  height: 3.5625rem; // 57px
+  width: 3rem; // 48px
+  height: 3rem; // 48px
   background: #5144ed;
   border-radius: 3.125rem; // 50px
   &:hover {
@@ -27,7 +27,7 @@ const Ul = styled.ul`
   display: flex;
   flex-direction: row;
   gap: 3rem; // 48px
-  padding-top: 0.4375rem; // 7px
+  padding-top: 0.375rem; // 6px
   padding-left: 1.5rem; // 24px
   font-size: 0.75rem; // 12px
   font-weight: 300;

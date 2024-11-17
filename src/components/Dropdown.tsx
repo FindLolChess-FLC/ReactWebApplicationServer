@@ -33,18 +33,21 @@ const LoginButton = styled.button`
 const Ul = styled.ul`
   display: flex;
   flex-direction: column;
-  width: 13rem; // 208px
-  height: 7.6875rem; // 123px
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 13.4375rem; // 215px
+  height: 8.3125rem; // 133px
+  border-radius: 5px;
+  box-shadow:
+    -2px 0px 4px 0px rgba(0, 0, 0, 0.2),
+    3px 0px 4px 0px rgba(0, 0, 0, 0.2),
+    0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   background: #fff;
   position: absolute; // 절대 위치 설정
-  transform: translate(0, 33px);
+  transform: translate(0, 27px);
 `;
 
 const Li = styled.li`
-  width: 13rem; // 208px
-  height: 2.5625rem; // 41px
-  padding: 0.875rem; // 14px
+  width: 13.4375rem; // 215px
+  height: 2.75rem; // 44px
   &:hover {
     background: #e1e1e1;
   }
@@ -55,6 +58,7 @@ const StyledLink = styled(Link)`
   flex-direction: row;
   align-items: center;
   gap: 0.5625rem; // 9px
+  padding: 1rem; // 16px
   text-decoration: none;
   color: inherit;
   font-weight: 500;
@@ -67,9 +71,10 @@ const LogoutButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 9px;
+  gap: 0.5625rem; // 9px
+  padding: 0.8rem 1rem; // 16px
   background: transparent;
-  font-size: 14px;
+  font-size: 0.875rem; // 14px
   font-weight: 500;
 `;
 
@@ -98,7 +103,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
       {/* 토글 버튼 */}
       <DropText>
         <LoginButton type="button" onClick={handleDropdown}>
-          {`${nickname}님 환영합니다.`}
+          {`${nickname}님 환영합니다`}
         </LoginButton>
         {isOpen ? (
           <Img
