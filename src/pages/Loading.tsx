@@ -1,11 +1,15 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import getCookie from "../utils/getCookie";
+import { useLocation, useNavigate } from "react-router-dom";
+import setCookie from "../utils/setCookie";
 
 export default function Loading() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const access = queryParams.get("token");
   useEffect(() => {
-    if (getCookie("token")) {
+    if (access) {
+      setCookie("token", access, 24);
       navigate("/");
     }
   }, []);
