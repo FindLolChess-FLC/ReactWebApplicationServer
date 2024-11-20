@@ -22,7 +22,7 @@ const Body = styled.div`
   width: 43.75rem; // 700px
   height: 100vh;
   margin: auto;
-  padding: 10%;
+  justify-content: center;
   box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
 `;
 

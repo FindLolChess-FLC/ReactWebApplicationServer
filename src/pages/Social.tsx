@@ -10,23 +10,19 @@ export default function Social() {
   const Body = styled.div`
     display: flex;
     flex-direction: column;
-    width: 692px; // 410px
+    width: 43.75rem; // 700px
     height: 100vh;
     margin: auto;
     justify-content: center;
+    box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
   `;
 
   const Section = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 6rem; // 96px
-    padding: 20%;
-    width: 692px;
-    height: 824px;
-    border-radius: 8px;
-    box-shadow:
-      4px 4px 4px 0px rgba(0, 0, 0, 0.25),
-      0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    margin: auto;
   `;
 
   const Header = styled.header`
