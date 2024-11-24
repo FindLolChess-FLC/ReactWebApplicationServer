@@ -76,7 +76,6 @@ function App() {
           <Route path="/meta-list">
             {/* 전체 메타 목록 */}
             <Route index element={<MetaList />} />
-            {/* 회원가입 통합페이지 */}
             <Route path="search-list" element={<SearchList />} />
           </Route>
           <Route path="login">
