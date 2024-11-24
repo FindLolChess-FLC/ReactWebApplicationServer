@@ -125,7 +125,7 @@ export default function Social() {
               type="button"
               bgcolor="#02c75a"
               color="#fff"
-              hovercolor="#1cbe00"
+              hovercolor="#00be4c"
               onClick={() => socialLogin("naver")}
             >
               <Image src={naverImg} alt="네이버 이미지" />

@@ -26,7 +26,7 @@ const SearchButton = styled.button`
 const Ul = styled.ul`
   display: flex;
   flex-direction: row;
-  gap: 3rem; // 48px
+  gap: 0.8125rem; // 13px
   padding-top: 0.375rem; // 6px
   padding-left: 1.5rem; // 24px
   font-size: 0.75rem; // 12px
