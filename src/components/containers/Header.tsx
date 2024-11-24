@@ -7,13 +7,13 @@ import UserStatus from "../UserStatus";
 const Body = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  height: 6.875rem; // 110px
+  align-items: baseline;
   justify-content: space-evenly;
+  height: 5.3125rem; // 85px
+  padding-top: 0.8125rem; // 13px
 `;
 
 const LogoImg = styled.img`
-  // margin-left: 9.125rem; // 146px
   width: 9.0625rem; // 145px
   height: 1.5625rem; // 25px
 `;
