@@ -31,6 +31,8 @@ const LoginButton = styled.button`
 `;
 
 const Ul = styled.ul`
+  z-index: 99;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 13.4375rem; // 215px

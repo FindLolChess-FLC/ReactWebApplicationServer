@@ -11,7 +11,7 @@ const ArrowUp = styled.img`
   width: 3.4375rem; // 55px
   height: 3.4375rem; // 55px
   position: fixed;
-  bottom: 9rem; // 144px
+  bottom: 2.1875rem; // 35px
   right: 2.1875rem; // 35px
   cursor: pointer;
   z-index: 10;
