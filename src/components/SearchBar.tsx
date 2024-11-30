@@ -61,7 +61,7 @@ export default function SearchBar({
   // 검색버튼 누르면 동작
   const onSubmit = (data: SearchForm) => {
     if (watch("search")) {
-      navigate("/meta-list/search-list", { state: data.search }); // state : 검색창에 있는 값
+      navigate("/search-list", { state: data.search }); // state : 검색창에 있는 값
     }
   };
 
