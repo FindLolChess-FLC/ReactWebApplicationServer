@@ -3,7 +3,7 @@ import { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import Loading from "./pages/Loading";
-import MetaList from "./pages/MetaList";
+import RecommendList from "./pages/RecommendList";
 import SearchList from "./pages/SearchList";
 import Login from "./pages/Login";
 import Social from "./pages/Social";
@@ -73,20 +73,20 @@ function App() {
           <Route path="/" index element={<Main />} />
           <Route path="/loading" index element={<Loading />} />
           <Route path="/test" index element={<Test />} />
-          <Route path="/meta-list">
-            {/* 전체 메타 목록 */}
-            <Route index element={<MetaList />} />
-            <Route path="search-list" element={<SearchList />} />
-          </Route>
-          <Route path="login">
-            <Route index element={<Login />} />
-          </Route>
+          {/* 추천 메타 */}
+          <Route path="recommend-list" index element={<RecommendList />} />
+          {/* 검색 메타 */}
+          <Route path="search-list" index element={<SearchList />} />
+          {/* 로그인 */}
+          <Route path="login" index element={<Login />} />
+          {/* 회원가입 */}
           <Route path="join">
             {/* 회원가입 통합페이지 */}
             <Route index element={<Social />} />
             {/* 이메일 회원가입 */}
             <Route path="email-join" element={<Join />} />
           </Route>
+          {/* 마이페이지 */}
           <Route path="mypage">
             <Route index element={<MyPage />} />
           </Route>

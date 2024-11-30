@@ -1,8 +1,24 @@
+import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm } from "../types/List";
 import Header from "../components/containers/Header";
+import Meta from "../components/common/Meta";
+import Footer from "../components/containers/Footer";
+
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  padding: 4.4375rem; // 71px
+  background-color: #f4f4f4;
+`;
 
 export default function SearchList() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
@@ -25,29 +41,39 @@ export default function SearchList() {
   console.log("처음");
   console.log(searchData);
   return (
-    <div>
-      <Header searchValue={typeof searchData === "string" ? searchData : ""} />
+    <Body>
+      <header>
+        <Header
+          searchValue={typeof searchData === "string" ? searchData : ""}
+        />
+      </header>
       <main>
-        {metaData && metaData.length > 0 ? (
-          // item : meta, synerge
-          metaData.map((item: ListForm) => (
-            <div key={item?.meta.id}>
-              <div>{item?.meta.title}</div>
-              {item?.meta.champions &&
-                // data :
-                item?.meta.champions.map((data: ChampionsForm) => (
-                  <div key={data.location}>
-                    <div>{data.champion.name}</div>
-                    <img src={data.champion.img.img_src} alt="챔피언" />
-                  </div>
-                ))}
-              <hr />
-            </div>
-          ))
-        ) : (
-          <div>데이터가 없습니다</div> // 데이터가 없을 때
-        )}
+        <Contents>
+          <Meta />
+          {metaData && metaData.length > 0 ? (
+            // item : meta, synerge
+            metaData.map((item: ListForm) => (
+              <div key={item?.meta.id}>
+                <div>{item?.meta.title}</div>
+                {item?.meta.champions &&
+                  // data :
+                  item?.meta.champions.map((data: ChampionsForm) => (
+                    <div key={data.location}>
+                      <div>{data.champion.name}</div>
+                      <img src={data.champion.img.img_src} alt="챔피언" />
+                    </div>
+                  ))}
+                <hr />
+              </div>
+            ))
+          ) : (
+            <div>데이터가 없습니다</div> // 데이터가 없을 때
+          )}
+        </Contents>
       </main>
-    </div>
+      <footer>
+        <Footer />
+      </footer>
+    </Body>
   );
 }
