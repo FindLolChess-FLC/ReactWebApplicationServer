@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/containers/Footer";
 import Header from "../components/containers/Header";
 import bgImage from "../assets/img/c1.jpg";
@@ -113,40 +114,46 @@ const FastBox = styled.div`
 `;
 
 export default function Main() {
+  const navigate = useNavigate();
+  const handleImage = () => {
+    navigate("/recommend-list");
+  };
   return (
     <Body>
       <header>
         <Header />
       </header>
-      <Contents>
-        <Carousel>
-          <CarouselBox>
-            <ImageBox>
-              <Text>
-                <p>시즌 13 &lt;아케인의 세계로&gt;</p>
-                <h2>FIND LOL CHESS</h2>
-                <h2>추천 메타 TOP3</h2>
-                <p>자세히 보기&gt;</p>
-              </Text>
-            </ImageBox>
-            <MetaBox>
-              <p>[기시감] 6선봉대 갈리오</p>
-            </MetaBox>
-          </CarouselBox>
-          <ArrowRight src={arrowRightImg} alt="오른쪽" />
-          <ArrowLeft src={arrowLeftImg} alt="왼쪽" />
-          <Bar>
-            <div> </div>
-          </Bar>
-        </Carousel>
-        <Fast>
-          <SubTitle>
-            빠른 챔피언 찾기
-            <img src={arrowImg} alt="화살표" />
-          </SubTitle>
-          <FastBox>내용</FastBox>
-        </Fast>
-      </Contents>
+      <main>
+        <Contents>
+          <Carousel>
+            <CarouselBox>
+              <ImageBox onClick={() => handleImage()}>
+                <Text>
+                  <p>시즌 13 &lt;아케인의 세계로&gt;</p>
+                  <h2>FIND LOL CHESS</h2>
+                  <h2>추천 메타 TOP3</h2>
+                  <p>자세히 보기&gt;</p>
+                </Text>
+              </ImageBox>
+              <MetaBox>
+                <p>[기시감] 6선봉대 갈리오</p>
+              </MetaBox>
+            </CarouselBox>
+            <ArrowRight src={arrowRightImg} alt="오른쪽" />
+            <ArrowLeft src={arrowLeftImg} alt="왼쪽" />
+            <Bar>
+              <div> </div>
+            </Bar>
+          </Carousel>
+          <Fast>
+            <SubTitle>
+              빠른 챔피언 찾기
+              <img src={arrowImg} alt="화살표" />
+            </SubTitle>
+            <FastBox>~~~준비중~~</FastBox>
+          </Fast>
+        </Contents>
+      </main>
       <footer>
         <Footer />
       </footer>
