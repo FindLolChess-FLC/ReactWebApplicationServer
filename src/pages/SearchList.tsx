@@ -16,7 +16,7 @@ const Contents = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  padding: 71px;
+  padding: 4.4375rem; // 71px
   background-color: #f4f4f4;
 `;
 

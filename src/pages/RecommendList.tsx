@@ -27,15 +27,16 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 29px;
+  gap: 1.8125rem; // 29px
   width: 100vw;
-  padding: 71px;
+  padding: 4.4375rem; // 71px
   background-color: #f4f4f4;
 `;
+
 const SubTitle = styled.div`
-  width: 966px;
-  font-size: 36px;
-  padding: 0 0 23px 11px;
+  width: 60.375rem; // 966px
+  font-size: 2.25rem; // 36px
+  padding: 0 0 1.4375rem 0.6875rem; // 0 0 23px 11px
   border-bottom: 1px solid #8d8d8d;
 `;
 
