@@ -10,6 +10,8 @@ const Form = styled.form`
   display: flex;
   align-items: center;
   gap: 0.3125rem; // 5px
+  margin-left: 3.625rem; // 58px
+  margin-right: 6rem; // 96px
   position: relative;
 `;
 
@@ -28,7 +30,7 @@ const Ul = styled.ul`
   flex-direction: row;
   gap: 0.8125rem; // 13px
   padding-top: 0.375rem; // 6px
-  padding-left: 1.5rem; // 24px
+  padding-left: 4.625rem; // 74px
   font-size: 0.75rem; // 12px
   font-weight: 300;
   color: #5144ed;

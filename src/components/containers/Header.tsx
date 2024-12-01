@@ -8,7 +8,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  justify-content: space-evenly;
+  justify-content: center;
   height: 5.3125rem; // 85px
   padding-top: 0.8125rem; // 13px
 `;
