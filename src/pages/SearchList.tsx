@@ -24,6 +24,7 @@ export default function SearchList() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
   const location = useLocation(); // navigate로 전달된 데이터 받기
   const searchData = location.state; // 전달된 검색어
+  const cache = `cache_buster=${Date.now()}`;
 
   useEffect(() => {
     const searchApi = async () => {
@@ -60,7 +61,10 @@ export default function SearchList() {
                   item?.meta.champions.map((data: ChampionsForm) => (
                     <div key={data.location}>
                       <div>{data.champion.name}</div>
-                      <img src={data.champion.img.img_src} alt="챔피언" />
+                      <img
+                        src={`${data.champion.img.img_src}?${cache}`}
+                        alt="챔피언"
+                      />
                     </div>
                   ))}
                 <hr />
