@@ -18,7 +18,7 @@ const Contents = styled.div`
   align-items: center;
   width: 100vw;
   padding: 2.8125rem; // 45px
-  background-color: #ececee;
+  background-color: #f4f4f4;
 `;
 
 const Carousel = styled.div`
@@ -27,18 +27,30 @@ const Carousel = styled.div`
 const CarouselBox = styled.div`
   width: 60.1875rem; // 963px
   height: 26.875rem; // 430px
-  border-radius: 33px;
-  border: 1px solid #000;
+  border-radius: 23px;
   box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: pointer;
 `;
 const ImageBox = styled.div`
   height: 19.8125rem; // 317px;
-  background: url(${bgImage}) no-repeat center center / cover;
+  overflow: hidden;
+  &:hover img {
+    transform: scale(1.05); // 이미지 확대
+  }
+`;
+const BackImage = styled.img`
+  position: relative;
+  width: 100%;
+  height: 19.8125rem; // 317px;
+  transition: transform 0.3s ease-in-out; // 부드러운 확대 애니메이션
 `;
 const Text = styled.div`
-  padding: 5.625rem 2.8125rem 3.75rem; // 90px 45px 60px
+  position: absolute;
+  top: 5.625rem; // 90px
+  left: 2.8125rem; // 45px
+  bottom: 3.75rem; // 60px
+  z-index: 10;
   color: #fff;
   font-size: 1.3125rem; // 21px
   font-weight: 400;
@@ -66,6 +78,9 @@ const MetaBox = styled.div`
   background-color: #fff;
   font-size: 1.25rem; // 20px
   font-weight: 500;
+  &:hover p {
+    font-weight: 700;
+  }
 `;
 const Bar = styled.div`
   position: absolute;
@@ -101,12 +116,12 @@ const SubTitle = styled.div`
   display: flex;
   gap: 0.3125rem; // 5px
   font-size: 1.875rem; // 30px
-  padding: 9.4375rem 0px 2.8125rem; // 151px 0 45px
+  padding: 8.125rem 0px 2.8125rem; // 130px 0 45px
 `;
 const FastBox = styled.div`
   width: 60.1875rem; // 963px
   height: 26.875rem; // 430px
-  border-radius: 33px;
+  border-radius: 23px;
   border: 1px solid #000;
   overflow: hidden;
   background-color: #fff;
@@ -128,6 +143,7 @@ export default function Main() {
           <Carousel>
             <CarouselBox>
               <ImageBox onClick={() => handleImage()}>
+                <BackImage src={bgImage} alt="캐러셀 이미지" />
                 <Text>
                   <p>시즌 13 &lt;아케인의 세계로&gt;</p>
                   <h2>FIND LOL CHESS</h2>
