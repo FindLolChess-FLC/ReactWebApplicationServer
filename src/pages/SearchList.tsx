@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Api } from "../utils/apis/Api";
-import { ChampionsForm, ListForm } from "../types/List";
+import { ListForm } from "../types/List";
 import Header from "../components/containers/Header";
 import Meta from "../components/common/Meta";
 import Footer from "../components/containers/Footer";
@@ -24,7 +24,6 @@ export default function SearchList() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
   const location = useLocation(); // navigate로 전달된 데이터 받기
   const searchData = location.state; // 전달된 검색어
-  const cache = `cache_buster=${Date.now()}`;
 
   useEffect(() => {
     const searchApi = async () => {
@@ -50,26 +49,8 @@ export default function SearchList() {
       </header>
       <main>
         <Contents>
-          <Meta />
           {metaData && metaData.length > 0 ? (
-            // item : meta, synerge
-            metaData.map((item: ListForm) => (
-              <div key={item?.meta.id}>
-                <div>{item?.meta.title}</div>
-                {item?.meta.champions &&
-                  // data :
-                  item?.meta.champions.map((data: ChampionsForm) => (
-                    <div key={data.location}>
-                      <div>{data.champion.name}</div>
-                      <img
-                        src={`${data.champion.img.img_src}?${cache}`}
-                        alt="챔피언"
-                      />
-                    </div>
-                  ))}
-                <hr />
-              </div>
-            ))
+            <Meta metaData={metaData} />
           ) : (
             <div>데이터가 없습니다</div> // 데이터가 없을 때
           )}

@@ -36,6 +36,7 @@ export type MetaForm = {
   title: string;
   like_count: number;
   dislike_count: number;
+  reroll_lv: number;
   augmenter: Array<AugmenterForm>;
   champions: Array<ChampionsForm>;
 };

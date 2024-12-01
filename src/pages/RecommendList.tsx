@@ -55,7 +55,7 @@ export default function RecommendList() {
         </ImageBox>
         <Contents>
           <SubTitle>추천 메타</SubTitle>
-          <Meta />
+          {/* <Meta /> */}
         </Contents>
       </main>
       <footer>
