@@ -45,7 +45,6 @@ const Tbody = styled.tbody`
   > tr {
     &:hover td h2 {
       color: #5144ed;
-      text-decoration-line: underline;
     }
   }
   > tr td {
@@ -147,17 +146,19 @@ export default function Meta({ metaData }: any) {
             </td>
             {/* 선호도 */}
             <td>
-              {(item?.meta.like_count || 0) +
-                (item?.meta.dislike_count || 0) ===
-              0
-                ? 0 // like_count와 dislike_count 합이 0이면 0% 반환
-                : Math.round(
-                    ((item?.meta.like_count || 0) /
-                      ((item?.meta.like_count || 0) +
-                        (item?.meta.dislike_count || 0))) *
-                      100,
-                  )}
-              %
+              <h2>
+                {(item?.meta.like_count || 0) +
+                  (item?.meta.dislike_count || 0) ===
+                0
+                  ? 0 // like_count와 dislike_count 합이 0이면 0% 반환
+                  : Math.round(
+                      ((item?.meta.like_count || 0) /
+                        ((item?.meta.like_count || 0) +
+                          (item?.meta.dislike_count || 0))) *
+                        100,
+                    )}
+                %
+              </h2>
             </td>
             {/* 화살표 */}
             <td>
