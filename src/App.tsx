@@ -66,7 +66,7 @@ const GlobalStyle = createGlobalStyle`
     // 전체 스크롤바 
   ::-webkit-scrollbar {
     width: 14px; // 스크롤바 너비
-    height: 12px; // 스크롤바 높이 (가로 스크롤용)
+    height: 14px; // 스크롤바 높이 (가로 스크롤용)
   }
   // 스크롤바 트랙 (배경)
   ::-webkit-scrollbar-track {

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Header from "../components/containers/Header";
 import Meta from "../components/common/Meta";
 import Footer from "../components/containers/Footer";
@@ -95,7 +97,13 @@ export default function RecommendList() {
           {metaData && metaData.length > 0 ? (
             <Meta metaData={metaData} />
           ) : (
-            <div>로딩</div> // 로딩
+            // 로딩
+            <Skeleton
+              height="550px"
+              width="1004px"
+              baseColor="#ebebeb"
+              borderRadius="27px"
+            />
           )}
         </Contents>
       </main>
