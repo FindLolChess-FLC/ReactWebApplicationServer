@@ -62,6 +62,27 @@ const GlobalStyle = createGlobalStyle`
     border: 1px solid #d4d4d8;
     -webkit-box-shadow: 0 0 0 1000px #d4d4d8 inset;
   }
+
+    // 전체 스크롤바 
+  ::-webkit-scrollbar {
+    width: 14px; // 스크롤바 너비
+    height: 14px; // 스크롤바 높이 (가로 스크롤용)
+  }
+  // 스크롤바 트랙 (배경)
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0; // 트랙 배경색
+  }
+  // 스크롤바 손잡이 (드래그 가능한 부분)
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* 손잡이 색상 */
+    border-radius: 6px; // 둥근 모서리
+    border: 2px solid #f0f0f0; // 손잡이와 트랙 사이의 간격
+    cursor: pointer;
+  }
+  // 스크롤바 손잡이 호버 효과
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 호버 시 손잡이 색상 */
+  }
   `;
 
 function App() {

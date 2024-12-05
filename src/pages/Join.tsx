@@ -17,7 +17,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.875rem; //14px
+
   height: 100vh;
   padding: 10%;
 `;
@@ -26,6 +26,8 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 3.375rem; // 54px
+  margin-bottom: 0.875rem; //14px
   gap: 0.875rem; // 14px
 `;
 
@@ -274,7 +276,7 @@ export default function Join() {
             input="password"
             labelname="비밀번호"
             type="password"
-            placeholder="비밀번호를 8~16글자로 입력해주세요."
+            placeholder="비밀번호 형식을 맞춰서 8~16글자로 입력해주세요."
             register={register("password")}
           />
           {errors.password && (

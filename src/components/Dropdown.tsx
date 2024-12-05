@@ -36,7 +36,7 @@ const Ul = styled.ul`
   display: flex;
   flex-direction: column;
   width: 13.4375rem; // 215px
-  height: 8.3125rem; // 133px
+  height: 8.25rem; // 132px
   border-radius: 5px;
   box-shadow:
     -2px 0px 4px 0px rgba(0, 0, 0, 0.2),
@@ -50,6 +50,9 @@ const Ul = styled.ul`
 const Li = styled.li`
   width: 13.4375rem; // 215px
   height: 2.75rem; // 44px
+  &:nth-child(2) {
+    border-bottom: 1px solid #b0b0b0;
+  }
   &:hover {
     background: #e1e1e1;
   }
@@ -138,7 +141,6 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
               나의 즐겨찾기
             </StyledLink>
           </Li>
-          <hr />
           <Li>
             <LogoutButton type="button" onClick={handleLogout}>
               <img src={outImg} alt="마이페이지" />

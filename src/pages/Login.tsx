@@ -130,7 +130,7 @@ export default function Login() {
             input="password"
             labelname="비밀번호"
             type="password"
-            placeholder="비밀번호를 8~16글자로 입력해주세요."
+            placeholder="비밀번호 형식을 맞춰서 8~16글자로 입력해주세요."
             register={register("password")}
           />
           {errors.password && (

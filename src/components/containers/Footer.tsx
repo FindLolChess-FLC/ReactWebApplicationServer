@@ -18,9 +18,16 @@ const ArrowUp = styled.img`
 `;
 
 export default function Footer() {
+  const handleTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Body>
-      <ArrowUp src={arrowUPImg} alt="위쪽" />
+      <ArrowUp src={arrowUPImg} alt="위쪽" onClick={() => handleTop()} />
     </Body>
   );
 }
