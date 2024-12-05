@@ -15,7 +15,7 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   padding: 4.4375rem; // 71px
   background-color: #f4f4f4;
 `;

@@ -13,7 +13,7 @@ const Body = styled.div`
 `;
 const ImageBox = styled.div`
   overflow: hidden;
-  width: 100vw;
+  width: 100%;
   height: 15.5rem; // 248px
   background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
 `;
@@ -22,7 +22,7 @@ const DivBox = styled.div`
   display: flex;
   position: relative;
   width: 90rem; // 1440px
-  // height: 15.5rem; // 248px
+  height: 15.5rem; // 248px
 `;
 const Text = styled.div`
   position: absolute;
@@ -49,7 +49,7 @@ const Contents = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1.8125rem; // 29px
-  width: 100vw;
+  width: 100%;
   padding: 4.4375rem; // 71px
   background-color: #f4f4f4;
 `;
