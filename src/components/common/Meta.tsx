@@ -76,13 +76,13 @@ const Tbody = styled.tbody`
     text-align: center;
   }
   > tr:nth-child(odd) {
-    background: #f1f1fb; // 홀수 순서일 때 색상
+    background: #fff; // 홀수 순서일 때 색상
     &:hover {
       background: #e2e2ee;
     }
   }
   > tr:nth-child(even) {
-    background: #fff; // 짝수 순서일 때 색상
+    background: #f1f1fb; // 짝수 순서일 때 색상
     &:hover {
       background: #e2e2ee;
     }
