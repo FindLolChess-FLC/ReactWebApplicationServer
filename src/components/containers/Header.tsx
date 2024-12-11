@@ -7,16 +7,13 @@ import UserStatus from "../UserStatus";
 const Body = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
   height: 5.3125rem; // 85px
-  padding-top: 0.8125rem; // 13px
+  padding-bottom: 10px;
 `;
 
-const LogoImg = styled.img`
-  width: 9.0625rem; // 145px
-  height: 1.5625rem; // 25px
-`;
+const LogoImg = styled.img``;
 type HeaderProps = {
   searchValue?: string;
 };
