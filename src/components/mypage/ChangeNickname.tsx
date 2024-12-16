@@ -8,6 +8,7 @@ import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
 import Input from "../common/Input";
 import Button from "../common/Button";
+import checkDuplicate from "../../utils/checkDuplicate";
 
 const StyledButton = styled.div`
   margin-top: 0.5625rem; // 9px
@@ -19,6 +20,7 @@ export default function ChangeNickname() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     watch,
   } = useForm({ mode: "onBlur", resolver: yupResolver(mypageSchema) });
@@ -30,9 +32,8 @@ export default function ChangeNickname() {
   useEffect(() => {
     if (nicknameValue?.trim().length > 1 && nicknameValue?.trim().length < 13) {
       setChange(false);
-    } // 버튼 활성화
-    else {
-      setChange(true); // 버튼 비활성화
+    } else {
+      setChange(true);
     }
   }, [nicknameValue]);
 
@@ -55,7 +56,18 @@ export default function ChangeNickname() {
             input="nickname"
             type="text"
             placeholder="변경하실 닉네임을 2~12글자로 입력해주세요."
-            register={register("nickname")}
+            register={register("nickname", {
+              // 닉네임 중복 체크
+              onBlur: async data => {
+                const response = await checkDuplicate({
+                  key: "nickname",
+                  value: data.target.value,
+                });
+                if (response.resultcode !== "SUCCESS") {
+                  setError("nickname", { message: response });
+                }
+              },
+            })}
           />
           {errors.nickname && <h3>{errors.nickname.message}</h3>}
         </div>
