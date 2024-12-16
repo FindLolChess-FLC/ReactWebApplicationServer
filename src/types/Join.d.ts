@@ -4,4 +4,6 @@ export type JoinForm = {
   password?: string;
   emailNumber?: number;
   confirmPassword?: string;
+  newPassword?: string;
+  newconfirmPassword?: string;
 };

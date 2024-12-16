@@ -94,7 +94,7 @@ const StyleSuccess = styled.p`
 
 export default function Join() {
   // useUserInput에서 input validation schema
-  const loginSchema = useUserInput();
+  const loginSchema = useUserInput().pick(["nickname", "email", "password"]);
   // useUserInput에서 input validation schema
   const joinSchema = useNumberInput();
   // Schema 통합
