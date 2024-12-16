@@ -20,9 +20,7 @@ export default function useUserInput() {
         "비밀번호에 영문, 숫자, 특수문자를 포함해주세요.",
       )
       .required("비밀번호를 입력해주세요."),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password"), undefined], "비밀번호가 일치하지 않습니다."),
+    confirmPassword: yup.string().required("비밀번호를 다시 입력해주세요."),
     newPassword: yup
       .string()
       .min(8, "비밀번호를 8~16글자로 입력해주세요.")
@@ -34,10 +32,8 @@ export default function useUserInput() {
       .required("새 비밀번호를 입력해주세요."),
     newconfirmPassword: yup
       .string()
-      .oneOf(
-        [yup.ref("newPassword"), undefined],
-        "새 비밀번호가 일치하지 않습니다.",
-      ),
+      .required("새 비밀번호를 다시 입력해주세요.")
+      .oneOf([yup.ref("newPassword")], "새 비밀번호가 일치하지 않습니다."),
   });
   return schema;
 }

@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import Swal from "sweetalert2";
 import useUserInput from "../../hooks/useUserInput";
 import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
@@ -12,7 +13,19 @@ import Button from "../common/Button";
 const StyledButton = styled.div`
   margin-top: 3.0625rem; // 49px
 `;
-
+const CustomSwalStyle = createGlobalStyle`
+  .custom-height-popup {
+    width: 350px;
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+  }
+  .custom-confirm-button {
+    width: 76px;
+  }
+`;
 export default function ChangePassword() {
   const mypageSchema = useUserInput().pick([
     "confirmPassword",
@@ -46,17 +59,29 @@ export default function ChangePassword() {
     }
   }, [passwordValue, newPasswordValue, newPasswordConfirmValue]);
 
-  const onSubmit = (data: JoinForm) => {
-    Api({
+  const onSubmit = async (data: JoinForm) => {
+    const passwordData = await Api({
       bodyData: { current: data.confirmPassword, new: data.newPassword },
       method: "PATCH",
       lastUrl: "user/updatepassword/",
     });
-    navigate("/");
+    if (passwordData.resultcode === "SUCCESS") {
+      navigate("/");
+    } else {
+      Swal.fire({
+        text: passwordData || "비밀번호 변경에 실패했습니다.",
+        confirmButtonText: "닫기",
+        customClass: {
+          popup: "custom-height-popup", // styled-component에서 정의한 클래스 사용
+          confirmButton: "custom-confirm-button",
+        },
+      });
+    }
   };
 
   return (
     <>
+      <CustomSwalStyle />
       <h1>비밀번호 변경</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -72,7 +97,7 @@ export default function ChangePassword() {
         <div>
           <Input
             width="500px"
-            input="password"
+            input="newpassword"
             type="password"
             labelname="새 비밀번호"
             placeholder="비밀번호를 8~16글자로 입력해주세요."
@@ -83,7 +108,7 @@ export default function ChangePassword() {
         <div>
           <Input
             width="500px"
-            input="password"
+            input="newconfirmpassword"
             type="password"
             labelname="새 비밀번호 확인"
             placeholder="새 비밀번호를 입력해주세요."
