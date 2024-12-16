@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import useUserInput from "../../hooks/useUserInput";
 import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
@@ -8,12 +9,14 @@ import Input from "../common/Input";
 import Button from "../common/Button";
 
 const StyledButton = styled.div`
-  // margin-top: 490px;
+  margin-top: 0.5625rem; // 9px
 `;
 
 export default function ChangeNickname() {
   // useUserInput에서 input validation schema
   const mypageSchema = useUserInput().pick(["nickname"]);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -27,6 +30,7 @@ export default function ChangeNickname() {
       method: "PATCH",
       lastUrl: "user/updateinfo/",
     });
+    navigate("/");
   };
 
   return (

@@ -1,22 +1,23 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useState } from "react";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import mypageImg from "../assets/img/mypage.png";
 import nicknameImg from "../assets/icon/mypage1.svg";
 import passwordImg from "../assets/icon/mypage2.svg";
 import userImg from "../assets/icon/mypage3.svg";
-import Input from "../components/common/Input";
-import useUserInput from "../hooks/useUserInput";
-import Button from "../components/common/Button";
-import { Api } from "../utils/apis/Api";
-import { JoinForm } from "../types/Join";
+import ChangeNickname from "../components/mypage/ChangeNickname";
+import ChangePassword from "../components/mypage/ChangePassword";
+import Withdrawal from "../components/mypage/Withdrawal";
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  flex: 1;
 `;
 
 const ImageBox = styled.div`
@@ -55,14 +56,14 @@ const Contents = styled.div`
   margin: auto;
   display: flex;
   width: 90rem; // 1440px
-  height: 70vh;
+  height: 100%;
 `;
 
 const Aside = styled.aside`
   position: relative;
   width: 23.75rem; // 380px
-  height: 100%;
-  box-shadow: 0.125rem 0rem 0.25rem rgba(0, 0, 0, 0.15); // 2px, 0px, 4px
+  min-height: calc(100vh - 19.25rem); // 308px -> 19.25rem
+  box-shadow: 0.05rem 0rem 0.15rem rgba(0, 0, 0, 0.15); // 오른쪽에만 그림자 추가
   > ul {
     position: absolute;
     top: 3rem; // 48px
@@ -72,6 +73,7 @@ const Aside = styled.aside`
     gap: 0.5rem; // 8px
   }
   > ul li {
+    cursor: pointer;
     width: 13.625rem; // 218px
     height: 2.5625rem; // 41px
     padding: 0.875rem; // 14px
@@ -89,41 +91,30 @@ const Aside = styled.aside`
 `;
 
 const Section = styled.section`
+  margin-bottom: 15.625rem; // 250px
   padding: 3.125rem; // 50px
   > h1 {
     font-size: 2.25rem; // 36px
     font-weight: 500;
+    margin-bottom: 3.5rem; // 56px
+  }
+  > form div h3 {
+    color: #fe2e00;
+    font-size: 0.75rem; // 12px
+    font-weight: 300;
+    margin-bottom: 0.75rem; // 12px
   }
 `;
 
-const InputDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 2.8125rem 0 0.6875rem; // 45px, 0, 11px
-`;
-
-const StyleError = styled.p`
-  color: #fe2e00;
-  font-size: 0.75rem; // 12px
-  font-weight: 300;
-`;
-
 export default function MyPage() {
-  // useUserInput에서 input validation schema
-  const mypageSchema = useUserInput().pick(["nickname"]);
+  const [activeSection, setActiveSection] = useState<
+    "nickname" | "password" | "withdrawal"
+  >("nickname");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onBlur", resolver: yupResolver(mypageSchema) });
-
-  const onSubmit = (data: JoinForm) => {
-    Api({
-      bodyData: data,
-      method: "PATCH",
-      lastUrl: "user/updateinfo/",
-    });
+  const handleSectionChange = (
+    section: "nickname" | "password" | "withdrawal",
+  ) => {
+    setActiveSection(section);
   };
 
   return (
@@ -131,7 +122,7 @@ export default function MyPage() {
       <header>
         <Header />
       </header>
-      <main>
+      <Main>
         <ImageBox>
           <DivBox>
             <Text>
@@ -143,42 +134,36 @@ export default function MyPage() {
         <Contents>
           <Aside>
             <ul>
-              <li>
+              <li
+                onKeyDown={() => handleSectionChange("nickname")}
+                onClick={() => handleSectionChange("nickname")}
+              >
                 <img src={nicknameImg} alt="닉네임" />
                 <h3>닉네임 변경</h3>
               </li>
-              <li>
+              <li
+                onKeyDown={() => handleSectionChange("password")}
+                onClick={() => handleSectionChange("password")}
+              >
                 <img src={passwordImg} alt="비밀번호" />
                 <h3>비밀번호 변경</h3>
               </li>
-              <li>
+              <li
+                onKeyDown={() => handleSectionChange("withdrawal")}
+                onClick={() => handleSectionChange("withdrawal")}
+              >
                 <img src={userImg} alt="회원탈퇴" />
                 <h3>회원탈퇴</h3>
               </li>
             </ul>
           </Aside>
           <Section>
-            <h1>닉네임 변경</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <InputDiv>
-                <Input
-                  width="500px"
-                  input="nickname"
-                  type="text"
-                  placeholder="변경하실 닉네임을 2~12글자로 입력해주세요."
-                  register={register("nickname")}
-                />
-                {errors.nickname && (
-                  <StyleError>{errors.nickname.message}</StyleError>
-                )}
-              </InputDiv>
-              <Button type="submit" id="save" name="save" disabled>
-                변경사항 저장
-              </Button>
-            </form>
+            {activeSection === "nickname" && <ChangeNickname />}
+            {activeSection === "password" && <ChangePassword />}
+            {activeSection === "withdrawal" && <Withdrawal />}
           </Section>
         </Contents>
-      </main>
+      </Main>
       <footer>
         <Footer />
       </footer>
