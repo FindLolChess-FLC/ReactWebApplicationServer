@@ -30,6 +30,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.125rem; // 18px
+  align-items: flex-end;
 `;
 
 const Title = styled.h1`
@@ -44,9 +45,14 @@ const InputDiv = styled.div`
   flex-direction: column;
 `;
 
+const FindLink = styled(Link)`
+  color: #6b6b6b;
+  font-size: 0.8125rem; // 13px
+  margin-bottom: 0.5rem; // 8px
+`;
 const TextSpan = styled.span`
   color: #333;
-  font-size: 0.875rem; //14px
+  font-size: 0.875rem; // 14px
   font-weight: 500;
 `;
 
@@ -74,6 +80,8 @@ const ImgDiv = styled.div`
 const Img = styled.img`
   cursor: pointer;
 `;
+
+const url = `${process.env.REACT_APP_SITEURL}/user/passwordreset/`;
 
 export default function Login() {
   // useUserInput에서 input validation schema
@@ -137,6 +145,9 @@ export default function Login() {
             <StyleError>{errors.password.message}</StyleError>
           )}
         </InputDiv>
+        <FindLink to={url} target="blank">
+          비밀번호 찾기
+        </FindLink>
         <Button type="submit" id="login" name="login">
           이메일로 로그인
         </Button>
