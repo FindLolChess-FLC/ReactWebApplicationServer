@@ -1,7 +1,8 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
 import Input from "../common/Input";
@@ -34,6 +35,20 @@ const StyledWarning = styled.div`
   line-height: 1.1875rem; // 19px
 `;
 
+const CustomSwalStyle = createGlobalStyle`
+  .custom-height-popup {
+    width: 21.875rem; // 350px 
+    height: 9.0625rem; // 145px 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1.875rem; // 30px 
+  }
+  .custom-confirm-button {
+    width: 4.75rem; // 76px 
+  }
+`;
+
 export default function Withdrawal() {
   const { register, handleSubmit, watch } = useForm({
     mode: "onBlur",
@@ -52,19 +67,31 @@ export default function Withdrawal() {
     }
   }, [passwordValue]);
 
-  const onSubmit = (data: JoinForm) => {
-    Api({
+  const onSubmit = async (data: JoinForm) => {
+    const withdrawalData = await Api({
       bodyData: data,
       method: "DELETE",
       lastUrl: "user/deleteid/",
     });
-    // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
-    document.cookie = "token=; max-age=0; path=/;";
-    navigate("/");
+    if (withdrawalData.resultcode === "SUCCESS") {
+      // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
+      document.cookie = "token=; max-age=0; path=/;";
+      navigate("/");
+    } else {
+      Swal.fire({
+        text: withdrawalData || "회원 탈퇴 실패했습니다.",
+        confirmButtonText: "닫기",
+        customClass: {
+          popup: "custom-height-popup", // styled-component에서 정의한 클래스 사용
+          confirmButton: "custom-confirm-button",
+        },
+      });
+    }
   };
 
   return (
     <>
+      <CustomSwalStyle />
       <h1>회원 탈퇴</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>

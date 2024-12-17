@@ -13,19 +13,21 @@ import Button from "../common/Button";
 const StyledButton = styled.div`
   margin-top: 3.0625rem; // 49px
 `;
+
 const CustomSwalStyle = createGlobalStyle`
   .custom-height-popup {
-    width: 350px;
-    height: 145px;
+    width: 21.875rem; // 350px 
+    height: 9.0625rem; // 145px 
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 30px;
+    padding-top: 1.875rem; // 30px 
   }
   .custom-confirm-button {
-    width: 76px;
+    width: 4.75rem; // 76px 
   }
 `;
+
 export default function ChangePassword() {
   const mypageSchema = useUserInput().pick([
     "confirmPassword",
