@@ -79,7 +79,7 @@ const MetaBox = styled.div`
   font-size: 1.25rem; // 20px
   font-weight: 500;
   &:hover p {
-    font-weight: 700;
+    text-decoration: underline;
   }
 `;
 const Bar = styled.div`

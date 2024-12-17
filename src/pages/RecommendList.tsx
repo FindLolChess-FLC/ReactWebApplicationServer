@@ -52,7 +52,7 @@ const Contents = styled.div`
   align-items: center;
   gap: 1.8125rem; // 29px
   width: 100%;
-  padding: 4.4375rem; // 71px
+  padding: 4.3125rem; // 69px
   background-color: #f4f4f4;
 `;
 

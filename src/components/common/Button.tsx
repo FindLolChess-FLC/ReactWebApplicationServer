@@ -31,13 +31,37 @@ const StyleButton = styled.button<ButtonForm>`
       }
     `}
 
-  /* disabled 스타일 */
+  /* 기본 버튼 disabled 스타일 */
   ${props =>
     props.disabled === true &&
     css`
       background: #6c6c6c;
       cursor: not-allowed; /* 비활성화 시 마우스 커서 */
       pointer-events: none; /* 클릭 등 이벤트 차단 */
+    `}
+
+  /* 변경사항 버튼 스타일 */
+  ${props =>
+    props.id === "save" &&
+    css`
+      width: 10rem; /* 160px */
+      height: 3.125rem; /* 50px */
+      font-size: 0.9375rem; /* 15px */
+      background: #5144ed;
+      &:hover {
+        background: #6f63ff;
+        color: #fff;
+        font-size: 0.9375rem; /* 15px */
+      }
+    `}
+    
+/* 변경사항 버튼 disabled 스타일 */
+    ${props =>
+    props.id === "save" &&
+    props.disabled === true &&
+    css`
+      background: #f4f4f4;
+      color: #888;
     `}
 `;
 export default function Button({

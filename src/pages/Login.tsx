@@ -77,7 +77,7 @@ const Img = styled.img`
 
 export default function Login() {
   // useUserInput에서 input validation schema
-  const loginSchema = useUserInput();
+  const loginSchema = useUserInput().pick(["email", "password"]);
 
   const {
     register,

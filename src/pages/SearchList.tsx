@@ -19,10 +19,12 @@ const Contents = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 11%;
+  padding: 3.875rem; // 62px
   background-color: #f4f4f4;
 `;
 const EmptyBox = styled.div`
+  height: 65vh;
+  padding: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
