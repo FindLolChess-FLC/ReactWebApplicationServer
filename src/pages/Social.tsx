@@ -6,101 +6,101 @@ import naverImg from "../assets/icon/naver.svg";
 import googleImg from "../assets/icon/google.svg";
 import socialLogin from "../utils/socialLogin";
 
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 43.75rem; // 700px
+  height: 100vh;
+  margin: auto;
+  justify-content: center;
+  box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
+`;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6rem; // 96px
+  margin: auto;
+`;
+
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+`;
+
+const Title = styled.h1`
+  color: #0d0d0d;
+  font-size: 2.5rem; // 40px
+  font-weight: 700;
+`;
+
+const Description = styled.p`
+  color: #0d0d0d;
+  font-size: 1.125rem; // 18px
+`;
+
+const Article = styled.article`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4375rem; // 39px
+`;
+const Line = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #17171b;
+  font-size: 0.875rem; //14px
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #bfbfbf;
+  }
+
+  &::before {
+    margin-right: 17px;
+  }
+
+  &::after {
+    margin-left: 17px;
+  }
+`;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8125rem; // 13px
+`;
+
+const ImageButton = styled.button<ImageButtonForm>`
+  position: relative;
+  width: 25.625rem; // 410px
+  height: 3.75rem; // 60px
+  background: ${props => props.bgcolor || `#fff`};
+  color: ${props => props.color || `##0d0d0d`};
+  border: ${props => props.border || `none`};
+  border-radius: 8px;
+
+  &:hover {
+    background: ${props => props.hovercolor || `#f2f2f2`};
+    border: ${props => props.hoverborder || `none`};
+  }
+`;
+
+const Image = styled.img`
+  width: 1rem; // 16px
+  height: 1rem; // 16px
+  position: absolute;
+  top: 1.375rem; // 22px
+  left: 2.25rem; // 36px
+`;
+
 export default function Social() {
-  const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 43.75rem; // 700px
-    height: 100vh;
-    margin: auto;
-    justify-content: center;
-    box-shadow: 0px 6px 15px 0px rgba(47, 47, 49, 0.25);
-  `;
-
-  const Section = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6rem; // 96px
-    margin: auto;
-  `;
-
-  const Header = styled.header`
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem; // 20px
-  `;
-
-  const Title = styled.h1`
-    color: #0d0d0d;
-    font-size: 2.5rem; // 40px
-    font-weight: 700;
-  `;
-
-  const Description = styled.p`
-    color: #0d0d0d;
-    font-size: 1.125rem; // 18px
-  `;
-
-  const Article = styled.article`
-    display: flex;
-    flex-direction: column;
-    gap: 2.4375rem; // 39px
-  `;
-  const Line = styled.div`
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #17171b;
-    font-size: 0.875rem; //14px
-
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #bfbfbf;
-    }
-
-    &::before {
-      margin-right: 17px;
-    }
-
-    &::after {
-      margin-left: 17px;
-    }
-  `;
-
-  const ButtonDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8125rem; // 13px
-  `;
-
-  const ImageButton = styled.button<ImageButtonForm>`
-    position: relative;
-    width: 25.625rem; // 410px
-    height: 3.75rem; // 60px
-    background: ${props => props.bgcolor || `#fff`};
-    color: ${props => props.color || `##0d0d0d`};
-    border: ${props => props.border || `none`};
-    border-radius: 8px;
-
-    &:hover {
-      background: ${props => props.hovercolor || `#f2f2f2`};
-      border: ${props => props.hoverborder || `none`};
-    }
-  `;
-
-  const Image = styled.img`
-    width: 1rem; // 16px
-    height: 1rem; // 16px
-    position: absolute;
-    top: 1.375rem; // 22px
-    left: 2.25rem; // 36px
-  `;
-
   return (
     <Body>
       <Section>

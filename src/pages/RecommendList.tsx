@@ -12,13 +12,21 @@ import { ListForm } from "../types/List";
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 `;
+
+const Main = styled.main`
+  flex: 1;
+  background-color: #f4f4f4;
+`;
+
 const ImageBox = styled.div`
   overflow: hidden;
   width: 100%;
   height: 15.5rem; // 248px
   background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
 `;
+
 const DivBox = styled.div`
   margin: auto;
   display: flex;
@@ -26,6 +34,7 @@ const DivBox = styled.div`
   width: 90rem; // 1440px
   height: 15.5rem; // 248px
 `;
+
 const Text = styled.div`
   position: absolute;
   top: 4.75rem; // 76px
@@ -39,6 +48,7 @@ const Text = styled.div`
     padding-bottom: 1.75rem; // 28px
   }
 `;
+
 const Image = styled.img`
   position: absolute;
   top: -19.6875rem; // -315px
@@ -46,6 +56,7 @@ const Image = styled.img`
   width: 40.375rem; // 646px
   height: 54.875rem; // 878px
 `;
+
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,7 +64,6 @@ const Contents = styled.div`
   gap: 1.8125rem; // 29px
   width: 100%;
   padding: 4.3125rem; // 69px
-  background-color: #f4f4f4;
 `;
 
 const SubTitle = styled.div`
@@ -82,7 +92,7 @@ export default function RecommendList() {
       <header>
         <Header />
       </header>
-      <main>
+      <Main>
         <ImageBox>
           <DivBox>
             <Text>
@@ -106,7 +116,7 @@ export default function RecommendList() {
             />
           )}
         </Contents>
-      </main>
+      </Main>
       <footer>
         <Footer />
       </footer>
