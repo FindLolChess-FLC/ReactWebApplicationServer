@@ -62,11 +62,6 @@ const Tbody = styled.tbody`
     align-items: center;
     gap: 0.375rem; // 6px
   }
-  > tr td:nth-child(4) img {
-    position: relative;
-    border-radius: 0.25rem; // 4px
-    width: 2.625rem; // 42px
-  }
   > tr td:nth-child(4) p {
     font-size: 0.625rem; // 10px
     width: 2.625rem; // 42px
@@ -103,9 +98,43 @@ const RestartBox = styled.div`
   font-weight: 500;
 `;
 
+const ChampionColor = styled.img<{ color: string }>`
+  position: relative;
+  border-radius: 0.25rem; // 4px
+  width: 2.625rem; // 42px
+  border: 3px solid ${props => props.color};
+`;
+
 export default function Meta({ metaData }: any) {
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
-
+  console.log(metaData);
+  const getChampionColor = (price: number) => {
+    // 1코인
+    if (price === 1) {
+      return "#CBB099";
+    }
+    // 2코인
+    if (price === 2) {
+      return "#26CE69";
+    }
+    // 3코인
+    if (price === 3) {
+      return "#2D97FF";
+    }
+    // 4코인
+    if (price === 4) {
+      return "#EE3CEE";
+    }
+    // 5코인
+    if (price === 5) {
+      return "#FAD542";
+    }
+    // 6코인
+    if (price === 6) {
+      return "#493AEC";
+    }
+    return "#CBB099";
+  };
   return (
     <Table>
       <Thead>
@@ -142,9 +171,10 @@ export default function Meta({ metaData }: any) {
               {item?.meta.champions &&
                 item?.meta.champions.map((data: ChampionsForm) => (
                   <div key={data.location}>
-                    <img
+                    <ChampionColor
                       src={`${data.champion.img.img_src}?${cache}`}
                       alt="챔피언"
+                      color={getChampionColor(data.champion.price)}
                     />
                     <p>{data.champion.name}</p>
                   </div>
