@@ -6,6 +6,11 @@ import mypageImg from "../assets/img/mypage.png";
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  flex: 1;
 `;
 
 const ImageBox = styled.div`
@@ -50,7 +55,7 @@ export default function Favorites() {
       <header>
         <Header />
       </header>
-      <main>
+      <Main>
         <ImageBox>
           <DivBox>
             <Text>
@@ -60,7 +65,7 @@ export default function Favorites() {
           </DivBox>
         </ImageBox>
         <Contents>ㅇ</Contents>
-      </main>
+      </Main>
       <footer>
         <Footer />
       </footer>

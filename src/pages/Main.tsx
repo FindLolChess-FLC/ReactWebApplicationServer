@@ -10,15 +10,19 @@ import arrowImg from "../assets/icon/arrow_right.svg";
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 `;
 
+const MainContents = styled.main`
+  flex: 1;
+  background-color: #f4f4f4;
+`;
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding: 2.8125rem; // 45px
-  background-color: #f4f4f4;
 `;
 
 const Carousel = styled.div`
@@ -138,7 +142,7 @@ export default function Main() {
       <header>
         <Header />
       </header>
-      <main>
+      <MainContents>
         <Contents>
           <Carousel>
             <CarouselBox>
@@ -169,7 +173,7 @@ export default function Main() {
             <FastBox>~~~준비중~~</FastBox>
           </Fast>
         </Contents>
-      </main>
+      </MainContents>
       <footer>
         <Footer />
       </footer>

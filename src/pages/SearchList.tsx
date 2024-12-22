@@ -13,15 +13,22 @@ import emptyImg from "../assets/img/empty.png";
 const Body = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 `;
+
+const Main = styled.main`
+  flex: 1;
+  background-color: #f4f4f4;
+`;
+
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding: 3.875rem; // 62px
-  background-color: #f4f4f4;
 `;
+
 const EmptyBox = styled.div`
   height: 65vh;
   padding: 5%;
@@ -99,9 +106,9 @@ export default function SearchList() {
           searchValue={typeof searchData === "string" ? searchData : ""}
         />
       </header>
-      <main>
+      <Main>
         <Contents>{renderContent()}</Contents>
-      </main>
+      </Main>
       <footer>
         <Footer />
       </footer>

@@ -26,6 +26,7 @@ export default function UserStatus() {
     // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
     document.cookie = "token=; max-age=0; path=/;";
     setToken(""); // 토큰 상태 초기화
+    navigate("/");
   };
 
   return (
