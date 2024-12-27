@@ -29,15 +29,15 @@ const Carousel = styled.div`
   position: relative;
 `;
 const CarouselBox = styled.div`
-  width: 60.1875rem; // 963px
-  height: 26.875rem; // 430px
-  border-radius: 23px;
-  box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 64.375rem; // 1030px
+  height: 28.75rem; // 460px
+  border-radius: 1.4375rem; // 23px
+  box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: pointer;
 `;
 const ImageBox = styled.div`
-  height: 19.8125rem; // 317px;
+  height: 21.1875rem; // 339px
   overflow: hidden;
   &:hover img {
     transform: scale(1.05); // 이미지 확대
@@ -46,7 +46,7 @@ const ImageBox = styled.div`
 const BackImage = styled.img`
   position: relative;
   width: 100%;
-  height: 19.8125rem; // 317px;
+  height: 21.1875rem; // 339px
   transition: transform 0.3s ease-in-out; // 부드러운 확대 애니메이션
 `;
 const Text = styled.div`
@@ -59,7 +59,7 @@ const Text = styled.div`
   font-size: 1.3125rem; // 21px
   font-weight: 400;
   > h2 {
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.51);
+    text-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.51);
     font-size: 2.875rem; // 46px
     font-weight: 600;
     margin: 0.6875rem 0; // 11px
@@ -74,11 +74,14 @@ const Text = styled.div`
     text-decoration: underline;
   }
 `;
+const PTitle = styled.p`
+  font-family: "Roboto", regular;
+`;
 const MetaBox = styled.div`
   display: flex;
   align-items: center;
   padding: 2.75rem 2.6875rem 2.8125rem; // 44px 43px 45px
-  height: 7.0625rem; // 113px
+  height: 7.5625rem; // 121px
   background-color: #fff;
   font-size: 1.25rem; // 20px
   font-weight: 500;
@@ -88,15 +91,15 @@ const MetaBox = styled.div`
 `;
 const Bar = styled.div`
   position: absolute;
-  top: 29.8125rem; // 477px
-  left: 24.0625rem; // 385px
-  width: 12rem; // 192px
+  top: 31.6875rem; // 507px
+  left: 14.625rem; // 234px
+  width: 35.125rem; // 562px
   height: 0.3125rem; // 5px
   border-radius: 999px;
   background: #c6c6c6;
   overflow: hidden;
   > div {
-    width: 4.25rem; // 68px
+    width: 11.6875rem; // 187px
     height: 0.3125rem; // 5px
     border-radius: 999px;
     background: #0d0d0d;
@@ -120,16 +123,16 @@ const SubTitle = styled.div`
   display: flex;
   gap: 0.3125rem; // 5px
   font-size: 1.875rem; // 30px
-  padding: 8.125rem 0px 2.8125rem; // 130px 0 45px
+  padding: 8.125rem 0rem 2.8125rem; // 130px 0 45px
 `;
 const FastBox = styled.div`
   width: 60.1875rem; // 963px
   height: 26.875rem; // 430px
-  border-radius: 23px;
-  border: 1px solid #000;
+  border-radius: 1.4375rem; // 23px
+  border: 0.0625rem solid #000; // 1px
   overflow: hidden;
   background-color: #fff;
-  box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
 `;
 
 export default function Main() {
@@ -149,7 +152,7 @@ export default function Main() {
               <ImageBox onClick={() => handleImage()}>
                 <BackImage src={bgImage} alt="캐러셀 이미지" />
                 <Text>
-                  <p>시즌 13 &lt;아케인의 세계로&gt;</p>
+                  <PTitle>&lt;TFT 시즌 13: 아케인의 세계로&gt;</PTitle>
                   <h2>FIND LOL CHESS</h2>
                   <h2>추천 메타 TOP3</h2>
                   <p>자세히 보기&gt;</p>
