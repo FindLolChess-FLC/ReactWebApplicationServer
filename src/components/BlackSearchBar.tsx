@@ -16,7 +16,6 @@ const Form = styled.form`
   margin-right: 6rem; // 96px
   padding: 0.875rem 0.5rem 0.8125rem 0.8125rem; // 14px 8px 13px 13px
   position: relative;
-  border: 0.0625rem solid #888; // 1px
   border-radius: 3.125rem; // 50px
   background: #fff;
   overflow: hidden;
@@ -26,6 +25,10 @@ const SearchButton = styled.button`
   width: 3rem; // 48px
   height: 3rem; // 48px
   background: #fff;
+  img {
+    filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(180deg)
+      brightness(88%) contrast(90%);
+  }
 `;
 
 const Ul = styled.ul`
@@ -36,11 +39,11 @@ const Ul = styled.ul`
   font-family: "Roboto", semibold;
   font-size: 0.6875rem; // 11px
   font-weight: 600;
-  color: #5144ed;
+  color: #fff;
   position: absolute;
 `;
 
-export default function SearchBar({
+export default function BlackSearchBar({
   searchValue = "",
 }: {
   searchValue?: string;

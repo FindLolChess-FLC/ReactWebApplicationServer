@@ -7,6 +7,11 @@ import Dropdown from "./Dropdown";
 
 const LoginButton = styled.button`
   background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
 `;
 
 export default function UserStatus() {
@@ -23,7 +28,7 @@ export default function UserStatus() {
       method: "DELETE",
       lastUrl: "user/signout/",
     });
-    // 쿠키에서 토큰을 삭제하는 방법 (max-age=0으로 만료)
+    // 쿠키에서 토큰 삭제
     document.cookie = "token=; max-age=0; path=/;";
     setToken(""); // 토큰 상태 초기화
     navigate("/");
@@ -34,12 +39,12 @@ export default function UserStatus() {
       {token === "" ? (
         <LoginButton
           type="button"
-          onClick={() => (token === "" ? handleLogin() : handleLogout())}
+          onClick={handleLogin} // token === ""일 때는 로그인만 처리
         >
           로그인
         </LoginButton>
       ) : (
-        <Dropdown handleLogout={handleLogout} /> // 로그아웃 시
+        <Dropdown handleLogout={handleLogout} /> // 로그아웃 Dropdown 표시
       )}
     </div>
   );

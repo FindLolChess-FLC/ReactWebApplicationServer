@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { DropdownForm } from "../types/Dropdown";
 import { Api } from "../utils/apis/Api";
@@ -22,12 +22,15 @@ const DropText = styled.div`
   position: relative;
 `;
 
-const Img = styled.img`
+const Img = styled.img<{ arrow: string }>`
   cursor: pointer;
+  filter:${props => props.arrow};
+}
 `;
 
-const LoginButton = styled.button`
+const LoginButton = styled.button<{ color: string }>`
   background: transparent;
+  color: ${props => props.color};
 `;
 
 const Ul = styled.ul`
@@ -84,6 +87,13 @@ const LogoutButton = styled.button`
 `;
 
 export default function Dropdown({ handleLogout }: DropdownForm) {
+  const location = useLocation();
+
+  // 경로에 따른 동적 색상 설정
+  const color = location.pathname === "/" ? "#fff" : "#333";
+  const arrow =
+    location.pathname === "/" ? `none` : `invert(0.9) brightness(0.7)`;
+
   // 상태 관리: 목록이 보이는지 여부를 결정하는 state
   const [isOpen, setIsOpen] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -107,12 +117,13 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
     <Body>
       {/* 토글 버튼 */}
       <DropText>
-        <LoginButton type="button" onClick={handleDropdown}>
+        <LoginButton type="button" color={color} onClick={handleDropdown}>
           {`${nickname}님 환영합니다`}
         </LoginButton>
         {isOpen ? (
           <Img
             src={upImg}
+            arrow={arrow}
             alt="윗 방향"
             onKeyDown={handleDropdown}
             onClick={handleDropdown}
@@ -120,6 +131,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
         ) : (
           <Img
             src={downImg}
+            arrow={arrow}
             alt="아랫 방향"
             onKeyDown={handleDropdown}
             onClick={handleDropdown}
