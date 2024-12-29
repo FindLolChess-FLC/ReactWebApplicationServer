@@ -1,9 +1,9 @@
-// 각각 시너지(synergy의 타입)
+// 각각 시너지(champions안에 있는 synergy의 타입)
 export type SynergyForm = {
   [key: string]: string;
 };
 
-// 각각 챔피언(champion의 타입)
+// 각각 챔피언(champions안에 있는  champion의 타입)
 export type ChampionForm = {
   img: {
     img_src: string;
@@ -13,7 +13,7 @@ export type ChampionForm = {
   synergy: SynergyForm;
 };
 
-// 증강체(augmenter의 타입)
+// 증강체(Meta안에 있는 augmenter의 타입)
 export type AugmenterForm = {
   effect: string;
   img: {
@@ -23,31 +23,38 @@ export type AugmenterForm = {
   tier: string;
 };
 
-// 모든 챔피언들(champions의 타입)
+// 모든 챔피언들(Meta안에 있는 champions의 타입)
 export type ChampionsForm = {
   champion: ChampionForm;
   location: number;
   star: number;
 };
 
-// 메타(meta의 타입)
+// 시너지 내부 목록(synergys안에 있음. synergyGroup의 이름은 다 다름)
+export type SynergysListForm = {
+  name: string;
+  effect: string;
+  img_src: string;
+  number: number;
+};
+
+// 모든 메타(meta의 타입)
 export type MetaForm = {
   id: number;
   title: string;
   like_count: number;
   dislike_count: number;
   reroll_lv: number;
-  augmenter: Array<AugmenterForm>;
   champions: Array<ChampionsForm>;
 };
 
 // 모든 시너지들(synergys의 타입)
 export type SynergysForm = {
-  [key: string]: number | string;
+  [key: string]: SynergysListForm;
 };
 
 // 전체(item의 타입)
 export type ListForm = {
   meta: MetaForm;
-  synergys: SynergysForm;
+  synergys: Array<SynergysForm>;
 };
