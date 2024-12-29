@@ -35,11 +35,11 @@ const Thead = styled.thead`
   }
   // 시너지
   > tr th:nth-child(3) {
-    width: 10.625rem; // 170px
+    width: 11.25rem; // 180px
   }
   // 챔피언
   > tr th:nth-child(4) {
-    width: 30.625rem; // 490px
+    width: 30rem; // 480px
   }
   // 선호도
   > tr th:nth-child(5) {
@@ -71,11 +71,11 @@ const Tbody = styled.tbody`
   }
   // 시너지
   > tr td:nth-child(3) > div {
-    max-width: 126px;
+    max-width: 9.75rem; // 156px
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     align-items: center;
-    gap: 1px 0;
+    gap: 0.0625rem 0; // 1px
   }
   // 챔피언
   > tr td:nth-child(4) {
@@ -87,9 +87,9 @@ const Tbody = styled.tbody`
   > tr td:nth-child(4) p {
     font-size: 0.625rem; // 10px
     width: 2.625rem; // 42px
-    overflow: hidden; // 넘친 내용을 숨김
-    white-space: nowrap; // 텍스트를 한 줄로 표시
-    text-overflow: ellipsis; // 넘친 텍스트를 ...으로 표시
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     text-align: center;
   }
   // 홀수 순서일 때
@@ -134,15 +134,13 @@ const SynergyColor = styled.div<{ color: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 21px;
-  height: 21px;
+  width: 1.5625rem; // 25px
+  height: 1.5625rem; // 25px
 `;
 
 const SynergyImg = styled.img`
-  width: 11px;
-  height: 11px;
-  // margin-left: 5px;
-  // margin-top: 4px;
+  width: 0.8125rem; // 13px
+  height: 0.8125rem; // 13px
 `;
 
 export default function Meta({ metaData }: any) {
@@ -177,21 +175,35 @@ export default function Meta({ metaData }: any) {
     return "#CBB099";
   };
 
-  const getSynergyColor = (number: number, key: string) => {
-    if (key === "고물의왕") {
+  const getSynergyColor = (number: number, key: string, effect: string) => {
+    const match = effect.match(/\((\d+)\)/g);
+    const effectNumbers = match
+      ? match.map(num => parseInt(num.replace(/\(|\)/g, ""), 10))
+      : [];
+    console.log(effectNumbers);
+    if (
+      key === "고물의왕" ||
+      key === "기계화의전령관" ||
+      key === "도박꾼" ||
+      key === "추방된마법사" ||
+      key === "피의사냥꾼"
+    ) {
       return uniqueImg;
     }
-    if (number < 4) {
-      return bronzeImg;
+    if (
+      effectNumbers[3] <= number &&
+      (key === "집행자" || key === "정복자" || key === "반군")
+    ) {
+      return chromaticImg;
     }
-    if (number < 6) {
-      return silverImg;
-    }
-    if (number < 8) {
+    if (effectNumbers[2] <= number) {
       return goldImg;
     }
-    if (number < 10) {
-      return chromaticImg;
+    if (effectNumbers[1] <= number && effectNumbers[2] > number) {
+      return silverImg;
+    }
+    if (effectNumbers[0] <= number && effectNumbers[1] > number) {
+      return bronzeImg;
     }
     return bronzeImg;
   };
@@ -233,7 +245,7 @@ export default function Meta({ metaData }: any) {
                     ([key, value]: [string, SynergysListForm]) => (
                       <SynergyColor
                         key={key}
-                        color={getSynergyColor(value.number, key)}
+                        color={getSynergyColor(value.number, key, value.effect)}
                       >
                         <SynergyImg
                           src={value.img_src}
