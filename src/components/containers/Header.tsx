@@ -1,32 +1,42 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import logoImg from "../../assets/img/logo.png";
+import { Link, useLocation } from "react-router-dom";
+import blacklogoImg from "../../assets/img/logo_black.png";
+import whitelogoImg from "../../assets/img/logo_white.png";
 import SearchBar from "../SearchBar";
 import UserStatus from "../UserStatus";
+import BlackSearchBar from "../BlackSearchBar";
 
-const Body = styled.div`
+const Body = styled.div<{ bgColor: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 5.3125rem; // 85px
-  padding-bottom: 10px;
+  background: ${props => props.bgColor};
+  height: 6.3125rem; // 101px
+  padding-bottom: 0.625rem; // 10px
 `;
 
-const LogoImg = styled.img``;
 type HeaderProps = {
   searchValue?: string;
 };
 
 export default function Header({ searchValue }: HeaderProps) {
+  const location = useLocation();
+  const bgColor = location.pathname === "/" ? "#070404" : "#fff";
+  const logo = location.pathname === "/" ? whitelogoImg : blacklogoImg;
   console.log("중간");
   console.log(searchValue);
   return (
-    <Body>
+    <Body bgColor={bgColor}>
       <Link to="/">
-        <LogoImg src={logoImg} alt="로고 이미지" />
+        <img src={logo} alt="로고 이미지" />
       </Link>
-      <SearchBar searchValue={searchValue} />
+      {location.pathname === "/" ? (
+        <BlackSearchBar searchValue={searchValue} />
+      ) : (
+        <SearchBar searchValue={searchValue} />
+      )}
+
       <UserStatus />
     </Body>
   );

@@ -54,22 +54,15 @@ const StyleInput = styled.input`
       }
     `}
 
-     /* Searchbar input의 스타일 */
+   /* Searchbar input의 스타일 */
   ${props =>
     props.id === "search" &&
     css`
       font-size: 1.125rem; // 18px
-      padding: 1.25rem 2.0625rem; // 20px 33px
-      border: 1px solid #888;
-      width: 614px;
-      height: 3rem; // 48px
-      border-radius: 3.125rem; // 50px
-      margin: 0;
-
+      border: none;
+      width:  34.375rem; // 550px;
       &:focus {
-        border: 2px solid #5144ed;
-        &::placeholder {
-          color: #5144ed;
+        border: none;
         }
       }
     `}
