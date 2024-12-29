@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Input from "./common/Input";
-import { SearchForm } from "../types/Search";
-import searchImg from "../assets/icon/search.svg";
+import Input from "../common/Input";
+import { SearchForm } from "../../types/Search";
+import searchImg from "../../assets/icon/search.svg";
 
 const Form = styled.form`
   width: 38.375rem; // 614px
@@ -16,6 +16,7 @@ const Form = styled.form`
   margin-right: 6rem; // 96px
   padding: 0.875rem 0.5rem 0.8125rem 0.8125rem; // 14px 8px 13px 13px
   position: relative;
+  border: 0.0625rem solid #888; // 1px
   border-radius: 3.125rem; // 50px
   background: #fff;
   overflow: hidden;
@@ -25,10 +26,6 @@ const SearchButton = styled.button`
   width: 3rem; // 48px
   height: 3rem; // 48px
   background: #fff;
-  img {
-    filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(180deg)
-      brightness(88%) contrast(90%);
-  }
 `;
 
 const Ul = styled.ul`
@@ -39,11 +36,11 @@ const Ul = styled.ul`
   font-family: "Roboto", semibold;
   font-size: 0.6875rem; // 11px
   font-weight: 600;
-  color: #fff;
+  color: #5144ed;
   position: absolute;
 `;
 
-export default function BlackSearchBar({
+export default function SearchBar({
   searchValue = "",
 }: {
   searchValue?: string;

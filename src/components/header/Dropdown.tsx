@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { DropdownForm } from "../types/Dropdown";
-import { Api } from "../utils/apis/Api";
-import downImg from "../assets/icon/arrow_down.svg";
-import upImg from "../assets/icon/arrow_up.svg";
-import myImg from "../assets/icon/mypage.svg";
-import heartImg from "../assets/icon/heart.svg";
-import outImg from "../assets/icon/logout.svg";
+import { DropdownForm } from "../../types/Dropdown";
+import { Api } from "../../utils/apis/Api";
+import downImg from "../../assets/icon/arrow_down.svg";
+import upImg from "../../assets/icon/arrow_up.svg";
+import myImg from "../../assets/icon/mypage.svg";
+import heartImg from "../../assets/icon/heart.svg";
+import outImg from "../../assets/icon/logout.svg";
 
 const Body = styled.div`
   display: flex;
