@@ -1,8 +1,13 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import bgImage from "../assets/img/c1.jpg";
+import bgImage1 from "../assets/img/c1.jpg";
+import bgImage2 from "../assets/img/c2.jpg";
+import bgImage3 from "../assets/img/c3.jpg";
 import arrowRightImg from "../assets/icon/arrow_button_right.svg";
 import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
+import { Api } from "../utils/apis/Api";
+import { ListForm } from "../types/List";
 
 const Body = styled.div`
   position: relative;
@@ -98,15 +103,44 @@ const ArrowLeft = styled.img`
 `;
 
 export default function Carousel() {
+  const [metaData, setMetaData] = useState<ListForm[] | null>(null);
+  const [slide, setSlide] = useState(1);
+
+  // 캐러셀 이미지 배열
+  const bgImages = [bgImage1, bgImage2, bgImage3];
+
+  useEffect(() => {
+    const searchApi = async () => {
+      const response = await Api({
+        method: "GET",
+        lastUrl: "meta/metasearch/",
+      });
+      setMetaData(response.data);
+    };
+    searchApi();
+  }, []);
+
   const navigate = useNavigate();
+  // 캐러셀 이미지 누르면 동작
   const handleImage = () => {
     navigate("/recommend-list");
   };
+  // 오른쪽 버튼 누르면 동작
+  const handleNextSlide = () => {
+    setSlide(lastSlide => (lastSlide < 3 ? lastSlide + 1 : 1)); // 3번째 슬라이드 이후 1번 슬라이드로
+  };
+  // 왼쪽 버튼 누르면 동작
+  const handlePrevSlide = () => {
+    setSlide(lastSlide => (lastSlide > 1 ? lastSlide - 1 : 3)); // 1번째 슬라이드 이전 3번 슬라이드로
+  };
+  if (!metaData) {
+    return <div>데이터를 불러오는 중...</div>;
+  }
   return (
     <Body>
       <CarouselBox>
         <ImageBox onClick={() => handleImage()}>
-          <BackImage src={bgImage} alt="캐러셀 이미지" />
+          <BackImage src={bgImages[slide - 1]} alt={`${slide} 캐러셀 이미지`} />
           <Text>
             <PTitle>&lt;TFT 시즌 13: 아케인의 세계로&gt;</PTitle>
             <h2>FIND LOL CHESS</h2>
@@ -115,11 +149,13 @@ export default function Carousel() {
           </Text>
         </ImageBox>
         <MetaBox>
-          <p>[기시감] 6선봉대 갈리오</p>
+          <p>{metaData[slide - 1]?.meta?.title}</p>
+          <div>시너지</div>
+          <div>챔피언</div>
         </MetaBox>
       </CarouselBox>
-      <ArrowRight src={arrowRightImg} alt="오른쪽" />
-      <ArrowLeft src={arrowLeftImg} alt="왼쪽" />
+      <ArrowRight src={arrowRightImg} alt="오른쪽" onClick={handleNextSlide} />
+      <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
       <Bar>
         <div> </div>
       </Bar>
