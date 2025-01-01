@@ -128,9 +128,8 @@ const ChampionColor = styled.img<{ color: string }>`
 
 const SynergyColor = styled.div<{ color: string }>`
   background: url(${props => props.color});
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding-top: 5px;
+  padding-left: 5.5px;
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
 `;
@@ -207,7 +206,10 @@ export default function Meta({ metaData }: any) {
                     <ChampionColor
                       src={`${data.champion.img.img_src}?${cache}`}
                       alt="챔피언"
-                      color={useChampionColor(data.champion.price)}
+                      color={useChampionColor(
+                        data.champion.price,
+                        data.champion.name,
+                      )}
                     />
                     <p>{data.champion.name}</p>
                   </div>
