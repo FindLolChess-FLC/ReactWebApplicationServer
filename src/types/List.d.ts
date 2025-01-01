@@ -32,10 +32,11 @@ export type ChampionsForm = {
 
 // 시너지 내부 목록(synergys안에 있음. synergyGroup의 이름은 다 다름)
 export type SynergysListForm = {
-  name: string;
+  name?: string;
   effect: string;
   img_src: string;
   number: number;
+  sequence: string[];
 };
 
 // 모든 메타(meta의 타입)
