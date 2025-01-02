@@ -1,29 +1,32 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 import bgImage1 from "../assets/img/c1.jpg";
 import bgImage2 from "../assets/img/c2.jpg";
 import bgImage3 from "../assets/img/c3.jpg";
 import arrowRightImg from "../assets/icon/arrow_button_right.svg";
 import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
 import { Api } from "../utils/apis/Api";
-import { ListForm } from "../types/List";
+import { ChampionsForm, ListForm, SynergysListForm } from "../types/List";
+import useChampionColor from "../hooks/useChampionColor";
+import useSynergyColor from "../hooks/useSynergyColor";
 
 const Body = styled.div`
   display: flex;
-  gap: 32px;
+  gap: 75px;
   position: relative;
 `;
 const ViewBox = styled.div`
   width: 64.375rem; // 1030px
-  height: 28.75rem; // 460px
+  height: 429px;
   position: absolute;
-  left: 1060px;
+  left: 1105px;
   pointer-events: none;
 `;
 const CarouselBox = styled.div<{ orderValue: number }>`
   width: 64.375rem; // 1030px
-  height: 28.75rem; // 460px
+  height: 429px;
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -44,7 +47,7 @@ const BackImage = styled.img`
 `;
 const Text = styled.div`
   position: absolute;
-  top: 5.625rem; // 90px
+  top: 105px;
   left: 2.8125rem; // 45px
   bottom: 3.75rem; // 60px
   z-index: 10;
@@ -53,7 +56,7 @@ const Text = styled.div`
   font-weight: 400;
   > h2 {
     text-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.51);
-    font-size: 2.875rem; // 46px
+    font-size: 41px;
     font-weight: 600;
     margin: 0.6875rem 0; // 11px
   }
@@ -72,9 +75,10 @@ const PTitle = styled.p`
 `;
 const MetaBox = styled.div`
   display: flex;
+  gap: 27px;
   align-items: center;
-  padding: 2.75rem 2.6875rem 2.8125rem; // 44px 43px 45px
-  height: 7.5625rem; // 121px
+  padding: 25px 2.6875rem; // 25px 43px
+  height: 90px;
   background-color: #fff;
   font-size: 1.25rem; // 20px
   font-weight: 500;
@@ -84,7 +88,7 @@ const MetaBox = styled.div`
 `;
 const Bar = styled.div<{ slide: number }>`
   position: absolute;
-  top: 31.6875rem; // 507px
+  top: 469px;
   left: 14.625rem; // 234px
   width: 35.125rem; // 562px
   height: 0.3125rem; // 5px
@@ -92,11 +96,10 @@ const Bar = styled.div<{ slide: number }>`
   background: #c6c6c6;
   overflow: hidden;
   > div {
-    width: 11.6875rem; // 187px
+    width: ${({ slide }) => `${187 * slide}px`};
     height: 0.3125rem; // 5px
     border-radius: 999px;
     background: #0d0d0d;
-    transform: ${({ slide }) => `translateX(${(slide - 1) * 187}px)`};
   }
 `;
 const ArrowRight = styled.img`
@@ -116,7 +119,38 @@ const ArrowLeft = styled.img`
   z-index: 999;
 `;
 
+const SynergyBox = styled.div`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 0.0625rem 0; // 1px
+`;
+const SynergyColor = styled.div<{ color: string }>`
+  background: url(${props => props.color});
+  width: 1.5625rem; // 25px
+  height: 1.5625rem; // 25px
+`;
+const SynergyImg = styled.img`
+  width: 0.8125rem; // 13px
+  height: 0.8125rem; // 13px
+  margin-top: 5px;
+  margin-left: 5.5px;
+`;
+
+const ChampionBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem; // 6px
+`;
+const ChampionColor = styled.img<{ color: string }>`
+  position: relative;
+  border-radius: 0.25rem; // 4px
+  width: 2.625rem; // 42px
+  border: 2.5px solid ${props => props.color};
+`;
+
 export default function Carousel() {
+  const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
   const [slide, setSlide] = useState(1);
   const navigate = useNavigate();
@@ -155,8 +189,16 @@ export default function Carousel() {
   ];
 
   if (!metaData) {
-    return <div>데이터를 불러오는 중...</div>;
+    return (
+      <Skeleton
+        height="429px"
+        width="1030px"
+        baseColor="#DCDCDC"
+        borderRadius="27px"
+      />
+    );
   }
+  console.log(metaData);
 
   return (
     <Body>
@@ -167,8 +209,44 @@ export default function Carousel() {
         </ImageBox>
         <MetaBox>
           <p>{metaData[2]?.meta?.title}</p>
-          <div>시너지</div>
-          <div>챔피언</div>
+          <SynergyBox>
+            {metaData[2]?.synergys.map(synergyGroup =>
+              Object.entries(synergyGroup).map(
+                ([key, value]: [string, SynergysListForm]) => {
+                  const colors = useSynergyColor(
+                    value.number,
+                    key,
+                    value.effect,
+                    value.sequence,
+                  );
+                  // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
+                  return colors ? (
+                    <SynergyColor key={key} color={colors}>
+                      <SynergyImg
+                        src={value.img_src}
+                        alt={`${key} 시너지 무늬`}
+                      />
+                    </SynergyColor>
+                  ) : null;
+                },
+              ),
+            )}
+          </SynergyBox>
+          <ChampionBox>
+            {metaData[2]?.meta?.champions &&
+              metaData[2]?.meta?.champions.map((data: ChampionsForm) => (
+                <div key={data.location}>
+                  <ChampionColor
+                    src={`${data.champion.img.img_src}?${cache}`}
+                    alt="챔피언"
+                    color={useChampionColor(
+                      data.champion.price,
+                      data.champion.name,
+                    )}
+                  />
+                </div>
+              ))}
+          </ChampionBox>
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 1 */}
@@ -178,8 +256,44 @@ export default function Carousel() {
         </ImageBox>
         <MetaBox>
           <p>{metaData[0]?.meta?.title}</p>
-          <div>시너지</div>
-          <div>챔피언</div>
+          <SynergyBox>
+            {metaData[0]?.synergys.map(synergyGroup =>
+              Object.entries(synergyGroup).map(
+                ([key, value]: [string, SynergysListForm]) => {
+                  const colors = useSynergyColor(
+                    value.number,
+                    key,
+                    value.effect,
+                    value.sequence,
+                  );
+                  // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
+                  return colors ? (
+                    <SynergyColor key={key} color={colors}>
+                      <SynergyImg
+                        src={value.img_src}
+                        alt={`${key} 시너지 무늬`}
+                      />
+                    </SynergyColor>
+                  ) : null;
+                },
+              ),
+            )}
+          </SynergyBox>
+          <ChampionBox>
+            {metaData[0]?.meta?.champions &&
+              metaData[0]?.meta?.champions.map((data: ChampionsForm) => (
+                <div key={data.location}>
+                  <ChampionColor
+                    src={`${data.champion.img.img_src}?${cache}`}
+                    alt="챔피언"
+                    color={useChampionColor(
+                      data.champion.price,
+                      data.champion.name,
+                    )}
+                  />
+                </div>
+              ))}
+          </ChampionBox>
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 2 */}
@@ -189,8 +303,44 @@ export default function Carousel() {
         </ImageBox>
         <MetaBox>
           <p>{metaData[1]?.meta?.title}</p>
-          <div>시너지</div>
-          <div>챔피언</div>
+          <SynergyBox>
+            {metaData[1]?.synergys.map(synergyGroup =>
+              Object.entries(synergyGroup).map(
+                ([key, value]: [string, SynergysListForm]) => {
+                  const colors = useSynergyColor(
+                    value.number,
+                    key,
+                    value.effect,
+                    value.sequence,
+                  );
+                  // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
+                  return colors ? (
+                    <SynergyColor key={key} color={colors}>
+                      <SynergyImg
+                        src={value.img_src}
+                        alt={`${key} 시너지 무늬`}
+                      />
+                    </SynergyColor>
+                  ) : null;
+                },
+              ),
+            )}
+          </SynergyBox>
+          <ChampionBox>
+            {metaData[1]?.meta?.champions &&
+              metaData[1]?.meta?.champions.map((data: ChampionsForm) => (
+                <div key={data.location}>
+                  <ChampionColor
+                    src={`${data.champion.img.img_src}?${cache}`}
+                    alt="챔피언"
+                    color={useChampionColor(
+                      data.champion.price,
+                      data.champion.name,
+                    )}
+                  />
+                </div>
+              ))}
+          </ChampionBox>
         </MetaBox>
       </CarouselBox>
 
