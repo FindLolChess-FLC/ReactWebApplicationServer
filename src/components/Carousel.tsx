@@ -10,15 +10,25 @@ import { Api } from "../utils/apis/Api";
 import { ListForm } from "../types/List";
 
 const Body = styled.div`
+  display: flex;
+  gap: 32px;
   position: relative;
 `;
-const CarouselBox = styled.div`
+const ViewBox = styled.div`
+  width: 64.375rem; // 1030px
+  height: 28.75rem; // 460px
+  position: absolute;
+  left: 1060px;
+  pointer-events: none;
+`;
+const CarouselBox = styled.div<{ orderValue: number }>`
   width: 64.375rem; // 1030px
   height: 28.75rem; // 460px
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: pointer;
+  order: ${({ orderValue }) => orderValue};
 `;
 const ImageBox = styled.div`
   height: 21.1875rem; // 339px
@@ -28,7 +38,6 @@ const ImageBox = styled.div`
   }
 `;
 const BackImage = styled.img`
-  position: relative;
   width: 100%;
   height: 21.1875rem; // 339px
   transition: transform 0.3s ease-in-out; // 부드러운 확대 애니메이션
@@ -73,7 +82,7 @@ const MetaBox = styled.div`
     text-decoration: underline;
   }
 `;
-const Bar = styled.div`
+const Bar = styled.div<{ slide: number }>`
   position: absolute;
   top: 31.6875rem; // 507px
   left: 14.625rem; // 234px
@@ -87,6 +96,7 @@ const Bar = styled.div`
     height: 0.3125rem; // 5px
     border-radius: 999px;
     background: #0d0d0d;
+    transform: ${({ slide }) => `translateX(${(slide - 1) * 187}px)`};
   }
 `;
 const ArrowRight = styled.img`
@@ -94,20 +104,22 @@ const ArrowRight = styled.img`
   top: 11.6875rem; // 187px
   right: -1.875rem; // -30px
   cursor: pointer;
+  pointer-events: auto;
+  z-index: 999;
 `;
 const ArrowLeft = styled.img`
   position: absolute;
   top: 11.6875rem; // 187px
   left: -1.875rem; // -30px
   cursor: pointer;
+  pointer-events: auto;
+  z-index: 999;
 `;
 
 export default function Carousel() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
   const [slide, setSlide] = useState(1);
-
-  // 캐러셀 이미지 배열
-  const bgImages = [bgImage1, bgImage2, bgImage3];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const searchApi = async () => {
@@ -120,11 +132,12 @@ export default function Carousel() {
     searchApi();
   }, []);
 
-  const navigate = useNavigate();
   // 캐러셀 이미지 누르면 동작
   const handleImage = () => {
     navigate("/recommend-list");
   };
+
+  // 버튼들 : slide 값을 변경하여 슬라이드를 전환
   // 오른쪽 버튼 누르면 동작
   const handleNextSlide = () => {
     setSlide(lastSlide => (lastSlide < 3 ? lastSlide + 1 : 1)); // 3번째 슬라이드 이후 1번 슬라이드로
@@ -133,32 +146,71 @@ export default function Carousel() {
   const handlePrevSlide = () => {
     setSlide(lastSlide => (lastSlide > 1 ? lastSlide - 1 : 3)); // 1번째 슬라이드 이전 3번 슬라이드로
   };
+
+  // order : 변경된 slide 값을 기준으로 각 슬라이드의 순서를 결정
+  const orderValues = [
+    slide,
+    slide === 3 ? 1 : slide + 1,
+    slide === 1 ? 3 : slide - 1,
+  ];
+
   if (!metaData) {
     return <div>데이터를 불러오는 중...</div>;
   }
+
   return (
     <Body>
-      <CarouselBox>
+      {/* 캐러셀 3 */}
+      <CarouselBox orderValue={orderValues[0]}>
         <ImageBox onClick={() => handleImage()}>
-          <BackImage src={bgImages[slide - 1]} alt={`${slide} 캐러셀 이미지`} />
-          <Text>
-            <PTitle>&lt;TFT 시즌 13: 아케인의 세계로&gt;</PTitle>
-            <h2>FIND LOL CHESS</h2>
-            <h2>추천 메타 TOP3</h2>
-            <p>자세히 보기&gt;</p>
-          </Text>
+          <BackImage src={bgImage3} alt="캐러셀 이미지3" />
         </ImageBox>
         <MetaBox>
-          <p>{metaData[slide - 1]?.meta?.title}</p>
+          <p>{metaData[2]?.meta?.title}</p>
           <div>시너지</div>
           <div>챔피언</div>
         </MetaBox>
       </CarouselBox>
-      <ArrowRight src={arrowRightImg} alt="오른쪽" onClick={handleNextSlide} />
-      <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
-      <Bar>
-        <div> </div>
-      </Bar>
+      {/* 캐러셀 1 */}
+      <CarouselBox orderValue={orderValues[1]}>
+        <ImageBox onClick={() => handleImage()}>
+          <BackImage src={bgImage1} alt="캐러셀 이미지1" />
+        </ImageBox>
+        <MetaBox>
+          <p>{metaData[0]?.meta?.title}</p>
+          <div>시너지</div>
+          <div>챔피언</div>
+        </MetaBox>
+      </CarouselBox>
+      {/* 캐러셀 2 */}
+      <CarouselBox orderValue={orderValues[2]}>
+        <ImageBox onClick={() => handleImage()}>
+          <BackImage src={bgImage2} alt="캐러셀 이미지2" />
+        </ImageBox>
+        <MetaBox>
+          <p>{metaData[1]?.meta?.title}</p>
+          <div>시너지</div>
+          <div>챔피언</div>
+        </MetaBox>
+      </CarouselBox>
+
+      <ViewBox>
+        <Text>
+          <PTitle>&lt;TFT 시즌 13: 아케인의 세계로&gt;</PTitle>
+          <h2>FIND LOL CHESS</h2>
+          <h2>추천 메타 TOP3</h2>
+          <p>자세히 보기&gt;</p>
+        </Text>
+        <ArrowRight
+          src={arrowRightImg}
+          alt="오른쪽"
+          onClick={handleNextSlide}
+        />
+        <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
+        <Bar slide={slide}>
+          <div> </div>
+        </Bar>
+      </ViewBox>
     </Body>
   );
 }
