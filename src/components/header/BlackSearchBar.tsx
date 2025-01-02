@@ -36,7 +36,7 @@ const Ul = styled.ul`
   flex-direction: row;
   gap: 0.9375rem; // 15px
   padding: 0.625rem 3rem 0.75rem; // 10px 48px 12px
-  font-family: "Roboto", semibold;
+  font-family: "Roboto", medium;
   font-size: 0.6875rem; // 11px
   font-weight: 600;
   color: #fff;

@@ -81,7 +81,7 @@ export default function SearchList() {
         <Skeleton
           height="550px"
           width="1004px"
-          baseColor="#ebebeb"
+          baseColor="#DCDCDC"
           borderRadius="27px"
         />
       );

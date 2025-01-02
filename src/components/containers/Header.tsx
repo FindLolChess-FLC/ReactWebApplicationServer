@@ -22,7 +22,7 @@ type HeaderProps = {
 
 export default function Header({ searchValue }: HeaderProps) {
   const location = useLocation();
-  const bgColor = location.pathname === "/" ? "#070404" : "#fff";
+  const bgColor = location.pathname === "/" ? "#0D0D0D" : "#fff";
   const logo = location.pathname === "/" ? whitelogoImg : blacklogoImg;
   console.log("중간");
   console.log(searchValue);

@@ -128,8 +128,6 @@ const ChampionColor = styled.img<{ color: string }>`
 
 const SynergyColor = styled.div<{ color: string }>`
   background: url(${props => props.color});
-  padding-top: 5px;
-  padding-left: 5.5px;
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
 `;
@@ -137,6 +135,8 @@ const SynergyColor = styled.div<{ color: string }>`
 const SynergyImg = styled.img`
   width: 0.8125rem; // 13px
   height: 0.8125rem; // 13px
+  margin-top: 0.3125rem; // 5px
+  margin-left: 0.34375rem; // 5.5px
 `;
 
 export default function Meta({ metaData }: any) {
