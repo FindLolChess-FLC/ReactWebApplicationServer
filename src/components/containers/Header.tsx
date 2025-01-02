@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import blacklogoImg from "../../assets/img/logo_black.png";
 import whitelogoImg from "../../assets/img/logo_white.png";
-import SearchBar from "../SearchBar";
-import UserStatus from "../UserStatus";
-import BlackSearchBar from "../BlackSearchBar";
+import SearchBar from "../header/SearchBar";
+import UserStatus from "../header/UserStatus";
+import BlackSearchBar from "../header/BlackSearchBar";
 
 const Body = styled.div<{ bgColor: string }>`
   display: flex;
@@ -22,7 +22,7 @@ type HeaderProps = {
 
 export default function Header({ searchValue }: HeaderProps) {
   const location = useLocation();
-  const bgColor = location.pathname === "/" ? "#070404" : "#fff";
+  const bgColor = location.pathname === "/" ? "#0D0D0D" : "#fff";
   const logo = location.pathname === "/" ? whitelogoImg : blacklogoImg;
   console.log("중간");
   console.log(searchValue);

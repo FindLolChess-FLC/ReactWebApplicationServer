@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import getCookie from "../utils/getCookie";
-import { Api } from "../utils/apis/Api";
+import getCookie from "../../utils/getCookie";
+import { Api } from "../../utils/apis/Api";
 import Dropdown from "./Dropdown";
 
 const LoginButton = styled.button`

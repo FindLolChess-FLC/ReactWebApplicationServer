@@ -3,11 +3,8 @@ import starEmptyImg from "../../assets/icon/star_empty.svg";
 import starFillImg from "../../assets/icon/star_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
-import bronzeImg from "../../assets/icon/bronze.svg";
-import silverImg from "../../assets/icon/silver.svg";
-import goldImg from "../../assets/icon/gold.svg";
-import chromaticImg from "../../assets/icon/chromatic.svg";
-import uniqueImg from "../../assets/icon/unique.svg";
+import useSynergyColor from "../../hooks/useSynergyColor";
+import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 
 const Table = styled.table`
@@ -131,9 +128,6 @@ const ChampionColor = styled.img<{ color: string }>`
 
 const SynergyColor = styled.div<{ color: string }>`
   background: url(${props => props.color});
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
 `;
@@ -141,72 +135,13 @@ const SynergyColor = styled.div<{ color: string }>`
 const SynergyImg = styled.img`
   width: 0.8125rem; // 13px
   height: 0.8125rem; // 13px
+  margin-top: 0.3125rem; // 5px
+  margin-left: 0.34375rem; // 5.5px
 `;
 
 export default function Meta({ metaData }: any) {
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
   console.log(metaData);
-
-  const getChampionColor = (price: number) => {
-    // 1코인
-    if (price === 1) {
-      return "#A19B8B";
-    }
-    // 2코인
-    if (price === 2) {
-      return "#26CE69";
-    }
-    // 3코인
-    if (price === 3) {
-      return "#2D97FF";
-    }
-    // 4코인
-    if (price === 4) {
-      return "#EE3CEE";
-    }
-    // 5코인
-    if (price === 5) {
-      return "#C13CEE";
-    }
-    // 6코인
-    if (price === 6) {
-      return "#FF98E6";
-    }
-    return "#CBB099";
-  };
-
-  const getSynergyColor = (number: number, key: string, effect: string) => {
-    const match = effect.match(/\((\d+)\)/g);
-    const effectNumbers = match
-      ? match.map(num => parseInt(num.replace(/\(|\)/g, ""), 10))
-      : [];
-    console.log(effectNumbers);
-    if (
-      key === "고물의왕" ||
-      key === "기계화의전령관" ||
-      key === "도박꾼" ||
-      key === "추방된마법사" ||
-      key === "피의사냥꾼"
-    ) {
-      return uniqueImg;
-    }
-    if (
-      effectNumbers[3] <= number &&
-      (key === "집행자" || key === "정복자" || key === "반군")
-    ) {
-      return chromaticImg;
-    }
-    if (effectNumbers[2] <= number) {
-      return goldImg;
-    }
-    if (effectNumbers[1] <= number && effectNumbers[2] > number) {
-      return silverImg;
-    }
-    if (effectNumbers[0] <= number && effectNumbers[1] > number) {
-      return bronzeImg;
-    }
-    return bronzeImg;
-  };
 
   return (
     <Table>
@@ -242,17 +177,23 @@ export default function Meta({ metaData }: any) {
               <div>
                 {item?.synergys.map(synergyGroup =>
                   Object.entries(synergyGroup).map(
-                    ([key, value]: [string, SynergysListForm]) => (
-                      <SynergyColor
-                        key={key}
-                        color={getSynergyColor(value.number, key, value.effect)}
-                      >
-                        <SynergyImg
-                          src={value.img_src}
-                          alt={`${key} 시너지 무늬`}
-                        />
-                      </SynergyColor>
-                    ),
+                    ([key, value]: [string, SynergysListForm]) => {
+                      const colors = useSynergyColor(
+                        value.number,
+                        key,
+                        value.effect,
+                        value.sequence,
+                      );
+                      // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
+                      return colors ? (
+                        <SynergyColor key={key} color={colors}>
+                          <SynergyImg
+                            src={value.img_src}
+                            alt={`${key} 시너지 무늬`}
+                          />
+                        </SynergyColor>
+                      ) : null;
+                    },
                   ),
                 )}
               </div>
@@ -265,7 +206,10 @@ export default function Meta({ metaData }: any) {
                     <ChampionColor
                       src={`${data.champion.img.img_src}?${cache}`}
                       alt="챔피언"
-                      color={getChampionColor(data.champion.price)}
+                      color={useChampionColor(
+                        data.champion.price,
+                        data.champion.name,
+                      )}
                     />
                     <p>{data.champion.name}</p>
                   </div>
