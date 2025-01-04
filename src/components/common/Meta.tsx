@@ -61,11 +61,14 @@ const Tbody = styled.tbody`
     vertical-align: middle;
     text-align: left;
   }
-  // 별, 선호도, 화살표
+  // 별, 화살표
   > tr td:nth-child(1),
-  td:nth-child(5),
   td:nth-child(6) {
     text-align: center;
+  }
+  // 선호도
+  > tr td:nth-child(5) {
+    text-align: end;
   }
   // 시너지
   > tr td:nth-child(3) > div {

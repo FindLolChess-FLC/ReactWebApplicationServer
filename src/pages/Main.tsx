@@ -10,12 +10,12 @@ const Body = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
-
-const MainContents = styled.main`
+const ContentsBox = styled.div`
   flex: 1;
   background-color: #f0f0f0;
 `;
-const Contents = styled.section`
+
+const Contents = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,17 +25,15 @@ const Contents = styled.section`
 `;
 
 const Fast = styled.section`
-  margin-top: 157px;
-  width: 1110px;
+  margin-top: 108px;
+  width: 911px;
   height: 924px;
   background-color: #fff;
-  // overflow: hidden;
 `;
-
 const SubTitle = styled.div`
   display: flex;
-  width: 1110px;
-  height: 163px;
+  width: 911px;
+  height: 149px;
   background: url(${championBannerImg});
   background-size: cover;
 `;
@@ -54,7 +52,7 @@ const Text = styled.div`
     font-weight: 600;
   }
 `;
-const FastBox = styled.div``;
+const FastBox = styled.ul``;
 
 export default function Main() {
   return (
@@ -62,7 +60,7 @@ export default function Main() {
       <header>
         <Header />
       </header>
-      <MainContents>
+      <ContentsBox>
         <Contents>
           <Carousel />
           <Fast>
@@ -75,10 +73,15 @@ export default function Main() {
                 </div>
               </Text>
             </SubTitle>
-            <FastBox>~~~준비중~~</FastBox>
+            <FastBox>
+              <li>
+                <div> </div>
+                <div>사진리스트</div>
+              </li>
+            </FastBox>
           </Fast>
         </Contents>
-      </MainContents>
+      </ContentsBox>
       <footer>
         <Footer />
       </footer>

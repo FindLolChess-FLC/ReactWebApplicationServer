@@ -38,7 +38,7 @@ const Ul = styled.ul`
   padding: 0.625rem 3rem 0.75rem; // 10px 48px 12px
   font-family: "Roboto", medium;
   font-size: 0.6875rem; // 11px
-  font-weight: 600;
+  font-weight: 500;
   color: #fff;
   position: absolute;
 `;

@@ -14,19 +14,13 @@ import useSynergyColor from "../hooks/useSynergyColor";
 
 const Body = styled.div`
   display: flex;
-  gap: 75px;
+  gap: 70px;
   position: relative;
 `;
-const ViewBox = styled.div`
-  width: 64.375rem; // 1030px
-  height: 429px;
-  position: absolute;
-  left: 1105px;
-  pointer-events: none;
-`;
+
 const CarouselBox = styled.div<{ orderValue: number }>`
-  width: 64.375rem; // 1030px
-  height: 429px;
+  width: 970px;
+  height: 405px;
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -34,7 +28,7 @@ const CarouselBox = styled.div<{ orderValue: number }>`
   order: ${({ orderValue }) => orderValue};
 `;
 const ImageBox = styled.div`
-  height: 21.1875rem; // 339px
+  height: 320px;
   overflow: hidden;
   &:hover img {
     transform: scale(1.05); // 이미지 확대
@@ -42,17 +36,66 @@ const ImageBox = styled.div`
 `;
 const BackImage = styled.img`
   width: 100%;
-  height: 21.1875rem; // 339px
+  height: 320px;
   transition: transform 0.3s ease-in-out; // 부드러운 확대 애니메이션
+`;
+
+const MetaBox = styled.div`
+  display: flex;
+  gap: 27px;
+  align-items: center;
+  padding: 25px 2.6875rem; // 25px 43px
+  height: 85px;
+  background-color: #fff;
+  font-size: 1.25rem; // 20px
+  font-weight: 500;
+  &:hover p {
+    text-decoration: underline;
+  }
+`;
+const SynergyBox = styled.div`
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 0.0625rem 0; // 1px
+`;
+const SynergyColor = styled.div<{ color: string }>`
+  background: url(${props => props.color});
+  width: 1.5625rem; // 25px
+  height: 1.5625rem; // 25px
+`;
+const SynergyImg = styled.img`
+  width: 0.8125rem; // 13px
+  height: 0.8125rem; // 13px
+  margin-top: 5px;
+  margin-left: 5.5px;
+`;
+const ChampionBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem; // 6px
+`;
+const ChampionColor = styled.img<{ color: string }>`
+  position: relative;
+  border-radius: 0.25rem; // 4px
+  width: 2.625rem; // 42px
+  border: 2.5px solid ${props => props.color};
+`;
+
+const ViewBox = styled.div`
+  width: 970px;
+  height: 320px;
+  position: absolute;
+  left: 1040px;
+  pointer-events: none;
 `;
 const Text = styled.div`
   position: absolute;
-  top: 105px;
-  left: 2.8125rem; // 45px
-  bottom: 3.75rem; // 60px
+  top: 90px;
+  left: 50px;
   z-index: 10;
   color: #fff;
-  font-size: 1.3125rem; // 21px
+  font-size: 19px;
   font-weight: 400;
   > h2 {
     text-shadow: 0rem 0.25rem 0.25rem rgba(0, 0, 0, 0.51);
@@ -65,38 +108,26 @@ const Text = styled.div`
   }
   > :nth-child(4) {
     color: #fff;
-    font-size: 0.9375rem; // 15px
+    font-size: 14px;
     font-weight: 500;
     text-decoration: underline;
+    padding: 3px;
   }
 `;
 const PTitle = styled.p`
   font-family: "Roboto", regular;
 `;
-const MetaBox = styled.div`
-  display: flex;
-  gap: 27px;
-  align-items: center;
-  padding: 25px 2.6875rem; // 25px 43px
-  height: 90px;
-  background-color: #fff;
-  font-size: 1.25rem; // 20px
-  font-weight: 500;
-  &:hover p {
-    text-decoration: underline;
-  }
-`;
 const Bar = styled.div<{ slide: number }>`
   position: absolute;
-  top: 469px;
+  top: 444px;
   left: 14.625rem; // 234px
-  width: 35.125rem; // 562px
+  width: 505px;
   height: 0.3125rem; // 5px
   border-radius: 999px;
   background: #c6c6c6;
   overflow: hidden;
   > div {
-    width: ${({ slide }) => `${187 * slide}px`};
+    width: ${({ slide }) => `${168 * slide}px`};
     height: 0.3125rem; // 5px
     border-radius: 999px;
     background: #0d0d0d;
@@ -117,36 +148,6 @@ const ArrowLeft = styled.img`
   cursor: pointer;
   pointer-events: auto;
   z-index: 999;
-`;
-
-const SynergyBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  align-items: center;
-  gap: 0.0625rem 0; // 1px
-`;
-const SynergyColor = styled.div<{ color: string }>`
-  background: url(${props => props.color});
-  width: 1.5625rem; // 25px
-  height: 1.5625rem; // 25px
-`;
-const SynergyImg = styled.img`
-  width: 0.8125rem; // 13px
-  height: 0.8125rem; // 13px
-  margin-top: 5px;
-  margin-left: 5.5px;
-`;
-
-const ChampionBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.375rem; // 6px
-`;
-const ChampionColor = styled.img<{ color: string }>`
-  position: relative;
-  border-radius: 0.25rem; // 4px
-  width: 2.625rem; // 42px
-  border: 2.5px solid ${props => props.color};
 `;
 
 export default function Carousel() {
