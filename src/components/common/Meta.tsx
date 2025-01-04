@@ -10,7 +10,7 @@ import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 
 const Table = styled.table`
   font-size: 0.875rem; // 14px
-  border-radius: 1.6875rem 1.6875rem 0 0; // 27px
+  border-radius: 20px 20px;
   overflow: hidden;
 `;
 
@@ -19,7 +19,7 @@ const Thead = styled.thead`
   font-weight: 700;
   background: #7d92e7;
   > tr th {
-    height: 4rem; // 64px
+    height: 58px;
     vertical-align: middle;
     text-align: left;
   }
