@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Footer from "../components/containers/Footer";
 import Header from "../components/containers/Header";
 import Carousel from "../components/Carousel";
+import championBannerImg from "../assets/img/champion_banner.jpg";
+import arrowFillImg from "../assets/icon/arrow_fill.svg";
 
 const Body = styled.div`
   display: flex;
@@ -13,30 +15,46 @@ const MainContents = styled.main`
   flex: 1;
   background-color: #f0f0f0;
 `;
-const Contents = styled.div`
+const Contents = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding: 2.8125rem; // 45px
+  overflow: hidden;
 `;
 
-const Fast = styled.div``;
+const Fast = styled.section`
+  margin-top: 157px;
+  width: 1110px;
+  height: 924px;
+  background-color: #fff;
+  // overflow: hidden;
+`;
+
 const SubTitle = styled.div`
   display: flex;
-  gap: 0.3125rem; // 5px
-  font-size: 1.875rem; // 30px
-  padding: 8.125rem 0rem 2.8125rem; // 130px 0 45px
+  width: 1110px;
+  height: 163px;
+  background: url(${championBannerImg});
+  background-size: cover;
 `;
-const FastBox = styled.div`
-  width: 60.1875rem; // 963px
-  height: 26.875rem; // 430px
-  border-radius: 1.4375rem; // 23px
-  border: 0.0625rem solid #000; // 1px
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
+const Text = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  padding: 47px 62px;
+  > div {
+    display: flex;
+    gap: 5px;
+    padding-top: 9px;
+  }
+  > h2 {
+    font-size: 34px;
+    font-weight: 600;
+  }
 `;
+const FastBox = styled.div``;
 
 export default function Main() {
   return (
@@ -48,7 +66,15 @@ export default function Main() {
         <Contents>
           <Carousel />
           <Fast>
-            <SubTitle>빠른 챔피언 찾기</SubTitle>
+            <SubTitle>
+              <Text>
+                <h2>빠른 챔피언 찾기</h2>
+                <div>
+                  <img src={arrowFillImg} alt="화살표" />
+                  <p>FIND LOL CHESS에서 시즌13 챔피언을 한눈에 확인해보세요!</p>
+                </div>
+              </Text>
+            </SubTitle>
             <FastBox>~~~준비중~~</FastBox>
           </Fast>
         </Contents>
