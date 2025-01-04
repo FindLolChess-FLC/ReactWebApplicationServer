@@ -3,6 +3,7 @@ import starEmptyImg from "../../assets/icon/star_empty.svg";
 import starFillImg from "../../assets/icon/star_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
+import sionImg from "../../assets/img/sion.jpg";
 import useSynergyColor from "../../hooks/useSynergyColor";
 import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
@@ -204,7 +205,11 @@ export default function Meta({ metaData }: any) {
                 item?.meta.champions.map((data: ChampionsForm) => (
                   <div key={data.location}>
                     <ChampionColor
-                      src={`${data.champion.img.img_src}?${cache}`}
+                      src={
+                        data.champion.name === "사이온"
+                          ? sionImg
+                          : `${data.champion.img.img_src}?${cache}`
+                      }
                       alt="챔피언"
                       color={useChampionColor(
                         data.champion.price,
