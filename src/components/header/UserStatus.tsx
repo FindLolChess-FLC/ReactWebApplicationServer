@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import getCookie from "../../utils/getCookie";
 import { Api } from "../../utils/apis/Api";
 import Dropdown from "./Dropdown";
 
-const LoginButton = styled.button`
+const LoginButton = styled.button<{ color: string }>`
   background: transparent;
-  color: #fff;
+  color: ${props => props.color};
   border: none;
   cursor: pointer;
   font-size: 1rem;
@@ -16,6 +16,10 @@ const LoginButton = styled.button`
 
 export default function UserStatus() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 경로에 따른 동적 색상 설정
+  const color = location.pathname === "/" ? "#fff" : "#333";
 
   const [token, setToken] = useState(getCookie("token"));
 
@@ -40,6 +44,7 @@ export default function UserStatus() {
         <LoginButton
           type="button"
           onClick={handleLogin} // token === ""일 때는 로그인만 처리
+          color={color}
         >
           로그인
         </LoginButton>
