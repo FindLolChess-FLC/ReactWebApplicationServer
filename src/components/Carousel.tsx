@@ -160,7 +160,7 @@ export default function Carousel() {
     const searchApi = async () => {
       const response = await Api({
         method: "GET",
-        lastUrl: "meta/metasearch/",
+        lastUrl: "meta/metasearch/?type=best",
       });
       setMetaData(response.data);
     };
