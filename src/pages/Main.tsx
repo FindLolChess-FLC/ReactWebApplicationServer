@@ -30,8 +30,9 @@ const Contents = styled.main`
 const Fast = styled.section`
   margin-top: 108px;
   width: 1004px;
-  height: 679px;
+  height: 703px;
   background-color: #fff;
+  box-shadow: 0px 7.657px 14.357px 0px rgba(112, 144, 176, 0.1);
 `;
 const SubTitle = styled.div`
   display: flex;
