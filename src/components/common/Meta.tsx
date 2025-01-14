@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useLocation } from "react-router-dom";
 import starEmptyImg from "../../assets/icon/star_empty.svg";
 import starFillImg from "../../assets/icon/star_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
@@ -14,10 +15,10 @@ const Table = styled.table`
   overflow: hidden;
 `;
 
-const Thead = styled.thead`
+const Thead = styled.thead<{ bgColor: string }>`
   color: #fff;
   font-weight: 700;
-  background: #7d92e7;
+  background: ${props => props.bgColor};
   > tr th {
     height: 58px;
     vertical-align: middle;
@@ -144,12 +145,14 @@ const SynergyImg = styled.img`
 `;
 
 export default function Meta({ metaData }: any) {
+  const location = useLocation();
+  const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
   console.log(metaData);
 
   return (
     <Table>
-      <Thead>
+      <Thead bgColor={bgColor}>
         <tr>
           <th> </th>
           <th>제목</th>

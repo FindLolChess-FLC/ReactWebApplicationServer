@@ -1,12 +1,15 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Header from "../components/containers/Header";
 import Carousel from "../components/Carousel";
 import FastBox from "../components/FastBox";
-import Meta from "../components/common/Meta";
 import Footer from "../components/containers/Footer";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
+import Meta from "../components/common/Meta";
+import { Api } from "../utils/apis/Api";
+import { ListForm } from "../types/List";
 
 const Body = styled.div`
   display: flex;
@@ -23,12 +26,14 @@ const Contents = styled.main`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 2.8125rem; // 45px
+  padding-top: 45px;
+  padding-bottom: 205px;
   overflow: hidden;
 `;
 
 const Fast = styled.section`
   margin-top: 108px;
+  margin-bottom: 35px;
   width: 1004px;
   height: 703px;
   background-color: #fff;
@@ -58,6 +63,19 @@ const Text = styled.div`
 `;
 
 export default function Main() {
+  const [metaData, setMetaData] = useState<ListForm[] | null>(null);
+
+  useEffect(() => {
+    const searchApi = async () => {
+      const response = await Api({
+        method: "GET",
+        lastUrl: "meta/metasearch/",
+      });
+      setMetaData(response.data);
+    };
+    searchApi();
+  }, []);
+
   return (
     <Body>
       <header>
@@ -78,7 +96,7 @@ export default function Main() {
             </SubTitle>
             <FastBox />
           </Fast>
-          {/* {metaData && metaData.length > 0 ? (
+          {metaData && metaData.length > 0 ? (
             <Meta metaData={metaData} />
           ) : (
             // 로딩
@@ -88,7 +106,7 @@ export default function Main() {
               baseColor="#DCDCDC"
               borderRadius="27px"
             />
-          )} */}
+          )}
         </Contents>
       </ContentsBox>
       <footer>
