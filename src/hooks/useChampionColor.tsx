@@ -1,4 +1,4 @@
-export default function useChampionColor(price: number, name: string) {
+export default function useChampionColor(price: number, name?: string) {
   // 사이온
   if (name === "사이온") {
     return "#000";

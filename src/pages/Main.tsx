@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import Footer from "../components/containers/Footer";
+import Skeleton from "react-loading-skeleton";
 import Header from "../components/containers/Header";
 import Carousel from "../components/Carousel";
+import FastBox from "../components/FastBox";
+import Meta from "../components/common/Meta";
+import Footer from "../components/containers/Footer";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 
@@ -26,14 +29,14 @@ const Contents = styled.main`
 
 const Fast = styled.section`
   margin-top: 108px;
-  width: 911px;
-  height: 924px;
+  width: 1004px;
+  height: 679px;
   background-color: #fff;
 `;
 const SubTitle = styled.div`
   display: flex;
-  width: 911px;
-  height: 149px;
+  width: 1004px;
+  height: 163px;
   background: url(${championBannerImg});
   background-size: cover;
 `;
@@ -52,7 +55,6 @@ const Text = styled.div`
     font-weight: 600;
   }
 `;
-const FastBox = styled.ul``;
 
 export default function Main() {
   return (
@@ -73,13 +75,19 @@ export default function Main() {
                 </div>
               </Text>
             </SubTitle>
-            <FastBox>
-              <li>
-                <div> </div>
-                <div>사진리스트</div>
-              </li>
-            </FastBox>
+            <FastBox />
           </Fast>
+          {/* {metaData && metaData.length > 0 ? (
+            <Meta metaData={metaData} />
+          ) : (
+            // 로딩
+            <Skeleton
+              height="550px"
+              width="1004px"
+              baseColor="#DCDCDC"
+              borderRadius="27px"
+            />
+          )} */}
         </Contents>
       </ContentsBox>
       <footer>
