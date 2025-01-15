@@ -46,11 +46,10 @@ const Champion = styled.div`
     display: block;
   }
 `;
-
 const Tooltip = styled.div`
   display: none;
   position: absolute;
-  bottom: -10%; // 챔피언 이름 위에 툴팁 표시
+  bottom: -10%;
   left: 50%;
   transform: translateX(-50%);
   padding: 5px 10px;
@@ -66,6 +65,7 @@ const ChampionImg = styled.img<{ color: string }>`
   border-radius: 0.25rem; // 4px
   border: 2.5px solid ${props => props.color};
 `;
+
 export default function FastBox() {
   const [championData, setChampionData] = useState([]);
   const [groupPrice, setGroupPrice] = useState<number[]>([]);

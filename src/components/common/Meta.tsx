@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import starEmptyImg from "../../assets/icon/star_empty.svg";
-import starFillImg from "../../assets/icon/star_fill.svg";
+import heartEmptyImg from "../../assets/icon/heart_empty.svg";
+import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
 import sionImg from "../../assets/img/sion.jpg";
@@ -50,7 +50,7 @@ const Thead = styled.thead<{ bgColor: string }>`
   }
 `;
 
-const Tbody = styled.tbody`
+const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
   cursor: pointer;
   > tr {
     &:hover td h2 {
@@ -98,14 +98,14 @@ const Tbody = styled.tbody`
   > tr:nth-child(odd) {
     background: #fff;
     &:hover {
-      background: #e2e2ee;
+      background: ${props => props.hoverColor};
     }
   }
   // 짝수 순서일 때
   > tr:nth-child(even) {
-    background: #f1f1fb;
+    background: ${props => props.evenColor};
     &:hover {
-      background: #e2e2ee;
+      background: ${props => props.hoverColor};
     }
   }
 `;
@@ -147,8 +147,9 @@ const SynergyImg = styled.img`
 export default function Meta({ metaData }: any) {
   const location = useLocation();
   const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
+  const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
+  const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
-  console.log(metaData);
 
   return (
     <Table>
@@ -162,13 +163,13 @@ export default function Meta({ metaData }: any) {
           <th> </th>
         </tr>
       </Thead>
-      <Tbody>
+      <Tbody hoverColor={hoverColor} evenColor={evenColor}>
         {/* item : meta, synerge */}
         {metaData.map((item: ListForm) => (
           <tr key={item?.meta.id}>
             {/* 별 */}
             <td>
-              <img src={starEmptyImg} alt="기본 별" />
+              <img src={heartEmptyImg} alt="기본 별" />
               {/* <img src={starFillImg} alt="채워진 별" /> */}
             </td>
             {/* 제목 */}

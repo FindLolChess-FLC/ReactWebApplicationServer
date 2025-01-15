@@ -18,7 +18,7 @@ const Body = styled.div`
 `;
 const ContentsBox = styled.div`
   flex: 1;
-  background-color: #f0f0f0;
+  background-color: #f2f2f2;
 `;
 
 const Contents = styled.main`
