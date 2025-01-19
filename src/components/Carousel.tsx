@@ -117,22 +117,22 @@ const Text = styled.div`
 const PTitle = styled.p`
   font-family: "Roboto", regular;
 `;
-const Bar = styled.div<{ slide: number }>`
+const Bar = styled.div`
+  display: flex;
+  gap: 4px;
   position: absolute;
-  top: 444px;
-  left: 14.625rem; // 234px
-  width: 505px;
-  height: 0.3125rem; // 5px
-  border-radius: 999px;
-  background: #c6c6c6;
-  overflow: hidden;
-  > div {
-    width: ${({ slide }) => `${168 * slide}px`};
-    height: 0.3125rem; // 5px
-    border-radius: 999px;
-    background: #0d0d0d;
-  }
+  top: 424px;
+  left: 50%;
+  transform: translate(-50%);
 `;
+const Circle = styled.div<{ active: boolean }>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d1d1d1;
+  ${({ active }) => active && `background: #0d0d0d;`}
+`;
+
 const ArrowRight = styled.img`
   position: absolute;
   top: 11.6875rem; // 187px
@@ -358,8 +358,10 @@ export default function Carousel() {
           onClick={handleNextSlide}
         />
         <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
-        <Bar slide={slide}>
-          <div> </div>
+        <Bar>
+          <Circle active={slide === 1}> </Circle>
+          <Circle active={slide === 2}> </Circle>
+          <Circle active={slide === 3}> </Circle>
         </Bar>
       </ViewBox>
     </Body>

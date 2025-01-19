@@ -21,7 +21,7 @@ const Contents = styled.main`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-top: 45px;
+  padding-top: 40px;
   padding-bottom: 205px;
   overflow: hidden;
 `;
