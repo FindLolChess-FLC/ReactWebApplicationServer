@@ -1,24 +1,26 @@
 import styled from "styled-components";
-import starEmptyImg from "../../assets/icon/star_empty.svg";
-import starFillImg from "../../assets/icon/star_fill.svg";
+import { useLocation } from "react-router-dom";
+import heartEmptyImg from "../../assets/icon/heart_empty.svg";
+import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
+import sionImg from "../../assets/img/sion.jpg";
 import useSynergyColor from "../../hooks/useSynergyColor";
 import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 
 const Table = styled.table`
   font-size: 0.875rem; // 14px
-  border-radius: 1.6875rem 1.6875rem 0 0; // 27px
+  border-radius: 20px 20px;
   overflow: hidden;
 `;
 
-const Thead = styled.thead`
+const Thead = styled.thead<{ bgColor: string }>`
   color: #fff;
   font-weight: 700;
-  background: #7d92e7;
+  background: ${props => props.bgColor};
   > tr th {
-    height: 4rem; // 64px
+    height: 58px;
     vertical-align: middle;
     text-align: left;
   }
@@ -48,7 +50,7 @@ const Thead = styled.thead`
   }
 `;
 
-const Tbody = styled.tbody`
+const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
   cursor: pointer;
   > tr {
     &:hover td h2 {
@@ -60,11 +62,14 @@ const Tbody = styled.tbody`
     vertical-align: middle;
     text-align: left;
   }
-  // 별, 선호도, 화살표
+  // 별, 화살표
   > tr td:nth-child(1),
-  td:nth-child(5),
   td:nth-child(6) {
     text-align: center;
+  }
+  // 선호도
+  > tr td:nth-child(5) {
+    text-align: end;
   }
   // 시너지
   > tr td:nth-child(3) > div {
@@ -93,14 +98,14 @@ const Tbody = styled.tbody`
   > tr:nth-child(odd) {
     background: #fff;
     &:hover {
-      background: #e2e2ee;
+      background: ${props => props.hoverColor};
     }
   }
   // 짝수 순서일 때
   > tr:nth-child(even) {
-    background: #f1f1fb;
+    background: ${props => props.evenColor};
     &:hover {
-      background: #e2e2ee;
+      background: ${props => props.hoverColor};
     }
   }
 `;
@@ -140,12 +145,15 @@ const SynergyImg = styled.img`
 `;
 
 export default function Meta({ metaData }: any) {
+  const location = useLocation();
+  const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
+  const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
+  const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
-  console.log(metaData);
 
   return (
     <Table>
-      <Thead>
+      <Thead bgColor={bgColor}>
         <tr>
           <th> </th>
           <th>제목</th>
@@ -155,13 +163,13 @@ export default function Meta({ metaData }: any) {
           <th> </th>
         </tr>
       </Thead>
-      <Tbody>
+      <Tbody hoverColor={hoverColor} evenColor={evenColor}>
         {/* item : meta, synerge */}
         {metaData.map((item: ListForm) => (
           <tr key={item?.meta.id}>
             {/* 별 */}
             <td>
-              <img src={starEmptyImg} alt="기본 별" />
+              <img src={heartEmptyImg} alt="기본 별" />
               {/* <img src={starFillImg} alt="채워진 별" /> */}
             </td>
             {/* 제목 */}
@@ -204,7 +212,11 @@ export default function Meta({ metaData }: any) {
                 item?.meta.champions.map((data: ChampionsForm) => (
                   <div key={data.location}>
                     <ChampionColor
-                      src={`${data.champion.img.img_src}?${cache}`}
+                      src={
+                        data.champion.name === "사이온"
+                          ? sionImg
+                          : `${data.champion.img.img_src}?${cache}`
+                      }
                       alt="챔피언"
                       color={useChampionColor(
                         data.champion.price,

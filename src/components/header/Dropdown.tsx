@@ -96,14 +96,18 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
 
   // 상태 관리: 목록이 보이는지 여부를 결정하는 state
   const [isOpen, setIsOpen] = useState(false);
-  const [nickname, setNickname] = useState("");
+  const [nicknameData, setNicknameData] = useState("");
   useEffect(() => {
     const nicknameAPI = async () => {
       const nicknameData = await Api({
         method: "GET",
         lastUrl: "user/updateinfo/",
       });
-      setNickname(nicknameData.nickname);
+      if (nicknameData && nicknameData.nickname) {
+        setNicknameData(nicknameData.nickname);
+      } else {
+        setNicknameData("Guest"); // 기본값 설정
+      }
     };
     nicknameAPI();
   }, []);
@@ -118,7 +122,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
       {/* 토글 버튼 */}
       <DropText>
         <LoginButton type="button" color={color} onClick={handleDropdown}>
-          {`${nickname}님 환영합니다`}
+          {`${nicknameData}님 환영합니다`}
         </LoginButton>
         {isOpen ? (
           <Img

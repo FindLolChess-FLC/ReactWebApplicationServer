@@ -121,7 +121,7 @@ export default function Login() {
 
   return (
     <Body>
-      <Title>LOGO</Title>
+      <Title>FLC</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputDiv>
           <Input
