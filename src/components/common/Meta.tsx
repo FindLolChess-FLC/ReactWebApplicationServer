@@ -9,9 +9,9 @@ import useSynergyColor from "../../hooks/useSynergyColor";
 import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 
-const Table = styled.table`
+const Table = styled.table<{ border: string }>`
   font-size: 0.875rem; // 14px
-  border-radius: 20px 20px;
+  border-radius: ${props => props.border};
   overflow: hidden;
 `;
 
@@ -146,13 +146,14 @@ const SynergyImg = styled.img`
 
 export default function Meta({ metaData }: any) {
   const location = useLocation();
+  const border = location.pathname === "/" ? "none" : "20px 20px";
   const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
   const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
   const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
 
   return (
-    <Table>
+    <Table border={border}>
       <Thead bgColor={bgColor}>
         <tr>
           <th> </th>
