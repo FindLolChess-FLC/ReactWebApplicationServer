@@ -98,12 +98,11 @@ const ChampionImg = styled.img<{ color: string }>`
   border: 2.5px solid ${props => props.color};
 `;
 
-interface ComponentProps {
-  pickMeta: string;
-  setPickMeta: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export default function Fast({ pickMeta, setPickMeta }: ComponentProps) {
+export default function Fast({
+  setPickMeta,
+}: {
+  setPickMeta: (value: string) => void;
+}) {
   const [championData, setChampionData] = useState([]);
   const [groupPrice, setGroupPrice] = useState<number[]>([]);
   const [selectName, setSelectName] = useState<string[]>([]);
@@ -123,8 +122,14 @@ export default function Fast({ pickMeta, setPickMeta }: ComponentProps) {
 
   const handleClick = (name: string) => {
     setSelectName(prevNames => {
-      const updatedNames = [...prevNames, name]; // 이전 값에 새 name 추가
-      const names = updatedNames.join(","); // ','로 합친 문자열 생성
+      const updatedNames = [...prevNames];
+      const index = updatedNames.indexOf(name); // 배열안에 name이 있는지 확인 (0이하면 없음 양수면 있음)
+      if (index < 0) {
+        updatedNames.push(name); // 이전 값에 새 name 추가
+      } else {
+        updatedNames.splice(index, 1); // 중복이면 배열에서 제거 (index번째로부터 1개)
+      }
+      const names = updatedNames.join(","); // 배열을 ','로 합친 문자열로 변경하고 생성
       sendPickMeta(names); // API 호출
       return updatedNames; // 상태 업데이트
     });

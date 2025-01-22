@@ -37,7 +37,7 @@ export default function Main() {
       <ContentsBox>
         <Contents>
           <Carousel />
-          <Fast pickMeta={pickMeta} setPickMeta={setPickMeta} />
+          <Fast setPickMeta={setPickMeta} />
           {pickMeta && pickMeta.length > 0 ? (
             <Meta metaData={pickMeta} />
           ) : (
