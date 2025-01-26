@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
+import { useMetaContext } from "../hooks/Context";
 import useChampionColor from "../hooks/useChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
@@ -91,11 +92,12 @@ const Tooltip = styled.div`
   font-size: 11px;
   white-space: nowrap;
 `;
-const ChampionImg = styled.img<{ color: string }>`
+const ChampionImg = styled.img<{ filter: string; color: string }>`
   width: 49px;
   height: 49px;
   border-radius: 0.25rem; // 4px
   border: 2.5px solid ${props => props.color};
+  filter: ${props => props.filter};
 `;
 
 export default function Fast({
@@ -106,6 +108,9 @@ export default function Fast({
   const [championData, setChampionData] = useState([]);
   const [groupPrice, setGroupPrice] = useState<number[]>([]);
   const [selectName, setSelectName] = useState<string[]>([]);
+  const [mono, setMono] = useState(false);
+
+  const { pickData, setPickData } = useMetaContext();
 
   useEffect(() => {
     const championApi = async () => {
@@ -120,14 +125,20 @@ export default function Fast({
     championApi();
   }, []);
 
+  useEffect(() => {
+    console.log(pickData); // pickData가 변경될 때마다 출력
+  }, [pickData]); // pickData 상태가 변경될 때마다 실행
+
   const handleClick = (name: string) => {
     setSelectName(prevNames => {
       const updatedNames = [...prevNames];
       const index = updatedNames.indexOf(name); // 배열안에 name이 있는지 확인 (0이하면 없음 양수면 있음)
       if (index < 0) {
         updatedNames.push(name); // 이전 값에 새 name 추가
+        setMono(true);
       } else {
         updatedNames.splice(index, 1); // 중복이면 배열에서 제거 (index번째로부터 1개)
+        setMono(false);
       }
       const names = updatedNames.join(","); // 배열을 ','로 합친 문자열로 변경하고 생성
       sendPickMeta(names); // API 호출
@@ -179,6 +190,7 @@ export default function Fast({
                         src={item?.img.img_src}
                         alt="챔피언"
                         color={useChampionColor(item.price)}
+                        filter={mono ? "grayscale(1)" : "none"}
                       />
                       <p>{item?.name}</p>
                       <Tooltip className="tooltip">{item?.name}</Tooltip>

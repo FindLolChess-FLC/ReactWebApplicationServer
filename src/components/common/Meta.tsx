@@ -1,5 +1,7 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { useMetaContext } from "../../hooks/Context";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
@@ -151,6 +153,32 @@ export default function Meta({ metaData }: any) {
   const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
   const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
+
+  const { pickData, setPickData } = useMetaContext();
+
+  useEffect(() => {
+    if (metaData?.length > 0) {
+      // 챔피언 이름 중복 제거
+      const getUniqueChampions = (champions: ChampionsForm[]) => {
+        const championNames = new Set<string>();
+        champions.forEach(champion => {
+          if (champion?.champion?.name) {
+            championNames.add(champion.champion.name);
+          }
+        });
+        return Array.from(championNames);
+      };
+
+      // 모든 챔피언을 flatMap으로 가져오기
+      const allChampions = metaData.flatMap(
+        (item: any) => item?.meta.champions || [],
+      );
+
+      // 중복 제거된 챔피언 이름을 setPickData에 전달
+      const uniqueChampionNames = getUniqueChampions(allChampions);
+      setPickData(uniqueChampionNames);
+    }
+  }, [metaData, setPickData]);
 
   return (
     <Table border={border}>
