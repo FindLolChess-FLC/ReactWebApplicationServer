@@ -27,7 +27,7 @@ const Contents = styled.main`
 `;
 
 export default function Main() {
-  const [pickMeta, setPickMeta] = useState<string>("");
+  const [pickMeta, setPickMeta] = useState<string>(""); // setPickData를 통해 Fast에서 Meta로 정보 보내기
 
   return (
     <Body>

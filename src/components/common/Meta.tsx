@@ -154,8 +154,9 @@ export default function Meta({ metaData }: any) {
   const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
 
-  const { pickData, setPickData } = useMetaContext();
+  const { setPickData } = useMetaContext(); // setPickData를 통해 Meta에서 Fast로 정보 보내기
 
+  // Fast에 다시 보낼 중복없는 챔피언 배열 만들기
   useEffect(() => {
     if (metaData?.length > 0) {
       // 챔피언 이름 중복 제거
@@ -171,11 +172,11 @@ export default function Meta({ metaData }: any) {
 
       // 모든 챔피언을 flatMap으로 가져오기
       const allChampions = metaData.flatMap(
-        (item: any) => item?.meta.champions || [],
+        (item: ListForm) => item?.meta.champions || [],
       );
 
       // 중복 제거된 챔피언 이름을 setPickData에 전달
-      const uniqueChampionNames = getUniqueChampions(allChampions);
+      const uniqueChampionNames = getUniqueChampions(allChampions).join(" ");
       setPickData(uniqueChampionNames);
     }
   }, [metaData, setPickData]);
