@@ -1,5 +1,7 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { useMetaContext } from "../../hooks/Context";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
@@ -9,9 +11,9 @@ import useSynergyColor from "../../hooks/useSynergyColor";
 import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 
-const Table = styled.table`
+const Table = styled.table<{ border: string }>`
   font-size: 0.875rem; // 14px
-  border-radius: 20px 20px;
+  border-radius: ${props => props.border};
   overflow: hidden;
 `;
 
@@ -146,13 +148,41 @@ const SynergyImg = styled.img`
 
 export default function Meta({ metaData }: any) {
   const location = useLocation();
+  const border = location.pathname === "/" ? "none" : "20px 20px";
   const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
   const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
   const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
 
+  const { setPickData } = useMetaContext(); // setPickData를 통해 Meta에서 Fast로 정보 보내기
+
+  // Fast에 다시 보낼 중복없는 챔피언 배열 만들기
+  useEffect(() => {
+    if (metaData?.length > 0) {
+      // 챔피언 이름 중복 제거
+      const getUniqueChampions = (champions: ChampionsForm[]) => {
+        const championNames = new Set<string>();
+        champions.forEach(champion => {
+          if (champion?.champion?.name) {
+            championNames.add(champion.champion.name);
+          }
+        });
+        return Array.from(championNames);
+      };
+
+      // 모든 챔피언을 flatMap으로 가져오기
+      const allChampions = metaData.flatMap(
+        (item: ListForm) => item?.meta.champions || [],
+      );
+
+      // 중복 제거된 챔피언 이름을 setPickData에 전달
+      const uniqueChampionNames = getUniqueChampions(allChampions).join(" ");
+      setPickData(uniqueChampionNames);
+    }
+  }, [metaData, setPickData]);
+
   return (
-    <Table>
+    <Table border={border}>
       <Thead bgColor={bgColor}>
         <tr>
           <th> </th>

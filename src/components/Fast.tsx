@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
+import { useMetaContext } from "../hooks/Context";
 import useChampionColor from "../hooks/useChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
@@ -91,23 +92,27 @@ const Tooltip = styled.div`
   font-size: 11px;
   white-space: nowrap;
 `;
-const ChampionImg = styled.img<{ color: string }>`
+const ChampionImg = styled.img<{ filter: string; color: string }>`
   width: 49px;
   height: 49px;
   border-radius: 0.25rem; // 4px
   border: 2.5px solid ${props => props.color};
+  filter: ${props => props.filter};
 `;
 
-interface ComponentProps {
-  pickMeta: string;
-  setPickMeta: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export default function Fast({ pickMeta, setPickMeta }: ComponentProps) {
-  const [championData, setChampionData] = useState([]);
-  const [groupPrice, setGroupPrice] = useState<number[]>([]);
+export default function Fast({
+  setPickMeta,
+}: {
+  setPickMeta: (value: string) => void;
+}) {
+  const [championData, setChampionData] = useState([]); // Fast표에 챔피언을 보여주기 위한 데이터
+  const [groupPrice, setGroupPrice] = useState<number[]>([]); // Fast표에서 가격별로 구분해주기 위한 그룹
   const [selectName, setSelectName] = useState<string[]>([]);
+  const [mono, setMono] = useState(true); // 흑백처러(false면 흑백)
 
+  const { pickData } = useMetaContext(); // PickData를 통해 Meta에 받아온 정보가 저장되어 있음
+
+  // 처음 실행
   useEffect(() => {
     const championApi = async () => {
       const response = await Api({
@@ -121,10 +126,23 @@ export default function Fast({ pickMeta, setPickMeta }: ComponentProps) {
     championApi();
   }, []);
 
+  // pickData 상태가 변경될 때마다 실행
+  useEffect(() => {
+    console.log(pickData);
+  }, [pickData]);
+
   const handleClick = (name: string) => {
     setSelectName(prevNames => {
-      const updatedNames = [...prevNames, name]; // 이전 값에 새 name 추가
-      const names = updatedNames.join(","); // ','로 합친 문자열 생성
+      const updatedNames = [...prevNames];
+      const index = updatedNames.indexOf(name); // 배열안에 name이 있는지 확인 (0이하면 없음 양수면 있음)
+      if (index < 0) {
+        updatedNames.push(name); // 이전 값에 새 name 추가
+        setMono(false); // 전체 흑백
+      } else {
+        updatedNames.splice(index, 1); // 중복이면 배열에서 제거 (index번째로부터 1개)
+        setMono(true); // 전체 컬러
+      }
+      const names = updatedNames.join(","); // 배열을 ','로 합친 문자열로 변경하고 생성
       sendPickMeta(names); // API 호출
       return updatedNames; // 상태 업데이트
     });
@@ -174,6 +192,11 @@ export default function Fast({ pickMeta, setPickMeta }: ComponentProps) {
                         src={item?.img.img_src}
                         alt="챔피언"
                         color={useChampionColor(item.price)}
+                        filter={
+                          mono || pickData.includes(item.name)
+                            ? "none"
+                            : "grayscale(1)"
+                        }
                       />
                       <p>{item?.name}</p>
                       <Tooltip className="tooltip">{item?.name}</Tooltip>

@@ -1,6 +1,7 @@
 import reset from "styled-reset";
 import { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MetaProvider } from "./hooks/Context";
 import Main from "./pages/Main";
 import Loading from "./pages/Loading";
 import RecommendList from "./pages/RecommendList";
@@ -89,31 +90,33 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" index element={<Main />} />
-          <Route path="/loading" index element={<Loading />} />
-          <Route path="/test" index element={<Test />} />
-          {/* 추천 메타 */}
-          <Route path="recommend-list" index element={<RecommendList />} />
-          {/* 검색 메타 */}
-          <Route path="search-list" index element={<SearchList />} />
-          {/* 로그인 */}
-          <Route path="login" index element={<Login />} />
-          {/* 회원가입 */}
-          <Route path="join">
-            {/* 회원가입 통합페이지 */}
-            <Route index element={<Social />} />
-            {/* 이메일 회원가입 */}
-            <Route path="email-join" element={<Join />} />
-          </Route>
-          {/* 마이페이지 */}
-          <Route path="mypage">
-            <Route index element={<MyPage />} />
-          </Route>
-          <Route path="favorites" index element={<Favorites />} />
-        </Routes>
-      </BrowserRouter>
+      <MetaProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" index element={<Main />} />
+            <Route path="/loading" index element={<Loading />} />
+            <Route path="/test" index element={<Test />} />
+            {/* 추천 메타 */}
+            <Route path="recommend-list" index element={<RecommendList />} />
+            {/* 검색 메타 */}
+            <Route path="search-list" index element={<SearchList />} />
+            {/* 로그인 */}
+            <Route path="login" index element={<Login />} />
+            {/* 회원가입 */}
+            <Route path="join">
+              {/* 회원가입 통합페이지 */}
+              <Route index element={<Social />} />
+              {/* 이메일 회원가입 */}
+              <Route path="email-join" element={<Join />} />
+            </Route>
+            {/* 마이페이지 */}
+            <Route path="mypage">
+              <Route index element={<MyPage />} />
+            </Route>
+            <Route path="favorites" index element={<Favorites />} />
+          </Routes>
+        </BrowserRouter>
+      </MetaProvider>
     </>
   );
 }

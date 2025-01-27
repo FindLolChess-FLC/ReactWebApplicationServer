@@ -81,7 +81,7 @@ const Img = styled.img`
   cursor: pointer;
 `;
 
-const url = `${process.env.REACT_APP_SITEURL}/user/passwordreset/`;
+const url = `${process.env.REACT_APP_SITEURL}user/passwordreset/`;
 
 export default function Login() {
   // useUserInput에서 input validation schema
