@@ -6,6 +6,7 @@ import { useMetaContext } from "../hooks/Context";
 import useChampionColor from "../hooks/useChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
+import downImg from "../assets/icon/arrow_down.svg";
 
 const Body = styled.section`
   margin-top: 60px;
@@ -99,7 +100,20 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   border: 2.5px solid ${props => props.color};
   filter: ${props => props.filter};
 `;
-
+const ScrollButton = styled.div`
+  position: absolute;
+  top: 1230px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #0d0d0d;
+  font-size: 14px;
+  cursor: pointer;
+  > img {
+    width: 34px;
+    height: 24px;
+    filter: brightness(20%);
+  }
+`;
 export default function Fast({
   setPickMeta,
 }: {
@@ -205,6 +219,10 @@ export default function Fast({
               </ChampionList>
             </li>
           ))}
+        <ScrollButton>
+          <img src={downImg} alt="아래 화살표" />
+          <p>Scroll</p>
+        </ScrollButton>
       </FastBox>
     </Body>
   );
