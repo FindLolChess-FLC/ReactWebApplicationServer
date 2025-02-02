@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
@@ -18,7 +18,15 @@ const Body = styled.div`
   position: relative;
 `;
 
-const CarouselBox = styled.div<{ orderValue: number }>`
+const shakeAnimation = keyframes`
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+`;
+
+const CarouselBox = styled.div<{ orderValue: number; isShaking: boolean }>`
   width: 970px;
   height: 405px;
   border-radius: 1.4375rem; // 23px
@@ -26,7 +34,14 @@ const CarouselBox = styled.div<{ orderValue: number }>`
   overflow: hidden;
   cursor: pointer;
   order: ${({ orderValue }) => orderValue};
+
+  ${({ isShaking }) =>
+    isShaking &&
+    css`
+      animation: ${shakeAnimation} 0.4s ease;
+    `}
 `;
+
 const ImageBox = styled.div`
   height: 320px;
   overflow: hidden;
@@ -155,6 +170,7 @@ export default function Carousel() {
   const [metaData, setMetaData] = useState<ListForm[] | null>(null);
   const [slide, setSlide] = useState(1);
   const navigate = useNavigate();
+  const [isShaking, setIsShaking] = useState(false);
 
   useEffect(() => {
     const searchApi = async () => {
@@ -175,11 +191,19 @@ export default function Carousel() {
   // 버튼들 : slide 값을 변경하여 슬라이드를 전환
   // 오른쪽 버튼 누르면 동작
   const handleNextSlide = () => {
-    setSlide(lastSlide => (lastSlide < 3 ? lastSlide + 1 : 1)); // 3번째 슬라이드 이후 1번 슬라이드로
+    triggerShake();
+    setSlide(lastSlide => (lastSlide > 1 ? lastSlide - 1 : 3)); // 1번째 슬라이드 이전 3번 슬라이드로
   };
   // 왼쪽 버튼 누르면 동작
   const handlePrevSlide = () => {
-    setSlide(lastSlide => (lastSlide > 1 ? lastSlide - 1 : 3)); // 1번째 슬라이드 이전 3번 슬라이드로
+    triggerShake();
+    setSlide(lastSlide => (lastSlide < 3 ? lastSlide + 1 : 1)); // 3번째 슬라이드 이후 1번 슬라이드로
+  };
+
+  // 흔들리는 애니메이션 실행 함수
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400); // 0.4초 후 애니메이션 종료
   };
 
   // order : 변경된 slide 값을 기준으로 각 슬라이드의 순서를 결정
@@ -199,12 +223,11 @@ export default function Carousel() {
       />
     );
   }
-  console.log(metaData);
 
   return (
     <Body>
       {/* 캐러셀 3 */}
-      <CarouselBox orderValue={orderValues[0]}>
+      <CarouselBox orderValue={orderValues[0]} isShaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage3} alt="캐러셀 이미지3" />
         </ImageBox>
@@ -251,7 +274,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 1 */}
-      <CarouselBox orderValue={orderValues[1]}>
+      <CarouselBox orderValue={orderValues[1]} isShaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage1} alt="캐러셀 이미지1" />
         </ImageBox>
@@ -298,7 +321,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 2 */}
-      <CarouselBox orderValue={orderValues[2]}>
+      <CarouselBox orderValue={orderValues[2]} isShaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage2} alt="캐러셀 이미지2" />
         </ImageBox>
@@ -360,8 +383,8 @@ export default function Carousel() {
         <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
         <Bar>
           <Circle active={slide === 1}> </Circle>
-          <Circle active={slide === 2}> </Circle>
           <Circle active={slide === 3}> </Circle>
+          <Circle active={slide === 2}> </Circle>
         </Bar>
       </ViewBox>
     </Body>

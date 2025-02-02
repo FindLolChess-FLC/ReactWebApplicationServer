@@ -12,6 +12,8 @@ import Join from "./pages/Join";
 import MyPage from "./pages/Mypage";
 import Favorites from "./pages/Favorites";
 import Test from "./tests/Test";
+import Privacy from "./pages/Privacy";
+import Service from "./pages/Service";
 
 // global styled-component
 const GlobalStyle = createGlobalStyle`
@@ -114,6 +116,13 @@ function App() {
               <Route index element={<MyPage />} />
             </Route>
             <Route path="favorites" index element={<Favorites />} />
+            {/* 약관 */}
+            <Route path="policy">
+              {/* 개인정보 처리방침 */}
+              <Route path="privacy" element={<Privacy />} />
+              {/* 서비스 이용약관 */}
+              <Route path="service" element={<Service />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </MetaProvider>
