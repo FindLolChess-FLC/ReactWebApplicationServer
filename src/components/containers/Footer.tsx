@@ -42,20 +42,31 @@ const Copyright = styled.span`
   font-size: 10px;
   line-height: 18px;
 `;
-const Social = styled.div`
+
+const Event = styled.div`
   display: flex;
-  flex-direction: row-reverse;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px 0;
 `;
-const Instagram = styled(Link)`
-  width: 32px;
-  height: 32px;
+const Policy = styled.div`
+  display: flex;
+  gap: 26px;
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
   cursor: pointer;
-  background: url(${instagramEmptyImg});
   &:hover {
-    background: url(${instagramFillImg});
+    text-decoration: underline;
   }
+`;
+
+const Social = styled.div`
+  display: flex;
+  gap: 12px;
 `;
 const Email = styled.a`
   width: 32px;
@@ -64,6 +75,15 @@ const Email = styled.a`
   background: url(${emailEmptyImg});
   &:hover {
     background: url(${emailFillImg});
+  }
+`;
+const Instagram = styled(Link)`
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: url(${instagramEmptyImg});
+  &:hover {
+    background: url(${instagramFillImg});
   }
 `;
 
@@ -94,13 +114,23 @@ export default function Footer() {
             </p>
           </Copyright>
         </Contents>
-        <Social>
-          <Instagram
-            to="https://www.instagram.com/flc.findlolchess/?igsh=N250cGFhYnFoY2dt"
-            target="blank"
-          />
-          <Email href="mailto:flc.findlolchess@gmail.com" />
-        </Social>
+        <Event>
+          <Policy>
+            <StyledLink to="/" target="blank">
+              이용약관
+            </StyledLink>
+            <StyledLink to="/" target="blank">
+              개인정보처리방침
+            </StyledLink>
+          </Policy>
+          <Social>
+            <Email href="mailto:flc.findlolchess@gmail.com" />
+            <Instagram
+              to="https://www.instagram.com/flc.findlolchess/?igsh=N250cGFhYnFoY2dt"
+              target="blank"
+            />
+          </Social>
+        </Event>
       </Main>
     </Body>
   );

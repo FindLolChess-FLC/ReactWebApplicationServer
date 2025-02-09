@@ -34,7 +34,6 @@ const CarouselBox = styled.div<{ orderValue: number; isShaking: boolean }>`
   overflow: hidden;
   cursor: pointer;
   order: ${({ orderValue }) => orderValue};
-
   ${({ isShaking }) =>
     isShaking &&
     css`
