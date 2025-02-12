@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useEffect, useState } from "react";
 import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
@@ -100,18 +100,35 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   border: 2.5px solid ${props => props.color};
   filter: ${props => props.filter};
 `;
+
+const arrowAnimation = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(10px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+`;
 const ScrollButton = styled.div`
   position: absolute;
   top: 1230px;
   left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
   transform: translateX(-50%);
-  color: #0d0d0d;
+  color: #929292;
   font-size: 14px;
   cursor: pointer;
   > img {
-    width: 34px;
-    height: 24px;
-    filter: brightness(20%);
+    width: 35px;
+    height: 15px;
+    filter: brightness(60%);
+    animation: ${arrowAnimation} 2s infinite;
   }
 `;
 export default function Fast({
@@ -175,6 +192,13 @@ export default function Fast({
     }
   };
 
+  const handleDown = () => {
+    window.scrollTo({
+      top: 1100,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Body>
       <SubTitle>
@@ -219,7 +243,7 @@ export default function Fast({
               </ChampionList>
             </li>
           ))}
-        <ScrollButton>
+        <ScrollButton onClick={() => handleDown()}>
           <img src={downImg} alt="아래 화살표" />
           <p>Scroll</p>
         </ScrollButton>
