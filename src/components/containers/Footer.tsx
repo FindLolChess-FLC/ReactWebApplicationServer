@@ -116,10 +116,16 @@ export default function Footer() {
         </Contents>
         <Event>
           <Policy>
-            <StyledLink to="/" target="blank">
+            <StyledLink
+              to="/https://flc.servehttp.com/policy/service/"
+              target="blank"
+            >
               이용약관
             </StyledLink>
-            <StyledLink to="/" target="blank">
+            <StyledLink
+              to="/https://flc.servehttp.com/policy/privacy/"
+              target="blank"
+            >
               개인정보처리방침
             </StyledLink>
           </Policy>

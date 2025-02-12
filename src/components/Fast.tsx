@@ -194,7 +194,7 @@ export default function Fast({
 
   const handleDown = () => {
     window.scrollTo({
-      top: 1000,
+      top: 1100,
       behavior: "smooth",
     });
   };
