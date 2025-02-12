@@ -53,7 +53,7 @@ const Policy = styled.div`
   display: flex;
   gap: 26px;
 `;
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   text-decoration: none;
   color: #fff;
   font-size: 12px;
@@ -117,13 +117,13 @@ export default function Footer() {
         <Event>
           <Policy>
             <StyledLink
-              to="/https://flc.servehttp.com/policy/service/"
+              href="https://flc.servehttp.com/policy/service/"
               target="blank"
             >
               이용약관
             </StyledLink>
             <StyledLink
-              to="/https://flc.servehttp.com/policy/privacy/"
+              href="https://flc.servehttp.com/policy/privacy/"
               target="blank"
             >
               개인정보처리방침
@@ -132,7 +132,7 @@ export default function Footer() {
           <Social>
             <Email href="mailto:flc.findlolchess@gmail.com" />
             <Instagram
-              to="https://www.instagram.com/flc.findlolchess/?igsh=N250cGFhYnFoY2dt"
+              to="https://www.instagram.com/find_lol_chess?igsh=N250cGFhYnFoY2dt&utm_source=qr"
               target="blank"
             />
           </Social>
