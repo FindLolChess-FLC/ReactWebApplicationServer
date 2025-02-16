@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
 import redImg from "../assets/icon/heart_red.svg";
@@ -20,6 +21,7 @@ const Body = styled.div`
   flex-direction: column;
   min-height: 100vh;
 `;
+
 const Main = styled.main`
   flex: 1;
   background-color: #f4f4f4;
@@ -29,6 +31,7 @@ const Main = styled.main`
   gap: 19px;
   padding: 25px 0 60px;
 `;
+
 const SynergyBox = styled.ul`
   display: flex;
   gap: 3px;
@@ -47,6 +50,7 @@ const Synergy = styled.li`
   border-radius: 5px;
   background: #fff;
 `;
+
 const Contents = styled.div`
   display: flex;
   gap: 16px;
@@ -57,15 +61,34 @@ const ChessBox = styled.div`
   background: #fff;
   box-shadow: 0px 4px 36px -14px rgba(0, 0, 0, 0.05);
 `;
+const Top = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 36px;
+  padding-right: 28px;
+  height: 66px;
+`;
 const Title = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
-  padding-left: 36px;
-  height: 66px;
   font-size: 22px;
   font-weight: 600;
   cursor: pointer;
+`;
+const RestartBox = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.125rem; // 2px
+  width: 2.6875rem; // 43px
+  height: 1.25rem; // 20px
+  border-radius: 0.3125rem; // 5px
+  border: 0.0625rem solid #000; // 1px
+  padding: 0.25rem 0.4375rem; // 4px 7px
+  margin-top: 4px;
+  font-size: 0.625rem; // 10px
+  font-weight: 500;
 `;
 const Line = styled.div`
   width: 804px;
@@ -184,10 +207,16 @@ export default function Detail() {
         </SynergyBox>
         <Contents>
           <ChessBox>
-            <Title>
-              <img src={blackImg} alt="빈하트" />
-              {item?.meta.title}
-            </Title>
+            <Top>
+              <Title>
+                <img src={blackImg} alt="빈하트" />
+                {item?.meta.title}
+              </Title>
+              <RestartBox>
+                <img src={restartImg} alt="리롤" />
+                lvl{item?.meta.reroll_lv}
+              </RestartBox>
+            </Top>
             <Line />
             <ChampionContents>{champions}</ChampionContents>
           </ChessBox>
