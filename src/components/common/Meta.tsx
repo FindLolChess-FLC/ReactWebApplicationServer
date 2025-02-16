@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMetaContext } from "../../hooks/Context";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
@@ -181,6 +181,12 @@ export default function Meta({ metaData }: any) {
     }
   }, [metaData, setPickData]);
 
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    navigate(`/detail/${id}`);
+  };
+
   return (
     <Table border={border}>
       <Thead bgColor={bgColor}>
@@ -193,9 +199,13 @@ export default function Meta({ metaData }: any) {
           <th> </th>
         </tr>
       </Thead>
-      <Tbody hoverColor={hoverColor} evenColor={evenColor}>
-        {/* item : meta, synerge */}
-        {metaData.map((item: ListForm) => (
+      {/* item : meta, synerge */}
+      {metaData.map((item: ListForm) => (
+        <Tbody
+          hoverColor={hoverColor}
+          evenColor={evenColor}
+          onClick={() => handleClick(item?.meta.id)}
+        >
           <tr key={item?.meta.id}>
             {/* 별 */}
             <td>
@@ -278,8 +288,8 @@ export default function Meta({ metaData }: any) {
               <img src={arrowImg} alt="화살표" />
             </td>
           </tr>
-        ))}
-      </Tbody>
+        </Tbody>
+      ))}
     </Table>
   );
 }
