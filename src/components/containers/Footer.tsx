@@ -39,7 +39,7 @@ const Contents = styled.div`
 `;
 const Copyright = styled.span`
   color: #7c7c7c;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 18px;
 `;
 
@@ -100,7 +100,7 @@ export default function Footer() {
       <ArrowUp src={arrowUPImg} alt="위쪽" onClick={() => handleTop()} />
       <Main>
         <Contents>
-          <h1>Find Lol Chess</h1>
+          <h1>FLC</h1>
           <Copyright>
             <p>© FindLolChess. All Rights Reserved.</p>
             <p>

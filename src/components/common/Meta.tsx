@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMetaContext } from "../../hooks/Context";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
@@ -10,6 +10,7 @@ import sionImg from "../../assets/img/sion.jpg";
 import useSynergyColor from "../../hooks/useSynergyColor";
 import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
+import usePreference from "../../hooks/usePreference";
 
 const Table = styled.table<{ border: string }>`
   font-size: 0.875rem; // 14px
@@ -181,6 +182,12 @@ export default function Meta({ metaData }: any) {
     }
   }, [metaData, setPickData]);
 
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    navigate(`/detail/${id}`);
+  };
+
   return (
     <Table border={border}>
       <Thead bgColor={bgColor}>
@@ -193,9 +200,13 @@ export default function Meta({ metaData }: any) {
           <th> </th>
         </tr>
       </Thead>
-      <Tbody hoverColor={hoverColor} evenColor={evenColor}>
-        {/* item : meta, synerge */}
-        {metaData.map((item: ListForm) => (
+      {/* item : meta, synerge */}
+      {metaData.map((item: ListForm) => (
+        <Tbody
+          hoverColor={hoverColor}
+          evenColor={evenColor}
+          onClick={() => handleClick(item?.meta.id)}
+        >
           <tr key={item?.meta.id}>
             {/* 별 */}
             <td>
@@ -260,16 +271,7 @@ export default function Meta({ metaData }: any) {
             {/* 선호도 */}
             <td>
               <h2>
-                {(item?.meta.like_count || 0) +
-                  (item?.meta.dislike_count || 0) ===
-                0
-                  ? 0 // like_count와 dislike_count 합이 0이면 0% 반환
-                  : Math.round(
-                      ((item?.meta.like_count || 0) /
-                        ((item?.meta.like_count || 0) +
-                          (item?.meta.dislike_count || 0))) *
-                        100,
-                    )}
+                {usePreference(item?.meta.like_count, item?.meta.dislike_count)}
                 %
               </h2>
             </td>
@@ -278,8 +280,8 @@ export default function Meta({ metaData }: any) {
               <img src={arrowImg} alt="화살표" />
             </td>
           </tr>
-        ))}
-      </Tbody>
+        </Tbody>
+      ))}
     </Table>
   );
 }

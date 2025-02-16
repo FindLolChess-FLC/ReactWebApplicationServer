@@ -12,6 +12,7 @@ import Join from "./pages/Join";
 import MyPage from "./pages/Mypage";
 import Favorites from "./pages/Favorites";
 import Test from "./tests/Test";
+import Detail from "./pages/Detail";
 
 // global styled-component
 const GlobalStyle = createGlobalStyle`
@@ -113,7 +114,10 @@ function App() {
             <Route path="mypage">
               <Route index element={<MyPage />} />
             </Route>
+            {/* 즐겨찾기 */}
             <Route path="favorites" index element={<Favorites />} />
+            {/* 상세페이지(덱마다 다른 id) */}
+            <Route path="detail/:id" element={<Detail />} />
           </Routes>
         </BrowserRouter>
       </MetaProvider>
