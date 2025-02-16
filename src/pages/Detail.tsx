@@ -13,6 +13,7 @@ import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
 import { ListForm } from "../types/List";
+import usePreference from "../hooks/usePreference";
 
 const Body = styled.div`
   display: flex;
@@ -196,7 +197,8 @@ export default function Detail() {
               <LikeButton>
                 <img src={likeImg} alt="좋아요" />
                 <img src={lineImg} alt="실선" />
-                100%
+                {usePreference(item?.meta.like_count, item?.meta.dislike_count)}
+                %
                 <img src={dislikeImg} alt="싫어요" />
               </LikeButton>
             </CommentTitle>
