@@ -100,7 +100,7 @@ export default function Footer() {
       <ArrowUp src={arrowUPImg} alt="위쪽" onClick={() => handleTop()} />
       <Main>
         <Contents>
-          <h1>FLC</h1>
+          <h1>FindLolChess</h1>
           <Copyright>
             <p>© FindLolChess. All Rights Reserved.</p>
             <p>
