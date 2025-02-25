@@ -100,6 +100,9 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   border-radius: 0.25rem; // 4px
   border: 2.5px solid ${props => props.color};
   filter: ${props => props.filter};
+  // 클릭 방지 & 비활성화 스타일 추가
+  cursor: ${({ filter }) =>
+    filter.includes("grayscale") ? "not-allowed" : "pointer"};
 `;
 const CheckImg = styled.img`
   position: absolute;
@@ -245,7 +248,11 @@ export default function Fast({
                   .map((item: ChampionDataForm) => (
                     <Champion
                       key={item?.name}
-                      onClick={() => handleClick(item?.name)}
+                      onClick={
+                        handleMono(item.name)
+                          ? () => handleClick(item?.name)
+                          : undefined
+                      }
                     >
                       <ChampionImg
                         src={item?.img.img_src}
