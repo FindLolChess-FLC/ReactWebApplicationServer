@@ -7,6 +7,7 @@ import useChampionColor from "../hooks/useChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import downImg from "../assets/icon/arrow_down.svg";
+import checkImg from "../assets/icon/check.svg";
 
 const Body = styled.section`
   margin-top: 60px;
@@ -100,6 +101,13 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   border: 2.5px solid ${props => props.color};
   filter: ${props => props.filter};
 `;
+const CheckImg = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -80%);
+  z-index: 2;
+`;
 
 const arrowAnimation = keyframes`
   0% {
@@ -138,13 +146,14 @@ export default function Fast({
 }) {
   const [championData, setChampionData] = useState([]); // Fast표에 챔피언을 보여주기 위한 데이터
   const [groupPrice, setGroupPrice] = useState<number[]>([]); // Fast표에서 가격별로 구분해주기 위한 그룹
-  const [selectName, setSelectName] = useState<string[]>([]);
+  const [selectName, setSelectName] = useState<string[]>([]); // 선택된 챔피언의 이름을 모아둔 배열
   const [mono, setMono] = useState(true); // 흑백처러(false면 흑백)
 
   const { pickData } = useMetaContext(); // PickData를 통해 Meta에 받아온 정보가 저장되어 있음
 
   // 처음 실행
   useEffect(() => {
+    // 챔피언 리스트에 챔피언 불러오기
     const championApi = async () => {
       const response = await Api({
         method: "GET",
@@ -179,6 +188,7 @@ export default function Fast({
     });
   };
 
+  // 메타 불러오기
   const sendPickMeta = async (names: string) => {
     const pickData = await Api({
       bodyData: { data: names },
@@ -192,6 +202,7 @@ export default function Fast({
     }
   };
 
+  // 스크롤
   const handleDown = () => {
     window.scrollTo({
       top: 1100,
@@ -236,6 +247,9 @@ export default function Fast({
                             : "grayscale(1)"
                         }
                       />
+                      {selectName.includes(item.name) && (
+                        <CheckImg src={checkImg} alt="체크 표시" />
+                      )}
                       <p>{item?.name}</p>
                       <Tooltip className="tooltip">{item?.name}</Tooltip>
                     </Champion>
