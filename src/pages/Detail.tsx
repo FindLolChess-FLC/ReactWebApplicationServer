@@ -175,6 +175,7 @@ const LikeButton = styled.div`
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [item, setItem] = useState<ListForm>();
+  const [heart, setHeart] = useState(false); // 빈하트 false
   useEffect(() => {
     const searchApi = async () => {
       const response = await Api({
@@ -196,6 +197,10 @@ export default function Detail() {
       </ChessChampion>,
     );
   }
+
+  const handleHeart = () => {
+    setHeart(!heart);
+  };
 
   return (
     <Body>
@@ -231,7 +236,16 @@ export default function Detail() {
           <ChessBox>
             <Top>
               <Title>
-                <img src={blackImg} alt="빈하트" />
+                <img
+                  src={heart ? redImg : blackImg}
+                  alt="하트"
+                  onClick={handleHeart}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      handleHeart(); // Enter 키나 Space 키로 클릭을 대체
+                    }
+                  }}
+                />
                 {item?.meta.title}
               </Title>
               <RestartBox>
