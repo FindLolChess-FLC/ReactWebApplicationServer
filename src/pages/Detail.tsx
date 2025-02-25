@@ -13,8 +13,9 @@ import lineImg from "../assets/icon/line.svg";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
-import { ListForm } from "../types/List";
+import { ListForm, SynergysListForm } from "../types/List";
 import usePreference from "../hooks/usePreference";
+import useSynergyColor from "../hooks/useSynergyColor";
 
 const Body = styled.div`
   display: flex;
@@ -50,6 +51,20 @@ const Synergy = styled.li`
   border-radius: 5px;
   background: #fff;
 `;
+const SynergyColor = styled.div<{ color: string }>`
+  background: url(${props => props.color});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 19px;
+  height: 19px;
+`;
+const SynergyImg = styled.img`
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+  margin-left: 4px;
+`;
 
 const Contents = styled.div`
   display: flex;
@@ -79,15 +94,15 @@ const Title = styled.div`
 `;
 const RestartBox = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: inherit;
   gap: 0.125rem; // 2px
-  width: 2.6875rem; // 43px
-  height: 1.25rem; // 20px
+  width: 49px;
+  height: 23px;
   border-radius: 0.3125rem; // 5px
   border: 0.0625rem solid #000; // 1px
-  padding: 0.25rem 0.4375rem; // 4px 7px
+  padding: 4px 8px;
   margin-top: 4px;
-  font-size: 0.625rem; // 10px
+  font-size: 11px;
   font-weight: 500;
 `;
 const Line = styled.div`
@@ -189,21 +204,28 @@ export default function Detail() {
       </header>
       <Main>
         <SynergyBox>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>4</p>
-            선도자
-          </Synergy>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>8</p>
-            마법사
-          </Synergy>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>3</p>
-            정복자
-          </Synergy>
+          {/* 시너지 */}
+          {item?.synergys &&
+            Object.entries(item?.synergys[0]).map(([key, value]) => {
+              const colors = useSynergyColor(
+                value.number,
+                key,
+                value.effect,
+                value.sequence,
+              );
+              return colors ? (
+                <Synergy key={key}>
+                  <SynergyColor color={colors}>
+                    <SynergyImg
+                      src={value.img_src}
+                      alt={`${key} 시너지 무늬`}
+                    />
+                  </SynergyColor>
+                  <p>{value.number}</p>
+                  {key}
+                </Synergy>
+              ) : null;
+            })}
         </SynergyBox>
         <Contents>
           <ChessBox>
