@@ -13,8 +13,9 @@ import lineImg from "../assets/icon/line.svg";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
-import { ListForm } from "../types/List";
+import { ListForm, SynergysListForm } from "../types/List";
 import usePreference from "../hooks/usePreference";
+import useSynergyColor from "../hooks/useSynergyColor";
 
 const Body = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const Main = styled.main`
 
 const SynergyBox = styled.ul`
   display: flex;
-  gap: 3px;
+  gap: 4px;
   width: 1195px;
   height: 30px;
   padding-left: 26px;
@@ -43,12 +44,30 @@ const SynergyBox = styled.ul`
 `;
 const Synergy = styled.li`
   display: flex;
-  gap: 2px;
+  padding: 6px;
   align-items: center;
   justify-content: center;
-  width: 100px;
   border-radius: 5px;
   background: #fff;
+  cursor: pointer;
+  > p {
+    padding-left: 2.5px;
+    padding-right: 2px;
+  }
+`;
+const SynergyColor = styled.div<{ color: string }>`
+  background: url(${props => props.color});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+`;
+const SynergyImg = styled.img`
+  width: 12px;
+  height: 12px;
+  margin-top: 3.5px;
+  margin-left: 3.5px;
 `;
 
 const Contents = styled.div`
@@ -79,15 +98,15 @@ const Title = styled.div`
 `;
 const RestartBox = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: inherit;
   gap: 0.125rem; // 2px
-  width: 2.6875rem; // 43px
-  height: 1.25rem; // 20px
+  width: 49px;
+  height: 23px;
   border-radius: 0.3125rem; // 5px
   border: 0.0625rem solid #000; // 1px
-  padding: 0.25rem 0.4375rem; // 4px 7px
+  padding: 4px 8px;
   margin-top: 4px;
-  font-size: 0.625rem; // 10px
+  font-size: 11px;
   font-weight: 500;
 `;
 const Line = styled.div`
@@ -160,6 +179,7 @@ const LikeButton = styled.div`
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [item, setItem] = useState<ListForm>();
+  const [heart, setHeart] = useState(false); // 빈하트 false
   useEffect(() => {
     const searchApi = async () => {
       const response = await Api({
@@ -182,6 +202,10 @@ export default function Detail() {
     );
   }
 
+  const handleHeart = () => {
+    setHeart(!heart);
+  };
+
   return (
     <Body>
       <header>
@@ -189,27 +213,43 @@ export default function Detail() {
       </header>
       <Main>
         <SynergyBox>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>4</p>
-            선도자
-          </Synergy>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>8</p>
-            마법사
-          </Synergy>
-          <Synergy>
-            <img src="" alt="시너지" />
-            <p>3</p>
-            정복자
-          </Synergy>
+          {/* 시너지 */}
+          {item?.synergys &&
+            Object.entries(item?.synergys[0]).map(([key, value]) => {
+              const colors = useSynergyColor(
+                value.number,
+                key,
+                value.effect,
+                value.sequence,
+              );
+              return colors ? (
+                <Synergy key={key}>
+                  <SynergyColor color={colors}>
+                    <SynergyImg
+                      src={value.img_src}
+                      alt={`${key} 시너지 무늬`}
+                    />
+                  </SynergyColor>
+                  <p>{value.number}</p>
+                  {key}
+                </Synergy>
+              ) : null;
+            })}
         </SynergyBox>
         <Contents>
           <ChessBox>
             <Top>
               <Title>
-                <img src={blackImg} alt="빈하트" />
+                <img
+                  src={heart ? redImg : blackImg}
+                  alt="하트"
+                  onClick={handleHeart}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      handleHeart(); // Enter 키나 Space 키로 클릭을 대체
+                    }
+                  }}
+                />
                 {item?.meta.title}
               </Title>
               <RestartBox>

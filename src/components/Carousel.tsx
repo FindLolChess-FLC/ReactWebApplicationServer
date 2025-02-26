@@ -186,6 +186,10 @@ export default function Carousel() {
   const handleImage = () => {
     navigate("/recommend-list");
   };
+  // 캐러셀 내용 누르면 동작
+  const handleClick = (id: number) => {
+    navigate(`/detail/${id}`);
+  };
 
   // 버튼들 : slide 값을 변경하여 슬라이드를 전환
   // 오른쪽 버튼 누르면 동작
@@ -230,7 +234,7 @@ export default function Carousel() {
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage3} alt="캐러셀 이미지3" />
         </ImageBox>
-        <MetaBox>
+        <MetaBox onClick={() => handleClick(metaData[2]?.meta?.id)}>
           <p>{metaData[2]?.meta?.title}</p>
           <SynergyBox>
             {metaData[2]?.synergys.map(synergyGroup =>
@@ -277,7 +281,7 @@ export default function Carousel() {
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage1} alt="캐러셀 이미지1" />
         </ImageBox>
-        <MetaBox>
+        <MetaBox onClick={() => handleClick(metaData[0]?.meta?.id)}>
           <p>{metaData[0]?.meta?.title}</p>
           <SynergyBox>
             {metaData[0]?.synergys.map(synergyGroup =>
@@ -324,7 +328,7 @@ export default function Carousel() {
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage2} alt="캐러셀 이미지2" />
         </ImageBox>
-        <MetaBox>
+        <MetaBox onClick={() => handleClick(metaData[1]?.meta?.id)}>
           <p>{metaData[1]?.meta?.title}</p>
           <SynergyBox>
             {metaData[1]?.synergys.map(synergyGroup =>

@@ -100,11 +100,11 @@ export default function Footer() {
       <ArrowUp src={arrowUPImg} alt="위쪽" onClick={() => handleTop()} />
       <Main>
         <Contents>
-          <h1>FLC</h1>
+          <h1>Find Lol Chess</h1>
           <Copyright>
-            <p>© FindLolChess. All Rights Reserved.</p>
+            <p>© Find Lol Chess. All Rights Reserved.</p>
             <p>
-              FindLolChess isn&apos;t endorsed by Riot Games and doesn&apos;t
+              Find Lol Chess isn&apos;t endorsed by Riot Games and doesn&apos;t
               reflect the views or opinions of Riot Games or anyone officially
               involved in producing or managing League of Legends. League of
             </p>

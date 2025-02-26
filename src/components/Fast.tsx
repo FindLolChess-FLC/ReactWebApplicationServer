@@ -7,6 +7,7 @@ import useChampionColor from "../hooks/useChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import downImg from "../assets/icon/arrow_down.svg";
+import checkImg from "../assets/icon/check.svg";
 
 const Body = styled.section`
   margin-top: 60px;
@@ -99,6 +100,16 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   border-radius: 0.25rem; // 4px
   border: 2.5px solid ${props => props.color};
   filter: ${props => props.filter};
+  // 클릭 방지 & 비활성화 스타일 추가
+  cursor: ${({ filter }) =>
+    filter.includes("grayscale") ? "not-allowed" : "pointer"};
+`;
+const CheckImg = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -80%);
+  z-index: 2;
 `;
 
 const arrowAnimation = keyframes`
@@ -137,21 +148,31 @@ export default function Fast({
   setPickMeta: (value: string) => void;
 }) {
   const [championData, setChampionData] = useState([]); // Fast표에 챔피언을 보여주기 위한 데이터
+  const [championPickData, setChampionPickData] = useState<string[]>([]); // Fast표에 챔피언 흑백나눠서 보여주기 위한 데이터
   const [groupPrice, setGroupPrice] = useState<number[]>([]); // Fast표에서 가격별로 구분해주기 위한 그룹
-  const [selectName, setSelectName] = useState<string[]>([]);
-  const [mono, setMono] = useState(true); // 흑백처러(false면 흑백)
+  const [selectName, setSelectName] = useState<string[]>([]); // 내가 선택한 챔피언의 이름을 모아둔 배열
 
   const { pickData } = useMetaContext(); // PickData를 통해 Meta에 받아온 정보가 저장되어 있음
 
   // 처음 실행
   useEffect(() => {
+    // 챔피언 리스트에 챔피언 불러오기
     const championApi = async () => {
-      const response = await Api({
-        method: "GET",
-        lastUrl: "meta/championsearch/",
-      });
-      setChampionData(response.data);
-      const prices = response.data.map((item: ChampionDataForm) => item.price);
+      const [responseAll, responsePick] = await Promise.all([
+        Api({
+          method: "GET",
+          lastUrl: "meta/championsearch/",
+        }),
+        Api({
+          method: "GET",
+          lastUrl: "/meta/usechampionsearch/",
+        }),
+      ]);
+      setChampionData(responseAll.data);
+      setChampionPickData(responsePick.data);
+      const prices = responseAll.data.map(
+        (item: ChampionDataForm) => item.price,
+      );
       setGroupPrice(Array.from(new Set(prices))); // 중복 제거
     };
     championApi();
@@ -159,7 +180,7 @@ export default function Fast({
 
   // pickData 상태가 변경될 때마다 실행
   useEffect(() => {
-    console.log(pickData);
+    // console.log(pickData);
   }, [pickData]);
 
   const handleClick = (name: string) => {
@@ -168,10 +189,11 @@ export default function Fast({
       const index = updatedNames.indexOf(name); // 배열안에 name이 있는지 확인 (0이하면 없음 양수면 있음)
       if (index < 0) {
         updatedNames.push(name); // 이전 값에 새 name 추가
-        setMono(false); // 전체 흑백
       } else {
         updatedNames.splice(index, 1); // 중복이면 배열에서 제거 (index번째로부터 1개)
-        setMono(true); // 전체 컬러
+      }
+      if (updatedNames) {
+        pickData.includes(name);
       }
       const names = updatedNames.join(","); // 배열을 ','로 합친 문자열로 변경하고 생성
       sendPickMeta(names); // API 호출
@@ -179,6 +201,7 @@ export default function Fast({
     });
   };
 
+  // 메타 불러오기
   const sendPickMeta = async (names: string) => {
     const pickData = await Api({
       bodyData: { data: names },
@@ -192,6 +215,25 @@ export default function Fast({
     }
   };
 
+  // 반환값이 false면 흑백
+  const handleMono = (name: string) => {
+    // 처음 들어오는 챔피언 자체가 덱에 있는지 여부 없으면 흑백
+    if (!championPickData.includes(name)) {
+      return false;
+    }
+    // 선택된게 아무것도 없을때 컬러, 다시 다 취소해도 컬러 유지
+    if (selectName.length === 0) {
+      return true;
+    }
+    // 내가 선택한거에 따라 선택했으면 컬러
+    if (pickData.includes(name)) {
+      return true;
+    }
+    // 나머지 경우 다 흑백
+    return false;
+  };
+
+  // 스크롤
   const handleDown = () => {
     window.scrollTo({
       top: 1100,
@@ -224,18 +266,21 @@ export default function Fast({
                   .map((item: ChampionDataForm) => (
                     <Champion
                       key={item?.name}
-                      onClick={() => handleClick(item?.name)}
+                      onClick={
+                        handleMono(item.name)
+                          ? () => handleClick(item?.name)
+                          : undefined
+                      }
                     >
                       <ChampionImg
                         src={item?.img.img_src}
                         alt="챔피언"
                         color={useChampionColor(item.price)}
-                        filter={
-                          mono || pickData.includes(item.name)
-                            ? "none"
-                            : "grayscale(1)"
-                        }
+                        filter={handleMono(item.name) ? "none" : "grayscale(1)"}
                       />
+                      {selectName.includes(item.name) && (
+                        <CheckImg src={checkImg} alt="체크 표시" />
+                      )}
                       <p>{item?.name}</p>
                       <Tooltip className="tooltip">{item?.name}</Tooltip>
                     </Champion>
