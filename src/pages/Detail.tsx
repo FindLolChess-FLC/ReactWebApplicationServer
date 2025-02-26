@@ -35,7 +35,7 @@ const Main = styled.main`
 
 const SynergyBox = styled.ul`
   display: flex;
-  gap: 3px;
+  gap: 4px;
   width: 1195px;
   height: 30px;
   padding-left: 26px;
@@ -44,26 +44,30 @@ const SynergyBox = styled.ul`
 `;
 const Synergy = styled.li`
   display: flex;
-  gap: 2px;
+  padding: 6px;
   align-items: center;
   justify-content: center;
-  width: 100px;
   border-radius: 5px;
   background: #fff;
+  cursor: pointer;
+  > p {
+    padding-left: 2.5px;
+    padding-right: 2px;
+  }
 `;
 const SynergyColor = styled.div<{ color: string }>`
   background: url(${props => props.color});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
 `;
 const SynergyImg = styled.img`
-  width: 10px;
-  height: 10px;
-  margin-top: 4px;
-  margin-left: 4px;
+  width: 12px;
+  height: 12px;
+  margin-top: 3.5px;
+  margin-left: 3.5px;
 `;
 
 const Contents = styled.div`
