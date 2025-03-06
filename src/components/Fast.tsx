@@ -8,6 +8,7 @@ import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import downImg from "../assets/icon/arrow_down.svg";
 import checkImg from "../assets/icon/check.svg";
+import resetImg from "../assets/icon/reset.svg";
 
 const Body = styled.section`
   margin-top: 60px;
@@ -104,6 +105,7 @@ const ChampionImg = styled.img<{ filter: string; color: string }>`
   cursor: ${({ filter }) =>
     filter.includes("grayscale") ? "not-allowed" : "pointer"};
 `;
+
 const CheckImg = styled.img`
   position: absolute;
   top: 50%;
@@ -142,6 +144,15 @@ const ScrollButton = styled.div`
     animation: ${arrowAnimation} 2s infinite;
   }
 `;
+
+const ResetButton = styled.div`
+  position: absolute;
+  top: 1230px;
+  left: 50%;
+  transform: translate(1150%, 20%);
+  cursor: pointer;
+`;
+
 export default function Fast({
   setPickMeta,
 }: {
@@ -241,6 +252,12 @@ export default function Fast({
     });
   };
 
+  // 리셋
+  const handleReset = () => {
+    setSelectName([]);
+    setPickMeta("");
+  };
+
   return (
     <Body>
       <SubTitle>
@@ -292,6 +309,9 @@ export default function Fast({
           <img src={downImg} alt="아래 화살표" />
           <p>Scroll</p>
         </ScrollButton>
+        <ResetButton onClick={() => handleReset()}>
+          <img src={resetImg} alt="리셋 버튼" />
+        </ResetButton>
       </FastBox>
     </Body>
   );

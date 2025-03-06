@@ -110,10 +110,10 @@ const RestartBox = styled.div`
   font-weight: 500;
 `;
 const Line = styled.div`
-  width: 804px;
+  width: 819px;
   height: 1px;
-  margin-left: 17px;
-  background: #c9c9c9;
+  margin-left: 11px;
+  background: #cecece;
 `;
 const ChampionContents = styled.div`
   padding: 20px 35px;

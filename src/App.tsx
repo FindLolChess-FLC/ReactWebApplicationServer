@@ -95,8 +95,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" index element={<Main />} />
-            <Route path="/loading" index element={<Loading />} />
-            <Route path="/test" index element={<Test />} />
+            <Route path="loading" index element={<Loading />} />
+            <Route path="test" index element={<Test />} />
             {/* 추천 메타 */}
             <Route path="recommend-list" index element={<RecommendList />} />
             {/* 검색 메타 */}
@@ -111,9 +111,7 @@ function App() {
               <Route path="email-join" element={<Join />} />
             </Route>
             {/* 마이페이지 */}
-            <Route path="mypage">
-              <Route index element={<MyPage />} />
-            </Route>
+            <Route path="mypage" index element={<MyPage />} />
             {/* 즐겨찾기 */}
             <Route path="favorites" index element={<Favorites />} />
             {/* 상세페이지(덱마다 다른 id) */}
