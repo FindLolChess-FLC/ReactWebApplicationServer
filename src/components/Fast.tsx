@@ -149,7 +149,7 @@ const ResetButton = styled.div`
   position: absolute;
   top: 1230px;
   left: 50%;
-  transform: translate(1150%, 10%);
+  transform: translate(1150%, 20%);
   cursor: pointer;
 `;
 
