@@ -13,9 +13,10 @@ import lineImg from "../assets/icon/line.svg";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
-import { ListForm, SynergysListForm } from "../types/List";
+import { ChampionsForm, ListForm } from "../types/List";
 import usePreference from "../hooks/usePreference";
 import useSynergyColor from "../hooks/useSynergyColor";
+import useChampionColor from "../hooks/useChampionColor";
 
 const Body = styled.div`
   display: flex;
@@ -131,19 +132,24 @@ const ChessChampion = styled.div`
   height: 91px;
   border-radius: 7px;
   background: #dedede;
-  img {
-    object-fit: cover;
-    border-radius: 7px;
-  }
   // 2번째 줄 들여쓰기
   &:nth-child(n + 8):nth-child(-n + 14) {
     margin-left: 54px;
   }
-
   // 4번째 줄 들여쓰기
   &:nth-child(n + 22):nth-child(-n + 28) {
     margin-left: 54px;
   }
+`;
+const BaseImg = styled.img`
+  object-fit: cover;
+  border-radius: 7px;
+`;
+const ChampionImg = styled.img<{ color: string }>`
+  border-radius: 7px;
+  width: 91px;
+  height: 91px;
+  border: 3px solid ${props => props.color};
 `;
 
 const Comment = styled.div`
@@ -180,6 +186,8 @@ export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [item, setItem] = useState<ListForm>();
   const [heart, setHeart] = useState(false); // 빈하트 false
+  const [championFace, setChampionFace] = useState([]);
+
   useEffect(() => {
     const searchApi = async () => {
       const response = await Api({
@@ -188,16 +196,34 @@ export default function Detail() {
         lastUrl: "meta/metasearch/",
       });
       setItem(response.data[0]);
+      setChampionFace(response.data[0].meta.champions);
       console.log(response.data[0]);
     };
     searchApi();
   }, []);
 
   const champions = []; // 챔피언 박스 배열
-  for (let i = 0; i < 28; i += 1) {
+  for (let i = 1; i < 29; i += 1) {
+    // location을 통해 챔피언이 위치에 있는지 확인
+    const locationChampion = championFace.find(
+      (champ: ChampionsForm) => champ.location === i,
+    ) as ChampionsForm | undefined;
+
+    // locationChampion이 존재하는 경우에만 champion 이미지에 접근하도록 함
     champions.push(
       <ChessChampion key={i}>
-        <img src={chessImg} alt="기본 이미지" />
+        {locationChampion ? (
+          <ChampionImg
+            src={locationChampion.champion.img.img_src}
+            alt="챔피언 이미지"
+            color={useChampionColor(
+              locationChampion.champion.price,
+              locationChampion.champion.name,
+            )}
+          />
+        ) : (
+          <BaseImg src={chessImg} alt="기본 이미지" />
+        )}
       </ChessChampion>,
     );
   }
