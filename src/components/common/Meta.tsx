@@ -27,7 +27,7 @@ const Thead = styled.thead<{ bgColor: string }>`
     vertical-align: middle;
     text-align: left;
   }
-  // 별
+  // 즐겨찾기
   > tr th:nth-child(1) {
     width: 4.375rem; // 70px
   }
@@ -65,7 +65,7 @@ const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
     vertical-align: middle;
     text-align: left;
   }
-  // 별, 화살표
+  // 즐겨찾기, 화살표
   > tr td:nth-child(1),
   td:nth-child(6) {
     text-align: center;
@@ -208,10 +208,10 @@ export default function Meta({ metaData }: any) {
           onClick={() => handleClick(item?.meta.id)}
         >
           <tr key={item?.meta.id}>
-            {/* 별 */}
+            {/* 즐겨찾기 */}
             <td>
-              <img src={heartEmptyImg} alt="기본 별" />
-              {/* <img src={starFillImg} alt="채워진 별" /> */}
+              <img src={heartEmptyImg} alt="기본 하트" />
+              {/* <img src={starFillImg} alt="채워진 하트" /> */}
             </td>
             {/* 제목 */}
             <td>

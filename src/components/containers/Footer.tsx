@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import arrowUPImg from "../../assets/icon/arrow_button_up.svg";
 import instagramEmptyImg from "../../assets/icon/instagram_empty.svg";
@@ -77,7 +76,7 @@ const Email = styled.a`
     background: url(${emailFillImg});
   }
 `;
-const Instagram = styled(Link)`
+const Instagram = styled.a`
   width: 32px;
   height: 32px;
   cursor: pointer;
@@ -132,7 +131,7 @@ export default function Footer() {
           <Social>
             <Email href="mailto:flc.findlolchess@gmail.com" />
             <Instagram
-              to="https://www.instagram.com/find_lol_chess?igsh=N250cGFhYnFoY2dt&utm_source=qr"
+              href="https://www.instagram.com/find_lol_chess?igsh=N250cGFhYnFoY2dt&utm_source=qr"
               target="blank"
             />
           </Social>

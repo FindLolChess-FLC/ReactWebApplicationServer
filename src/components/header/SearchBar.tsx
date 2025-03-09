@@ -45,8 +45,6 @@ export default function SearchBar({
 }: {
   searchValue?: string;
 }) {
-  console.log("마지막");
-  console.log(searchValue);
   const { register, watch, handleSubmit, setValue } = useForm<SearchForm>({
     mode: "onBlur",
   });
