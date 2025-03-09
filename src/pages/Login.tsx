@@ -33,11 +33,15 @@ const Form = styled.form`
   align-items: flex-end;
 `;
 
-const Title = styled.h1`
-  color: #5144ed;
+const Title = styled(Link)`
+  color: #333;
   text-align: center;
-  font-size: 3.125rem; // 40px
-  font-weight: 800;
+  font-size: 37px;
+  font-weight: 900;
+  text-decoration: none;
+  &:hover {
+    color: #5144ed;
+  }
 `;
 
 const InputDiv = styled.div`
@@ -121,7 +125,7 @@ export default function Login() {
 
   return (
     <Body>
-      <Title>FLC</Title>
+      <Title to="/">FIND LOL CHESS</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputDiv>
           <Input
