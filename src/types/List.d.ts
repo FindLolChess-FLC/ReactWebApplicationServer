@@ -13,6 +13,17 @@ export type ChampionForm = {
   synergy: SynergyForm;
 };
 
+// 챔피언에 맞는 아이템 (champions안에 있는 item의 타입)
+export type ItemForm = {
+  effect: string;
+  img: {
+    img_src: string;
+  };
+  item1: string;
+  item2: string;
+  name: string;
+};
+
 // 증강체(Meta안에 있는 augmenter의 타입)
 export type AugmenterForm = {
   effect: string;
@@ -28,6 +39,7 @@ export type ChampionsForm = {
   champion: ChampionForm;
   location: number;
   star: number;
+  item?: Array<ItemForm>;
 };
 
 // 시너지 내부 목록(synergys안에 있음. synergyGroup의 이름은 다 다름)

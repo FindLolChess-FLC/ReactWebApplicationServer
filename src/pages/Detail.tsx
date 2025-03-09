@@ -10,6 +10,9 @@ import likeClickImg from "../assets/icon/like_click.svg";
 import dislikeImg from "../assets/icon/dislike.svg";
 import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
+import star1Img from "../assets/icon/star1.svg";
+import star2Img from "../assets/icon/star2.svg";
+import star3Img from "../assets/icon/star3.svg";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
@@ -125,6 +128,7 @@ const ChampionContents = styled.div`
   row-gap: 8px; // 줄과 줄 사이 간격
 `;
 const ChessChampion = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,6 +136,7 @@ const ChessChampion = styled.div`
   height: 91px;
   border-radius: 7px;
   background: #dedede;
+  overflow: hidden;
   // 2번째 줄 들여쓰기
   &:nth-child(n + 8):nth-child(-n + 14) {
     margin-left: 54px;
@@ -151,7 +156,21 @@ const ChampionImg = styled.img<{ color: string }>`
   height: 91px;
   border: 3px solid ${props => props.color};
 `;
-
+const StarBox = styled.div<{ color: string }>`
+  width: 56px;
+  height: 33px;
+  transform: rotate(-45deg);
+  background: ${props => props.color};
+  position: absolute;
+  top: -9px;
+  left: -19px;
+  > img {
+    z-index: 5;
+    position: absolute;
+    top: 14px;
+    left: 16px;
+  }
+`;
 const Comment = styled.div`
   width: 334px;
   height: 490px;
@@ -202,25 +221,42 @@ export default function Detail() {
     searchApi();
   }, []);
 
-  const champions = []; // 챔피언 박스 배열
+  // 챔피언 별
+  const getStarImage = (star: number) => {
+    if (star === 1) return <img src={star1Img} alt="별1" />;
+    if (star === 2) return <img src={star2Img} alt="별2" />;
+    if (star === 3) return <img src={star3Img} alt="별3" />;
+    return null;
+  };
+
+  // 챔피언
+  const champions = [];
   for (let i = 1; i < 29; i += 1) {
-    // location을 통해 챔피언이 위치에 있는지 확인
     const locationChampion = championFace.find(
       (champ: ChampionsForm) => champ.location === i,
     ) as ChampionsForm | undefined;
 
-    // locationChampion이 존재하는 경우에만 champion 이미지에 접근하도록 함
     champions.push(
       <ChessChampion key={i}>
         {locationChampion ? (
-          <ChampionImg
-            src={locationChampion.champion.img.img_src}
-            alt="챔피언 이미지"
-            color={useChampionColor(
-              locationChampion.champion.price,
-              locationChampion.champion.name,
-            )}
-          />
+          <>
+            <ChampionImg
+              src={locationChampion.champion.img.img_src}
+              alt="챔피언 이미지"
+              color={useChampionColor(
+                locationChampion.champion.price,
+                locationChampion.champion.name,
+              )}
+            />
+            <StarBox
+              color={useChampionColor(
+                locationChampion.champion.price,
+                locationChampion.champion.name,
+              )}
+            >
+              {getStarImage(locationChampion.star)}
+            </StarBox>
+          </>
         ) : (
           <BaseImg src={chessImg} alt="기본 이미지" />
         )}
