@@ -92,7 +92,7 @@ const Top = styled.div`
   padding-right: 28px;
   height: 66px;
 `;
-const Title = styled.div`
+const Title = styled.h1`
   display: flex;
   gap: 8px;
   align-items: center;
@@ -171,6 +171,32 @@ const StarBox = styled.div<{ color: string }>`
     left: 16px;
   }
 `;
+const ItemBox = styled.div`
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  > img {
+    width: 20px;
+    height: 20px;
+    border-radius: 8px;
+    border: 1px solid #f6f6f6;
+  }
+`;
+const ChampionName = styled.p`
+  text-align: center;
+  position: absolute;
+  bottom: 7.5px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  -webkit-text-stroke-width: 0.74px;
+  -webkit-text-stroke-color: #000;
+`;
+
 const Comment = styled.div`
   width: 334px;
   height: 490px;
@@ -181,7 +207,6 @@ const CommentTitle = styled.div`
   height: 66px;
   border-bottom: 1px solid #c9c9c9;
   padding: 14px 19px;
-
   > h4 {
     font-size: 13px;
     font-weight: 600;
@@ -222,7 +247,8 @@ export default function Detail() {
   }, []);
 
   // 챔피언 별
-  const getStarImage = (star: number) => {
+  const getStarImage = (star: number, name: string) => {
+    if (name === "사이온") return null;
     if (star === 1) return <img src={star1Img} alt="별1" />;
     if (star === 2) return <img src={star2Img} alt="별2" />;
     if (star === 3) return <img src={star3Img} alt="별3" />;
@@ -254,8 +280,34 @@ export default function Detail() {
                 locationChampion.champion.name,
               )}
             >
-              {getStarImage(locationChampion.star)}
+              {getStarImage(
+                locationChampion.star,
+                locationChampion.champion.name,
+              )}
             </StarBox>
+            {locationChampion.item ? (
+              <ItemBox>
+                {locationChampion.item[0] ? (
+                  <img
+                    src={locationChampion.item[0].img.img_src}
+                    alt="아이템1"
+                  />
+                ) : null}
+                {locationChampion.item[1] ? (
+                  <img
+                    src={locationChampion.item[1].img.img_src}
+                    alt="아이템1"
+                  />
+                ) : null}
+                {locationChampion.item[2] ? (
+                  <img
+                    src={locationChampion.item[2].img.img_src}
+                    alt="아이템1"
+                  />
+                ) : null}
+              </ItemBox>
+            ) : null}
+            <ChampionName>{locationChampion.champion.name}</ChampionName>
           </>
         ) : (
           <BaseImg src={chessImg} alt="기본 이미지" />
@@ -301,6 +353,7 @@ export default function Detail() {
         <Contents>
           <ChessBox>
             <Top>
+              {/* 즐겨찾기 */}
               <Title>
                 <img
                   src={heart ? redImg : blackImg}
@@ -320,6 +373,7 @@ export default function Detail() {
               </RestartBox>
             </Top>
             <Line />
+            {/* 챔피언 */}
             <ChampionContents>{champions}</ChampionContents>
           </ChessBox>
           <Comment>
