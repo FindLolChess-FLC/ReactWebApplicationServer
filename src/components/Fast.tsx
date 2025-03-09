@@ -146,11 +146,21 @@ const ScrollButton = styled.div`
 `;
 
 const ResetButton = styled.div`
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
   position: absolute;
   top: 1230px;
   left: 50%;
-  transform: translate(1150%, 20%);
+  transform: translate(1400%, 20%);
   cursor: pointer;
+  background: #282828;
+  > img {
+    padding: 7px;
+  }
+  &:hover {
+    background: #30c4ff;
+  }
 `;
 
 export default function Fast({
