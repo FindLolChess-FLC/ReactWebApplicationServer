@@ -18,10 +18,10 @@ const Table = styled.table<{ border: string }>`
   overflow: hidden;
 `;
 
-const Thead = styled.thead<{ bgColor: string }>`
+const Thead = styled.thead<{ bgcolor: string }>`
   color: #fff;
   font-weight: 700;
-  background: ${props => props.bgColor};
+  background: ${props => props.bgcolor};
   > tr th {
     height: 58px;
     vertical-align: middle;
@@ -53,7 +53,7 @@ const Thead = styled.thead<{ bgColor: string }>`
   }
 `;
 
-const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
+const Tbody = styled.tbody<{ hovercolor: string; evencolor: string }>`
   cursor: pointer;
   > tr {
     &:hover td h2 {
@@ -101,14 +101,14 @@ const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
   > tr:nth-child(odd) {
     background: #fff;
     &:hover {
-      background: ${props => props.hoverColor};
+      background: ${props => props.hovercolor};
     }
   }
   // 짝수 순서일 때
   > tr:nth-child(even) {
-    background: ${props => props.evenColor};
+    background: ${props => props.evencolor};
     &:hover {
-      background: ${props => props.hoverColor};
+      background: ${props => props.hovercolor};
     }
   }
 `;
@@ -150,9 +150,9 @@ const SynergyImg = styled.img`
 export default function Meta({ metaData }: any) {
   const location = useLocation();
   const border = location.pathname === "/" ? "none" : "20px 20px";
-  const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
-  const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
-  const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
+  const bgcolor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
+  const hovercolor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
+  const evencolor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
 
   const { setPickData } = useMetaContext(); // setPickData를 통해 Meta에서 Fast로 정보 보내기
@@ -190,7 +190,7 @@ export default function Meta({ metaData }: any) {
 
   return (
     <Table border={border}>
-      <Thead bgColor={bgColor}>
+      <Thead bgcolor={bgcolor}>
         <tr>
           <th> </th>
           <th>제목</th>
@@ -203,8 +203,8 @@ export default function Meta({ metaData }: any) {
       {/* item : meta, synerge */}
       {metaData.map((item: ListForm) => (
         <Tbody
-          hoverColor={hoverColor}
-          evenColor={evenColor}
+          hovercolor={hovercolor}
+          evencolor={evencolor}
           onClick={() => handleClick(item?.meta.id)}
         >
           <tr key={item?.meta.id}>
