@@ -20,6 +20,7 @@ import { ChampionsForm, ListForm } from "../types/List";
 import usePreference from "../hooks/usePreference";
 import useSynergyColor from "../hooks/useSynergyColor";
 import useChampionColor from "../hooks/useChampionColor";
+import Tooltip from "../components/common/Tooltip";
 
 const Body = styled.div`
   display: flex;
@@ -48,6 +49,7 @@ const SynergyBox = styled.ul`
 `;
 const Synergy = styled.li`
   display: flex;
+  position: relative;
   padding: 6px;
   align-items: center;
   justify-content: center;
@@ -226,11 +228,25 @@ const LikeButton = styled.div`
     cursor: pointer;
   }
 `;
+const TooltipSynergy = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 18px;
+`;
+const TooltipImg = styled.img`
+  filter: invert(1);
+  width: 18px;
+  height: 18px;
+`;
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [item, setItem] = useState<ListForm>();
   const [heart, setHeart] = useState(false); // 빈하트 false
   const [championFace, setChampionFace] = useState([]);
+  const [synergyTooltip, setSynergyTooltip] = useState<any>();
+  const [championTooltip, setChampionTooltip] = useState<any>();
+  const [itemTooltip, setItemTooltip] = useState<any>();
 
   useEffect(() => {
     const searchApi = async () => {
@@ -273,6 +289,8 @@ export default function Detail() {
                 locationChampion.champion.price,
                 locationChampion.champion.name,
               )}
+              onMouseEnter={() => setChampionTooltip(true)}
+              onMouseLeave={() => setChampionTooltip(false)}
             />
             <StarBox
               color={useChampionColor(
@@ -288,10 +306,24 @@ export default function Detail() {
             {locationChampion.item ? (
               <ItemBox>
                 {locationChampion.item.map(item =>
-                  item ? <img src={item.img.img_src} alt="아이템" /> : null,
+                  item ? (
+                    <img
+                      src={item.img.img_src}
+                      alt="아이템"
+                      onMouseEnter={() => setItemTooltip(true)}
+                      onMouseLeave={() => setItemTooltip(false)}
+                    />
+                  ) : null,
                 )}
               </ItemBox>
             ) : null}
+            {/* 호버 시 아이템 툴팁 */}
+            {itemTooltip && (
+              <Tooltip width=" 146px" height="77px">
+                <h3>아이템</h3>
+                <p>아이템 툴팁박스</p>
+              </Tooltip>
+            )}
             <ChampionName>{locationChampion.champion.name}</ChampionName>
           </>
         ) : (
@@ -321,8 +353,13 @@ export default function Detail() {
                 value.effect,
                 value.sequence,
               );
+
               return colors ? (
-                <Synergy key={key}>
+                <Synergy
+                  key={key}
+                  onMouseEnter={() => setSynergyTooltip({ key, value })}
+                  onMouseLeave={() => setSynergyTooltip(null)}
+                >
                   <SynergyColor color={colors}>
                     <SynergyImg
                       src={value.img_src}
@@ -331,6 +368,24 @@ export default function Detail() {
                   </SynergyColor>
                   <p>{value.number}</p>
                   {key}
+                  {/* 호버 시 시너지 툴팁 */}
+                  {synergyTooltip && synergyTooltip.key === key && (
+                    <Tooltip width="328px" height="170px" top="30px">
+                      <TooltipSynergy>
+                        <TooltipImg
+                          src={synergyTooltip.value.img_src}
+                          alt="시너지 이미지"
+                        />
+                        <h3>{synergyTooltip.key}</h3>
+                      </TooltipSynergy>
+                      <p>
+                        {synergyTooltip.value.effect.replace(
+                          /(?=\(\d+\))/g,
+                          "\n",
+                        )}
+                      </p>
+                    </Tooltip>
+                  )}
                 </Synergy>
               ) : null;
             })}
@@ -359,7 +414,16 @@ export default function Detail() {
             </Top>
             <Line />
             {/* 챔피언 */}
-            <ChampionContents>{champions}</ChampionContents>
+            <ChampionContents>
+              {champions}
+              {/* 호버 시 챔피언 툴팁 */}
+              {championTooltip && (
+                <Tooltip width=" 146px" height="77px">
+                  <h3>챔</h3>
+                  <p>챔피언 툴팁박스</p>
+                </Tooltip>
+              )}
+            </ChampionContents>
           </ChessBox>
           <Comment>
             <CommentTitle>
