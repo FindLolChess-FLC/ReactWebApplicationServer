@@ -287,24 +287,9 @@ export default function Detail() {
             </StarBox>
             {locationChampion.item ? (
               <ItemBox>
-                {locationChampion.item[0] ? (
-                  <img
-                    src={locationChampion.item[0].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
-                {locationChampion.item[1] ? (
-                  <img
-                    src={locationChampion.item[1].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
-                {locationChampion.item[2] ? (
-                  <img
-                    src={locationChampion.item[2].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
+                {locationChampion.item.map(item =>
+                  item ? <img src={item.img.img_src} alt="아이템" /> : null,
+                )}
               </ItemBox>
             ) : null}
             <ChampionName>{locationChampion.champion.name}</ChampionName>
