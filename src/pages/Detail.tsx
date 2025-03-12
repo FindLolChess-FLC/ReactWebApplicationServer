@@ -10,6 +10,7 @@ import SynergyColor from "../utils/meta/SynergyColor";
 import ChampionColor from "../utils/meta/ChampionColor";
 import Tooltip from "../components/common/Tooltip";
 import ItemImage from "../utils/meta/ItemImage";
+import ChampionStar from "../utils/meta/ChampionStar";
 import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
@@ -19,9 +20,6 @@ import likeClickImg from "../assets/icon/like_click.svg";
 import dislikeImg from "../assets/icon/dislike.svg";
 import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
-import star1Img from "../assets/icon/star1.svg";
-import star2Img from "../assets/icon/star2.svg";
-import star3Img from "../assets/icon/star3.svg";
 import moneyImg from "../assets/icon/money.svg";
 
 const Body = styled.div`
@@ -290,15 +288,6 @@ export default function Detail() {
     searchApi();
   }, []);
 
-  // 챔피언 별
-  const getStarImage = (star: number, name: string) => {
-    if (name === "사이온") return null;
-    if (star === 1) return <img src={star1Img} alt="별1" />;
-    if (star === 2) return <img src={star2Img} alt="별2" />;
-    if (star === 3) return <img src={star3Img} alt="별3" />;
-    return null;
-  };
-
   // 챔피언
   const champions = [];
   for (let i = 1; i < 29; i += 1) {
@@ -312,7 +301,6 @@ export default function Detail() {
           <>
             <ChampionImg
               $url={locationChampion.champion.img.img_src}
-              // alt="챔피언 이미지"
               color={ChampionColor(
                 locationChampion.champion.price,
                 locationChampion.champion.name,
@@ -326,7 +314,7 @@ export default function Detail() {
                   locationChampion.champion.name,
                 )}
               >
-                {getStarImage(
+                {ChampionStar(
                   locationChampion.star,
                   locationChampion.champion.name,
                 )}
