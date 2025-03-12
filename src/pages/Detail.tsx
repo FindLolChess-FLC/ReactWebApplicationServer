@@ -9,6 +9,7 @@ import usePreference from "../hooks/usePreference";
 import useSynergyColor from "../hooks/useSynergyColor";
 import useChampionColor from "../hooks/useChampionColor";
 import Tooltip from "../components/common/Tooltip";
+import itemImage from "../utils/itemImage";
 import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
@@ -22,16 +23,6 @@ import star1Img from "../assets/icon/star1.svg";
 import star2Img from "../assets/icon/star2.svg";
 import star3Img from "../assets/icon/star3.svg";
 import moneyImg from "../assets/icon/money.svg";
-import bletImg from "../assets/img/거인의 허리띠.png";
-import bowImg from "../assets/img/곡궁.png";
-import spatulaImg from "../assets/img/뒤집개.png";
-import vestImg from "../assets/img/쇠사슬 조끼.png";
-import rodImg from "../assets/img/쓸데없이 큰 지팡이.png";
-import tearImg from "../assets/img/여신의 눈물.png";
-import glovesImg from "../assets/img/연습용 장갑.png";
-import cloakImg from "../assets/img/음전자 망토.png";
-import fryingPanImg from "../assets/img/프라이팬.png";
-import swordImg from "../assets/img/B.F.대검.png";
 
 const Body = styled.div`
   display: flex;
@@ -285,18 +276,6 @@ export default function Detail() {
   const [synergyTooltip, setSynergyTooltip] = useState<any>(); // 시너지 툴팁 on/off
   const [championTooltip, setChampionTooltip] = useState<any>(); // 챔피언 툴팁 on/off
   const [itemTooltip, setItemTooltip] = useState<any>(); // 아이템 툴팁 on/off
-  const itemArray: any = {
-    "거인의 허리띠": bletImg,
-    곡궁: bowImg,
-    뒤집개: spatulaImg,
-    "쇠사슬 조끼": vestImg,
-    "쓸데없이 큰 지팡이": rodImg,
-    "여신의 눈물": tearImg,
-    "연습용 장갑": glovesImg,
-    "음전자 망토": cloakImg,
-    프라이팬: fryingPanImg,
-    "B.F.대검": swordImg,
-  };
 
   useEffect(() => {
     const searchApi = async () => {
@@ -369,22 +348,28 @@ export default function Detail() {
                       {itemTooltip &&
                         itemTooltip[0].name === item.name &&
                         itemTooltip[1] === locationChampion.champion.name && (
-                          <Tooltip width=" 146px" height="70px" left="22px">
+                          <Tooltip width="125px" height="70px" left="22px">
                             <h3>{itemTooltip[0].name}</h3>
-                            <TooltipItem>
-                              <img
-                                src={itemArray[itemTooltip[0].item1]}
-                                alt="아이템1"
-                              />
-                              <p>{itemTooltip[0].item1}</p>
-                            </TooltipItem>
-                            <TooltipItem>
-                              <img
-                                src={itemArray[itemTooltip[0].item2]}
-                                alt="아이템2"
-                              />
-                              <p>{itemTooltip[0].item2}</p>
-                            </TooltipItem>
+                            {itemTooltip[0].item1 ? (
+                              <>
+                                <TooltipItem>
+                                  <img
+                                    src={itemImage(itemTooltip[0].item1)}
+                                    alt="아이템1"
+                                  />
+                                  <p>{itemTooltip[0].item1}</p>
+                                </TooltipItem>
+                                <TooltipItem>
+                                  <img
+                                    src={itemImage(itemTooltip[0].item2)}
+                                    alt="아이템2"
+                                  />
+                                  <p>{itemTooltip[0].item2}</p>
+                                </TooltipItem>
+                              </>
+                            ) : (
+                              "제작 불가 아이템"
+                            )}
                           </Tooltip>
                         )}
                     </ItemImg>
