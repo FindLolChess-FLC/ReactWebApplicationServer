@@ -397,7 +397,7 @@ export default function Detail() {
             {championTooltip &&
               championTooltip.name === locationChampion.champion.name &&
               championTooltip.name !== "사이온" && (
-                <Tooltip width="120px" height="90px" top="91px">
+                <Tooltip width="140px" height="90px" top="91px">
                   <TooltipChampion>
                     <h3>{championTooltip.name}</h3>
                     <img src={moneyImg} alt="돈 이미지" />
@@ -406,11 +406,7 @@ export default function Detail() {
                   {championTooltip.synergy.map((synergy: string) => (
                     <TooltipChampion>
                       <TooltipImg
-                        src={
-                          synergyTooltip && synergyTooltip.key === synergy
-                            ? synergyTooltip.value.img_src
-                            : ""
-                        }
+                        src={data?.synergys[0][synergy]?.img_src}
                         alt="시너지 이미지"
                       />
                       <p>{synergy}</p>
