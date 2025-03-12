@@ -1,5 +1,5 @@
 import { ApiForm } from "../../types/Api";
-import getCookie from "../getCookie";
+import getCookie from "../cookies/getCookie";
 
 const url = process.env.REACT_APP_SITEURL;
 

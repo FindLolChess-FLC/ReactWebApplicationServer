@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import getCookie from "../../utils/getCookie";
+import getCookie from "../../utils/cookies/getCookie";
 import { Api } from "../../utils/apis/Api";
 import Dropdown from "./Dropdown";
 

@@ -5,7 +5,7 @@ const StyleButton = styled.button<ButtonForm>`
   /* 기본 버튼 스타일 */
   width: ${props => props.width || `25.625rem`}; // 410px
   height: ${props => props.height || `3.75rem`}; // 60px
-  background: ${props => props.bgcolor || `#5144ed`};
+  background: ${props => props.$bgcolor || `#5144ed`};
   border-radius: 4px;
   color: #fff;
   font-size: 1rem; // 16px
@@ -67,7 +67,7 @@ const StyleButton = styled.button<ButtonForm>`
 export default function Button({
   width,
   height,
-  bgcolor,
+  $bgcolor,
   type,
   id,
   name,
@@ -79,7 +79,7 @@ export default function Button({
     <StyleButton
       width={width}
       height={height}
-      bgcolor={bgcolor}
+      $bgcolor={$bgcolor}
       type={type === "submit" ? "submit" : "button"}
       id={id}
       name={name}

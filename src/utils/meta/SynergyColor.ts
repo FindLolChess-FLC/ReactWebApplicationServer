@@ -1,10 +1,10 @@
-import bronzeImg from "../assets/icon/bronze.svg";
-import silverImg from "../assets/icon/silver.svg";
-import goldImg from "../assets/icon/gold.svg";
-import chromaticImg from "../assets/icon/chromatic.svg";
-import uniqueImg from "../assets/icon/unique.svg";
+import bronzeImg from "../../assets/icon/bronze.svg";
+import silverImg from "../../assets/icon/silver.svg";
+import goldImg from "../../assets/icon/gold.svg";
+import chromaticImg from "../../assets/icon/chromatic.svg";
+import uniqueImg from "../../assets/icon/unique.svg";
 
-export default function useSynergyColor(
+export default function SynergyColor(
   number: number,
   key: string,
   effect: string,

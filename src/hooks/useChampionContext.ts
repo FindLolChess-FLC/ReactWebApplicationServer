@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ChampionContext } from "./ChampionProvider";
+import { ChampionContext } from "./Provider";
 
 export function useChampionContext() {
   const context = useContext(ChampionContext);

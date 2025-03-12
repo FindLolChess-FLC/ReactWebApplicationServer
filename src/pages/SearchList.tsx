@@ -71,8 +71,6 @@ export default function SearchList() {
     };
     searchApi();
   }, [searchData]);
-  console.log("처음");
-  console.log(searchData);
 
   const renderContent = () => {
     // 로딩 상태

@@ -2,26 +2,26 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMetaContext } from "../../hooks/Context";
+import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
+import SynergyColor from "../../utils/meta/SynergyColor";
+import ChampionColor from "../../utils/meta/ChampionColor";
+import Preference from "../../utils/meta/Preference";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
 import sionImg from "../../assets/img/sion.jpg";
-import useSynergyColor from "../../hooks/useSynergyColor";
-import useChampionColor from "../../hooks/useChampionColor";
-import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
-import usePreference from "../../hooks/usePreference";
 
-const Table = styled.table<{ border: string }>`
+const Table = styled.table<{ $border: string }>`
   font-size: 0.875rem; // 14px
-  border-radius: ${props => props.border};
+  border-radius: ${props => props.$border};
   overflow: hidden;
 `;
 
-const Thead = styled.thead<{ bgColor: string }>`
+const Thead = styled.thead<{ $bgcolor: string }>`
   color: #fff;
   font-weight: 700;
-  background: ${props => props.bgColor};
+  background: ${props => props.$bgcolor};
   > tr th {
     height: 58px;
     vertical-align: middle;
@@ -53,7 +53,7 @@ const Thead = styled.thead<{ bgColor: string }>`
   }
 `;
 
-const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
+const Tbody = styled.tbody<{ $hovercolor: string; $evencolor: string }>`
   cursor: pointer;
   > tr {
     &:hover td h2 {
@@ -101,14 +101,14 @@ const Tbody = styled.tbody<{ hoverColor: string; evenColor: string }>`
   > tr:nth-child(odd) {
     background: #fff;
     &:hover {
-      background: ${props => props.hoverColor};
+      background: ${props => props.$hovercolor};
     }
   }
   // 짝수 순서일 때
   > tr:nth-child(even) {
-    background: ${props => props.evenColor};
+    background: ${props => props.$evencolor};
     &:hover {
-      background: ${props => props.hoverColor};
+      background: ${props => props.$hovercolor};
     }
   }
 `;
@@ -127,14 +127,14 @@ const RestartBox = styled.div`
   font-weight: 500;
 `;
 
-const ChampionColor = styled.img<{ color: string }>`
+const ChampionColors = styled.img<{ color: string }>`
   position: relative;
   border-radius: 0.25rem; // 4px
   width: 2.625rem; // 42px
   border: 2.5px solid ${props => props.color};
 `;
 
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
@@ -150,9 +150,9 @@ const SynergyImg = styled.img`
 export default function Meta({ metaData }: any) {
   const location = useLocation();
   const border = location.pathname === "/" ? "none" : "20px 20px";
-  const bgColor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
-  const hoverColor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
-  const evenColor = location.pathname === "/" ? "#eee" : "#f1f1fb";
+  const bgcolor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
+  const hovercolor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
+  const evencolor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
 
   const { setPickData } = useMetaContext(); // setPickData를 통해 Meta에서 Fast로 정보 보내기
@@ -189,8 +189,8 @@ export default function Meta({ metaData }: any) {
   };
 
   return (
-    <Table border={border}>
-      <Thead bgColor={bgColor}>
+    <Table $border={border}>
+      <Thead $bgcolor={bgcolor}>
         <tr>
           <th> </th>
           <th>제목</th>
@@ -203,8 +203,8 @@ export default function Meta({ metaData }: any) {
       {/* item : meta, synerge */}
       {metaData.map((item: ListForm) => (
         <Tbody
-          hoverColor={hoverColor}
-          evenColor={evenColor}
+          $hovercolor={hovercolor}
+          $evencolor={evencolor}
           onClick={() => handleClick(item?.meta.id)}
         >
           <tr key={item?.meta.id}>
@@ -227,7 +227,7 @@ export default function Meta({ metaData }: any) {
                 {item?.synergys.map(synergyGroup =>
                   Object.entries(synergyGroup).map(
                     ([key, value]: [string, SynergysListForm]) => {
-                      const colors = useSynergyColor(
+                      const colors = SynergyColor(
                         value.number,
                         key,
                         value.effect,
@@ -235,12 +235,12 @@ export default function Meta({ metaData }: any) {
                       );
                       // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                       return colors ? (
-                        <SynergyColor key={key} color={colors}>
+                        <SynergyColors key={key} color={colors}>
                           <SynergyImg
                             src={value.img_src}
                             alt={`${key} 시너지 무늬`}
                           />
-                        </SynergyColor>
+                        </SynergyColors>
                       ) : null;
                     },
                   ),
@@ -252,14 +252,14 @@ export default function Meta({ metaData }: any) {
               {item?.meta.champions &&
                 item?.meta.champions.map((data: ChampionsForm) => (
                   <div key={data.location}>
-                    <ChampionColor
+                    <ChampionColors
                       src={
                         data.champion.name === "사이온"
                           ? sionImg
                           : `${data.champion.img.img_src}?${cache}`
                       }
                       alt="챔피언"
-                      color={useChampionColor(
+                      color={ChampionColor(
                         data.champion.price,
                         data.champion.name,
                       )}
@@ -271,8 +271,7 @@ export default function Meta({ metaData }: any) {
             {/* 선호도 */}
             <td>
               <h2>
-                {usePreference(item?.meta.like_count, item?.meta.dislike_count)}
-                %
+                {Preference(item?.meta.like_count, item?.meta.dislike_count)}%
               </h2>
             </td>
             {/* 화살표 */}

@@ -1,6 +1,16 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Api } from "../utils/apis/Api";
+import { ChampionsForm, ListForm } from "../types/List";
+import Header from "../components/containers/Header";
+import Footer from "../components/containers/Footer";
+import Preference from "../utils/meta/Preference";
+import SynergyColor from "../utils/meta/SynergyColor";
+import ChampionColor from "../utils/meta/ChampionColor";
+import Tooltip from "../components/common/Tooltip";
+import ItemImage from "../utils/meta/ItemImage";
+import ChampionStar from "../utils/meta/ChampionStar";
 import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
@@ -10,16 +20,7 @@ import likeClickImg from "../assets/icon/like_click.svg";
 import dislikeImg from "../assets/icon/dislike.svg";
 import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
-import star1Img from "../assets/icon/star1.svg";
-import star2Img from "../assets/icon/star2.svg";
-import star3Img from "../assets/icon/star3.svg";
-import Header from "../components/containers/Header";
-import Footer from "../components/containers/Footer";
-import { Api } from "../utils/apis/Api";
-import { ChampionsForm, ListForm } from "../types/List";
-import usePreference from "../hooks/usePreference";
-import useSynergyColor from "../hooks/useSynergyColor";
-import useChampionColor from "../hooks/useChampionColor";
+import moneyImg from "../assets/icon/money.svg";
 
 const Body = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const Main = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 19px;
-  padding: 25px 0 60px;
+  padding: 25px 0 90px;
 `;
 
 const SynergyBox = styled.ul`
@@ -48,6 +49,7 @@ const SynergyBox = styled.ul`
 `;
 const Synergy = styled.li`
   display: flex;
+  position: relative;
   padding: 6px;
   align-items: center;
   justify-content: center;
@@ -59,7 +61,7 @@ const Synergy = styled.li`
     padding-right: 2px;
   }
 `;
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   background-size: contain;
   background-repeat: no-repeat;
@@ -136,7 +138,6 @@ const ChessChampion = styled.div`
   height: 91px;
   border-radius: 7px;
   background: #dedede;
-  overflow: hidden;
   // 2번째 줄 들여쓰기
   &:nth-child(n + 8):nth-child(-n + 14) {
     margin-left: 54px;
@@ -150,20 +151,24 @@ const BaseImg = styled.img`
   object-fit: cover;
   border-radius: 7px;
 `;
-const ChampionImg = styled.img<{ color: string }>`
+const ChampionImg = styled.div<{ $url: string; color: string }>`
+  position: relative;
+  overflow: hidden;
+  background: url(${props => props.$url});
+  background-size: cover;
   border-radius: 7px;
   width: 91px;
   height: 91px;
   border: 3px solid ${props => props.color};
 `;
 const StarBox = styled.div<{ color: string }>`
-  width: 56px;
-  height: 33px;
+  width: 60px;
+  height: 35px;
   transform: rotate(-45deg);
   background: ${props => props.color};
   position: absolute;
-  top: -9px;
-  left: -19px;
+  top: -10px;
+  left: -21px;
   > img {
     z-index: 5;
     position: absolute;
@@ -179,12 +184,15 @@ const ItemBox = styled.div`
   position: absolute;
   top: 3px;
   right: 3px;
-  > img {
-    width: 20px;
-    height: 20px;
-    border-radius: 8px;
-    border: 1px solid #f6f6f6;
-  }
+`;
+const ItemImg = styled.div<{ $url: string }>`
+  position: relative;
+  background: url(${props => props.$url});
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  border: 1px solid #f6f6f6;
 `;
 const ChampionName = styled.p`
   text-align: center;
@@ -226,11 +234,46 @@ const LikeButton = styled.div`
     cursor: pointer;
   }
 `;
+const TooltipImg = styled.img`
+  filter: invert(1);
+  width: 16px;
+  height: 16px;
+`;
+const TooltipSynergy = styled.div`
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  height: 18px;
+  padding-bottom: 8px;
+`;
+const TooltipChampion = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 2px;
+  h4 {
+    font-size: 12px;
+    color: #f1ca76;
+  }
+`;
+const TooltipItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 2px;
+  > img {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
-  const [item, setItem] = useState<ListForm>();
+  const [data, setData] = useState<ListForm>(); // api에서 받아온 메타 정보
   const [heart, setHeart] = useState(false); // 빈하트 false
-  const [championFace, setChampionFace] = useState([]);
+  const [synergyTooltip, setSynergyTooltip] = useState<any>(); // 시너지 툴팁 on/off
+  const [championTooltip, setChampionTooltip] = useState<any>(); // 챔피언 툴팁 on/off
+  const [itemTooltip, setItemTooltip] = useState<any>(); // 아이템 툴팁 on/off
 
   useEffect(() => {
     const searchApi = async () => {
@@ -239,26 +282,16 @@ export default function Detail() {
         method: "POST",
         lastUrl: "meta/metasearch/",
       });
-      setItem(response.data[0]);
-      setChampionFace(response.data[0].meta.champions);
+      setData(response.data[0]);
       console.log(response.data[0]);
     };
     searchApi();
   }, []);
 
-  // 챔피언 별
-  const getStarImage = (star: number, name: string) => {
-    if (name === "사이온") return null;
-    if (star === 1) return <img src={star1Img} alt="별1" />;
-    if (star === 2) return <img src={star2Img} alt="별2" />;
-    if (star === 3) return <img src={star3Img} alt="별3" />;
-    return null;
-  };
-
   // 챔피언
   const champions = [];
   for (let i = 1; i < 29; i += 1) {
-    const locationChampion = championFace.find(
+    const locationChampion = data?.meta.champions.find(
       (champ: ChampionsForm) => champ.location === i,
     ) as ChampionsForm | undefined;
 
@@ -267,47 +300,93 @@ export default function Detail() {
         {locationChampion ? (
           <>
             <ChampionImg
-              src={locationChampion.champion.img.img_src}
-              alt="챔피언 이미지"
-              color={useChampionColor(
+              $url={locationChampion.champion.img.img_src}
+              color={ChampionColor(
                 locationChampion.champion.price,
                 locationChampion.champion.name,
               )}
-            />
-            <StarBox
-              color={useChampionColor(
-                locationChampion.champion.price,
-                locationChampion.champion.name,
-              )}
+              onMouseEnter={() => setChampionTooltip(locationChampion.champion)}
+              onMouseLeave={() => setChampionTooltip(null)}
             >
-              {getStarImage(
-                locationChampion.star,
-                locationChampion.champion.name,
-              )}
-            </StarBox>
+              <StarBox
+                color={ChampionColor(
+                  locationChampion.champion.price,
+                  locationChampion.champion.name,
+                )}
+              >
+                {ChampionStar(
+                  locationChampion.star,
+                  locationChampion.champion.name,
+                )}
+              </StarBox>
+            </ChampionImg>
             {locationChampion.item ? (
               <ItemBox>
-                {locationChampion.item[0] ? (
-                  <img
-                    src={locationChampion.item[0].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
-                {locationChampion.item[1] ? (
-                  <img
-                    src={locationChampion.item[1].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
-                {locationChampion.item[2] ? (
-                  <img
-                    src={locationChampion.item[2].img.img_src}
-                    alt="아이템1"
-                  />
-                ) : null}
+                {locationChampion.item.map(item =>
+                  item ? (
+                    <ItemImg
+                      $url={item.img.img_src}
+                      onMouseEnter={
+                        () =>
+                          setItemTooltip([item, locationChampion.champion.name]) // item의 정보와 챔피언마다 다른 아이템을 나타내주기 위해 champion.name도 필요
+                      }
+                      onMouseLeave={() => setItemTooltip(null)}
+                    >
+                      {/* 호버 시 아이템 툴팁 */}
+                      {itemTooltip &&
+                        itemTooltip[0].name === item.name &&
+                        itemTooltip[1] === locationChampion.champion.name && (
+                          <Tooltip width="125px" height="70px" $left="22px">
+                            <h3>{itemTooltip[0].name}</h3>
+                            {itemTooltip[0].item1 ? (
+                              <>
+                                <TooltipItem>
+                                  <img
+                                    src={ItemImage(itemTooltip[0].item1)}
+                                    alt="아이템1"
+                                  />
+                                  <p>{itemTooltip[0].item1}</p>
+                                </TooltipItem>
+                                <TooltipItem>
+                                  <img
+                                    src={ItemImage(itemTooltip[0].item2)}
+                                    alt="아이템2"
+                                  />
+                                  <p>{itemTooltip[0].item2}</p>
+                                </TooltipItem>
+                              </>
+                            ) : (
+                              "제작 불가 아이템"
+                            )}
+                          </Tooltip>
+                        )}
+                    </ItemImg>
+                  ) : null,
+                )}
               </ItemBox>
             ) : null}
             <ChampionName>{locationChampion.champion.name}</ChampionName>
+            {/* 호버 시 챔피언 툴팁 */}
+            {championTooltip &&
+              championTooltip.name === locationChampion.champion.name &&
+              championTooltip.name !== "사이온" && (
+                <Tooltip width="140px" height="90px" $top="91px">
+                  <TooltipChampion>
+                    <h3>{championTooltip.name}</h3>
+                    <img src={moneyImg} alt="돈 이미지" />
+                    <h4>{championTooltip.price}</h4>
+                  </TooltipChampion>
+                  {championTooltip.synergy.map((synergy: string) => (
+                    <TooltipChampion>
+                      <TooltipImg
+                        src={data?.synergys[0][synergy]?.img_src}
+                        alt="시너지 이미지"
+                      />
+                      <p>{synergy}</p>
+                    </TooltipChampion>
+                  ))}
+                </Tooltip>
+              )}
           </>
         ) : (
           <BaseImg src={chessImg} alt="기본 이미지" />
@@ -328,24 +407,47 @@ export default function Detail() {
       <Main>
         <SynergyBox>
           {/* 시너지 */}
-          {item?.synergys &&
-            Object.entries(item?.synergys[0]).map(([key, value]) => {
-              const colors = useSynergyColor(
+          {data?.synergys &&
+            Object.entries(data?.synergys[0]).map(([key, value]) => {
+              const colors = SynergyColor(
                 value.number,
                 key,
                 value.effect,
                 value.sequence,
               );
+
               return colors ? (
-                <Synergy key={key}>
-                  <SynergyColor color={colors}>
+                <Synergy
+                  key={key}
+                  onMouseEnter={() => setSynergyTooltip({ key, value })}
+                  onMouseLeave={() => setSynergyTooltip(null)}
+                >
+                  <SynergyColors color={colors}>
                     <SynergyImg
                       src={value.img_src}
                       alt={`${key} 시너지 무늬`}
                     />
-                  </SynergyColor>
+                  </SynergyColors>
                   <p>{value.number}</p>
                   {key}
+                  {/* 호버 시 시너지 툴팁 */}
+                  {synergyTooltip && synergyTooltip.key === key && (
+                    <Tooltip width="328px" height="170px" $top="30px">
+                      <TooltipSynergy>
+                        <TooltipImg
+                          src={synergyTooltip.value.img_src}
+                          alt="시너지 이미지"
+                        />
+                        <h3>{synergyTooltip.key}</h3>
+                      </TooltipSynergy>
+                      <p>
+                        {synergyTooltip.value.effect.replace(
+                          /(?=\(\d+\))/g,
+                          "\n",
+                        )}
+                      </p>
+                    </Tooltip>
+                  )}
                 </Synergy>
               ) : null;
             })}
@@ -365,11 +467,11 @@ export default function Detail() {
                     }
                   }}
                 />
-                {item?.meta.title}
+                {data?.meta.title}
               </Title>
               <RestartBox>
                 <img src={restartImg} alt="리롤" />
-                lvl{item?.meta.reroll_lv}
+                lvl{data?.meta.reroll_lv}
               </RestartBox>
             </Top>
             <Line />
@@ -382,7 +484,7 @@ export default function Detail() {
               <LikeButton>
                 <img src={likeImg} alt="좋아요" />
                 <img src={lineImg} alt="실선" />
-                {usePreference(item?.meta.like_count, item?.meta.dislike_count)}
+                {Preference(data?.meta.like_count, data?.meta.dislike_count)}
                 %
                 <img src={dislikeImg} alt="싫어요" />
               </LikeButton>

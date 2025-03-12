@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import useUserInput from "../../hooks/useUserInput";
+import useUserInput from "../../utils/user/UserInput";
 import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
 import Input from "../common/Input";
 import Button from "../common/Button";
-import checkDuplicate from "../../utils/checkDuplicate";
+import checkDuplicate from "../../utils/CheckDuplicate";
 
 const StyledButton = styled.div`
   margin-top: 0.5625rem; // 9px

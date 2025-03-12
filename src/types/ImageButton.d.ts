@@ -1,5 +1,5 @@
 export type ImageButtonForm = {
-  bgcolor?: string;
+  $bgcolor?: string;
   color?: string;
   border?: string;
   hovercolor?: string;

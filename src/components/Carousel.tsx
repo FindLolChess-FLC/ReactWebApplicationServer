@@ -9,8 +9,8 @@ import arrowRightImg from "../assets/icon/arrow_button_right.svg";
 import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
 import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm, SynergysListForm } from "../types/List";
-import useChampionColor from "../hooks/useChampionColor";
-import useSynergyColor from "../hooks/useSynergyColor";
+import ChampionColor from "../utils/meta/ChampionColor";
+import SynergyColor from "../utils/meta/SynergyColor";
 
 const Body = styled.div`
   display: flex;
@@ -26,16 +26,16 @@ const shakeAnimation = keyframes`
   100% { transform: translateX(0); }
 `;
 
-const CarouselBox = styled.div<{ orderValue: number; isShaking: boolean }>`
+const CarouselBox = styled.div<{ $order: number; $shaking: boolean }>`
   width: 970px;
   height: 405px;
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: pointer;
-  order: ${({ orderValue }) => orderValue};
-  ${({ isShaking }) =>
-    isShaking &&
+  order: ${({ $order }) => $order};
+  ${({ $shaking }) =>
+    $shaking &&
     css`
       animation: ${shakeAnimation} 0.4s ease;
     `}
@@ -73,7 +73,7 @@ const SynergyBox = styled.div`
   align-items: center;
   gap: 0.0625rem 0; // 1px
 `;
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
@@ -89,7 +89,7 @@ const ChampionBox = styled.div`
   align-items: center;
   gap: 0.375rem; // 6px
 `;
-const ChampionColor = styled.img<{ color: string }>`
+const ChampionColors = styled.img<{ color: string }>`
   position: relative;
   border-radius: 0.25rem; // 4px
   width: 2.625rem; // 42px
@@ -139,12 +139,12 @@ const Bar = styled.div`
   left: 50%;
   transform: translate(-50%);
 `;
-const Circle = styled.div<{ active: boolean }>`
+const Circle = styled.div<{ $active: boolean }>`
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #d1d1d1;
-  ${({ active }) => active && `background: #0d0d0d;`}
+  ${({ $active }) => $active && `background: #0d0d0d;`}
 `;
 
 const ArrowRight = styled.img`
@@ -230,7 +230,7 @@ export default function Carousel() {
   return (
     <Body>
       {/* 캐러셀 3 */}
-      <CarouselBox orderValue={orderValues[0]} isShaking={isShaking}>
+      <CarouselBox $order={orderValues[0]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage3} alt="캐러셀 이미지3" />
         </ImageBox>
@@ -240,7 +240,7 @@ export default function Carousel() {
             {metaData[2]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -248,12 +248,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -263,10 +263,10 @@ export default function Carousel() {
             {metaData[2]?.meta?.champions &&
               metaData[2]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}
@@ -277,7 +277,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 1 */}
-      <CarouselBox orderValue={orderValues[1]} isShaking={isShaking}>
+      <CarouselBox $order={orderValues[1]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage1} alt="캐러셀 이미지1" />
         </ImageBox>
@@ -287,7 +287,7 @@ export default function Carousel() {
             {metaData[0]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -295,12 +295,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -310,10 +310,10 @@ export default function Carousel() {
             {metaData[0]?.meta?.champions &&
               metaData[0]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}
@@ -324,7 +324,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 2 */}
-      <CarouselBox orderValue={orderValues[2]} isShaking={isShaking}>
+      <CarouselBox $order={orderValues[2]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage2} alt="캐러셀 이미지2" />
         </ImageBox>
@@ -334,7 +334,7 @@ export default function Carousel() {
             {metaData[1]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -342,12 +342,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -357,10 +357,10 @@ export default function Carousel() {
             {metaData[1]?.meta?.champions &&
               metaData[1]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}
@@ -385,9 +385,9 @@ export default function Carousel() {
         />
         <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
         <Bar>
-          <Circle active={slide === 1}> </Circle>
-          <Circle active={slide === 3}> </Circle>
-          <Circle active={slide === 2}> </Circle>
+          <Circle $active={slide === 1}> </Circle>
+          <Circle $active={slide === 3}> </Circle>
+          <Circle $active={slide === 2}> </Circle>
         </Bar>
       </ViewBox>
     </Body>

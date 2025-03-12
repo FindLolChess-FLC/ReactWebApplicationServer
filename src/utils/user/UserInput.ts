@@ -1,6 +1,6 @@
 import * as yup from "yup"; // yup 전체를 불러오기 위해 * as 별칭 사용
 
-export default function useUserInput() {
+export default function UserInput() {
   // validation
   const schema = yup.object().shape({
     nickname: yup

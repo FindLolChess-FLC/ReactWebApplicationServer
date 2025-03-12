@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useMemo } from "react";
+import { createContext, useState, ReactNode, useMemo } from "react";
 import { ChampionDataForm } from "../types/ChampionData";
 
 interface ChampionContextProps {
@@ -11,11 +11,7 @@ export const ChampionContext = createContext<ChampionContextProps | undefined>(
   undefined,
 );
 
-export default function ChampionProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function Provider({ children }: { children: ReactNode }) {
   const [championMeta, setChampionMeta] = useState<ChampionDataForm | null>(
     null,
   );
