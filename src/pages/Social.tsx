@@ -4,7 +4,7 @@ import { ImageButtonForm } from "../types/ImageButton";
 import kakaoImg from "../assets/icon/kakao.svg";
 import naverImg from "../assets/icon/naver.svg";
 import googleImg from "../assets/icon/google.svg";
-import socialLogin from "../utils/socialLogin";
+import socialLogin from "../utils/user/SocialLogin";
 
 const Body = styled.div`
   display: flex;

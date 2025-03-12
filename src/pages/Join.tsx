@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useUserInput from "../hooks/useUserInput";
-import useNumberInput from "../hooks/useNumberInput";
-import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import { JoinForm } from "../types/Join";
-import checkDuplicate from "../utils/checkDuplicate";
 import { VerificationCodeForm } from "../types/VerificationCode";
+import UserInput from "../utils/user/UserInput";
+import NumberInput from "../utils/user/NumberInput";
+import checkDuplicate from "../utils/CheckDuplicate";
+import Input from "../components/common/Input";
 import CountDown from "../components/CountDown";
 import Button from "../components/common/Button";
 
@@ -94,9 +94,9 @@ const StyleSuccess = styled.p`
 
 export default function Join() {
   // useUserInput에서 input validation schema
-  const loginSchema = useUserInput().pick(["nickname", "email", "password"]);
+  const loginSchema = UserInput().pick(["nickname", "email", "password"]);
   // useUserInput에서 input validation schema
-  const joinSchema = useNumberInput();
+  const joinSchema = NumberInput();
   // Schema 통합
   const combinedSchema = loginSchema.concat(joinSchema);
   // useForm으로 form 관리

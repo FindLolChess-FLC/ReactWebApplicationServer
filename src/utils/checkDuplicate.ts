@@ -1,7 +1,7 @@
 import { CheckDuplicateForm } from "../types/CheckDuplicate";
 import { Api } from "./apis/Api";
 
-export default async function checkDuplicate({
+export default async function CheckDuplicate({
   key,
   value,
 }: CheckDuplicateForm) {

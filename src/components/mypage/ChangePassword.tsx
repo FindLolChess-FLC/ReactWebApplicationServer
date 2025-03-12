@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import Swal from "sweetalert2";
-import useUserInput from "../../hooks/useUserInput";
+import useUserInput from "../../utils/user/UserInput";
 import { JoinForm } from "../../types/Join";
 import { Api } from "../../utils/apis/Api";
 import Input from "../common/Input";

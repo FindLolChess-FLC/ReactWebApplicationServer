@@ -5,11 +5,11 @@ import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm } from "../types/List";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
-import usePreference from "../hooks/usePreference";
-import useSynergyColor from "../hooks/useSynergyColor";
-import useChampionColor from "../hooks/useChampionColor";
+import Preference from "../utils/meta/Preference";
+import SynergyColor from "../utils/meta/SynergyColor";
+import ChampionColor from "../utils/meta/ChampionColor";
 import Tooltip from "../components/common/Tooltip";
-import itemImage from "../utils/itemImage";
+import ItemImage from "../utils/meta/ItemImage";
 import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
@@ -63,7 +63,7 @@ const Synergy = styled.li`
     padding-right: 2px;
   }
 `;
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   background-size: contain;
   background-repeat: no-repeat;
@@ -313,7 +313,7 @@ export default function Detail() {
             <ChampionImg
               $url={locationChampion.champion.img.img_src}
               // alt="챔피언 이미지"
-              color={useChampionColor(
+              color={ChampionColor(
                 locationChampion.champion.price,
                 locationChampion.champion.name,
               )}
@@ -321,7 +321,7 @@ export default function Detail() {
               onMouseLeave={() => setChampionTooltip(null)}
             >
               <StarBox
-                color={useChampionColor(
+                color={ChampionColor(
                   locationChampion.champion.price,
                   locationChampion.champion.name,
                 )}
@@ -354,14 +354,14 @@ export default function Detail() {
                               <>
                                 <TooltipItem>
                                   <img
-                                    src={itemImage(itemTooltip[0].item1)}
+                                    src={ItemImage(itemTooltip[0].item1)}
                                     alt="아이템1"
                                   />
                                   <p>{itemTooltip[0].item1}</p>
                                 </TooltipItem>
                                 <TooltipItem>
                                   <img
-                                    src={itemImage(itemTooltip[0].item2)}
+                                    src={ItemImage(itemTooltip[0].item2)}
                                     alt="아이템2"
                                   />
                                   <p>{itemTooltip[0].item2}</p>
@@ -421,7 +421,7 @@ export default function Detail() {
           {/* 시너지 */}
           {data?.synergys &&
             Object.entries(data?.synergys[0]).map(([key, value]) => {
-              const colors = useSynergyColor(
+              const colors = SynergyColor(
                 value.number,
                 key,
                 value.effect,
@@ -434,12 +434,12 @@ export default function Detail() {
                   onMouseEnter={() => setSynergyTooltip({ key, value })}
                   onMouseLeave={() => setSynergyTooltip(null)}
                 >
-                  <SynergyColor color={colors}>
+                  <SynergyColors color={colors}>
                     <SynergyImg
                       src={value.img_src}
                       alt={`${key} 시너지 무늬`}
                     />
-                  </SynergyColor>
+                  </SynergyColors>
                   <p>{value.number}</p>
                   {key}
                   {/* 호버 시 시너지 툴팁 */}
@@ -496,7 +496,7 @@ export default function Detail() {
               <LikeButton>
                 <img src={likeImg} alt="좋아요" />
                 <img src={lineImg} alt="실선" />
-                {usePreference(data?.meta.like_count, data?.meta.dislike_count)}
+                {Preference(data?.meta.like_count, data?.meta.dislike_count)}
                 %
                 <img src={dislikeImg} alt="싫어요" />
               </LikeButton>

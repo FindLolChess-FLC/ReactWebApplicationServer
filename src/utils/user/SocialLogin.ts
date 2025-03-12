@@ -1,6 +1,6 @@
-import { Api } from "./apis/Api";
+import { Api } from "../apis/Api";
 
-export default async function socialLogin(provider: string) {
+export default async function SocialLogin(provider: string) {
   const socialData = await Api({
     method: "GET",
     lastUrl: `oauth/${provider}/login/`,

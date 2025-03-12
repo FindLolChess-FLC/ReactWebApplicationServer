@@ -9,8 +9,8 @@ import arrowRightImg from "../assets/icon/arrow_button_right.svg";
 import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
 import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm, SynergysListForm } from "../types/List";
-import useChampionColor from "../hooks/useChampionColor";
-import useSynergyColor from "../hooks/useSynergyColor";
+import ChampionColor from "../utils/meta/ChampionColor";
+import SynergyColor from "../utils/meta/SynergyColor";
 
 const Body = styled.div`
   display: flex;
@@ -73,7 +73,7 @@ const SynergyBox = styled.div`
   align-items: center;
   gap: 0.0625rem 0; // 1px
 `;
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
@@ -89,7 +89,7 @@ const ChampionBox = styled.div`
   align-items: center;
   gap: 0.375rem; // 6px
 `;
-const ChampionColor = styled.img<{ color: string }>`
+const ChampionColors = styled.img<{ color: string }>`
   position: relative;
   border-radius: 0.25rem; // 4px
   width: 2.625rem; // 42px
@@ -240,7 +240,7 @@ export default function Carousel() {
             {metaData[2]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -248,12 +248,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -263,10 +263,10 @@ export default function Carousel() {
             {metaData[2]?.meta?.champions &&
               metaData[2]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}
@@ -287,7 +287,7 @@ export default function Carousel() {
             {metaData[0]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -295,12 +295,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -310,10 +310,10 @@ export default function Carousel() {
             {metaData[0]?.meta?.champions &&
               metaData[0]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}
@@ -334,7 +334,7 @@ export default function Carousel() {
             {metaData[1]?.synergys.map(synergyGroup =>
               Object.entries(synergyGroup).map(
                 ([key, value]: [string, SynergysListForm]) => {
-                  const colors = useSynergyColor(
+                  const colors = SynergyColor(
                     value.number,
                     key,
                     value.effect,
@@ -342,12 +342,12 @@ export default function Carousel() {
                   );
                   // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                   return colors ? (
-                    <SynergyColor key={key} color={colors}>
+                    <SynergyColors key={key} color={colors}>
                       <SynergyImg
                         src={value.img_src}
                         alt={`${key} 시너지 무늬`}
                       />
-                    </SynergyColor>
+                    </SynergyColors>
                   ) : null;
                 },
               ),
@@ -357,10 +357,10 @@ export default function Carousel() {
             {metaData[1]?.meta?.champions &&
               metaData[1]?.meta?.champions.map((data: ChampionsForm) => (
                 <div key={data.location}>
-                  <ChampionColor
+                  <ChampionColors
                     src={`${data.champion.img.img_src}?${cache}`}
                     alt="챔피언"
-                    color={useChampionColor(
+                    color={ChampionColor(
                       data.champion.price,
                       data.champion.name,
                     )}

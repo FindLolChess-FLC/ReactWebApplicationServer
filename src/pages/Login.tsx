@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
-import useUserInput from "../hooks/useUserInput";
+import useUserInput from "../utils/user/UserInput";
 import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
 import setCookie from "../utils/cookies/setCookie";
@@ -12,7 +12,7 @@ import Button from "../components/common/Button";
 import kakaoImg from "../assets/icon/kakao_round.svg";
 import naverImg from "../assets/icon/naver_round.svg";
 import googleImg from "../assets/icon/google_round.svg";
-import socialLogin from "../utils/socialLogin";
+import socialLogin from "../utils/user/SocialLogin";
 
 const Body = styled.div`
   display: flex;

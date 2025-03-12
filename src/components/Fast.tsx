@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
 import { useMetaContext } from "../hooks/Context";
-import useChampionColor from "../hooks/useChampionColor";
+import ChampionColor from "../utils/meta/ChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import downImg from "../assets/icon/arrow_down.svg";
@@ -283,7 +283,7 @@ export default function Fast({
         {groupPrice &&
           groupPrice.map(price => (
             <li key={price}>
-              <LineColor $bgcolor={useChampionColor(price)}> </LineColor>
+              <LineColor $bgcolor={ChampionColor(price)}> </LineColor>
               <ChampionList>
                 {championData
                   .filter(
@@ -302,7 +302,7 @@ export default function Fast({
                       <ChampionImg
                         src={item?.img.img_src}
                         alt="챔피언"
-                        color={useChampionColor(item.price)}
+                        color={ChampionColor(item.price)}
                         filter={handleMono(item.name) ? "none" : "grayscale(1)"}
                       />
                       {selectName.includes(item.name) && (

@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMetaContext } from "../../hooks/Context";
+import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
+import SynergyColor from "../../utils/meta/SynergyColor";
+import ChampionColor from "../../utils/meta/ChampionColor";
+import Preference from "../../utils/meta/Preference";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
 import sionImg from "../../assets/img/sion.jpg";
-import useSynergyColor from "../../hooks/useSynergyColor";
-import useChampionColor from "../../hooks/useChampionColor";
-import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
-import usePreference from "../../hooks/usePreference";
 
 const Table = styled.table<{ $border: string }>`
   font-size: 0.875rem; // 14px
@@ -127,14 +127,14 @@ const RestartBox = styled.div`
   font-weight: 500;
 `;
 
-const ChampionColor = styled.img<{ color: string }>`
+const ChampionColors = styled.img<{ color: string }>`
   position: relative;
   border-radius: 0.25rem; // 4px
   width: 2.625rem; // 42px
   border: 2.5px solid ${props => props.color};
 `;
 
-const SynergyColor = styled.div<{ color: string }>`
+const SynergyColors = styled.div<{ color: string }>`
   background: url(${props => props.color});
   width: 1.5625rem; // 25px
   height: 1.5625rem; // 25px
@@ -227,7 +227,7 @@ export default function Meta({ metaData }: any) {
                 {item?.synergys.map(synergyGroup =>
                   Object.entries(synergyGroup).map(
                     ([key, value]: [string, SynergysListForm]) => {
-                      const colors = useSynergyColor(
+                      const colors = SynergyColor(
                         value.number,
                         key,
                         value.effect,
@@ -235,12 +235,12 @@ export default function Meta({ metaData }: any) {
                       );
                       // color가 undefined일 경우 SynergyColor를 렌더링하지 않음
                       return colors ? (
-                        <SynergyColor key={key} color={colors}>
+                        <SynergyColors key={key} color={colors}>
                           <SynergyImg
                             src={value.img_src}
                             alt={`${key} 시너지 무늬`}
                           />
-                        </SynergyColor>
+                        </SynergyColors>
                       ) : null;
                     },
                   ),
@@ -252,14 +252,14 @@ export default function Meta({ metaData }: any) {
               {item?.meta.champions &&
                 item?.meta.champions.map((data: ChampionsForm) => (
                   <div key={data.location}>
-                    <ChampionColor
+                    <ChampionColors
                       src={
                         data.champion.name === "사이온"
                           ? sionImg
                           : `${data.champion.img.img_src}?${cache}`
                       }
                       alt="챔피언"
-                      color={useChampionColor(
+                      color={ChampionColor(
                         data.champion.price,
                         data.champion.name,
                       )}
@@ -271,8 +271,7 @@ export default function Meta({ metaData }: any) {
             {/* 선호도 */}
             <td>
               <h2>
-                {usePreference(item?.meta.like_count, item?.meta.dislike_count)}
-                %
+                {Preference(item?.meta.like_count, item?.meta.dislike_count)}%
               </h2>
             </td>
             {/* 화살표 */}

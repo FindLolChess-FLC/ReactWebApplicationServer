@@ -1,6 +1,6 @@
 import * as yup from "yup"; // yup 전체를 불러오기 위해 * as 별칭 사용
 
-export default function useNumberInput() {
+export default function NumberInput() {
   // validation
   const schema = yup.object().shape({
     code: yup

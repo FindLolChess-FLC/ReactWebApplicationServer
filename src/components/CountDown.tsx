@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import useTimeFormat from "../hooks/useTimeFormat";
+import TimeFormat from "../utils/TimeFormat";
 import { CountDownForm } from "../types/Countdown";
 
 const CountDiv = styled.div`
@@ -25,7 +25,7 @@ export default function CountDown({
         if (countRef.current > 0) {
           countRef.current -= 1;
           if (displayRef.current) {
-            displayRef.current.innerText = useTimeFormat(countRef.current); // useTimeFormat 자체가 string 형식
+            displayRef.current.innerText = TimeFormat(countRef.current); // useTimeFormat 자체가 string 형식
             // 타이머가 0이면 setTimer를 호출하여 타이머를 0으로 설정
             if (countRef.current === 0) {
               setTimer(0);
@@ -41,6 +41,6 @@ export default function CountDown({
 
   return (
     // 처음 1번을 위해 여기에도 useTimeFormat을 해줘야함
-    <CountDiv ref={displayRef}>{useTimeFormat(countRef.current)}</CountDiv>
+    <CountDiv ref={displayRef}>{TimeFormat(countRef.current)}</CountDiv>
   );
 }
