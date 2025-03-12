@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import setCookie from "../utils/setCookie";
+import setCookie from "../utils/cookies/setCookie";
 
 export default function Loading() {
   const navigate = useNavigate();

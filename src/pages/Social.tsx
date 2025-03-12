@@ -81,7 +81,7 @@ const ImageButton = styled.button<ImageButtonForm>`
   position: relative;
   width: 25.625rem; // 410px
   height: 3.75rem; // 60px
-  background: ${props => props.bgcolor || `#fff`};
+  background: ${props => props.$bgcolor || `#fff`};
   color: ${props => props.color || `##0d0d0d`};
   border: ${props => props.border || `none`};
   border-radius: 8px;
@@ -113,7 +113,7 @@ export default function Social() {
             <ImageButton
               id="kakao"
               type="button"
-              bgcolor="#fee500"
+              $bgcolor="#fee500"
               hovercolor="#eed900"
               onClick={() => socialLogin("kakao")}
             >
@@ -123,7 +123,7 @@ export default function Social() {
             <ImageButton
               id="naver"
               type="button"
-              bgcolor="#02c75a"
+              $bgcolor="#02c75a"
               color="#fff"
               hovercolor="#00be4c"
               onClick={() => socialLogin("naver")}
@@ -134,7 +134,7 @@ export default function Social() {
             <ImageButton
               id="google"
               type="button"
-              bgcolor="#f2f2f2"
+              $bgcolor="#f2f2f2"
               hovercolor="#e8e7eb"
               onClick={() => socialLogin("google")}
             >

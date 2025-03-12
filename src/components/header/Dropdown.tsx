@@ -22,9 +22,9 @@ const DropText = styled.div`
   position: relative;
 `;
 
-const Img = styled.img<{ arrow: string }>`
+const Img = styled.img<{ $arrow: string }>`
   cursor: pointer;
-  filter:${props => props.arrow};
+  filter:${props => props.$arrow};
 }
 `;
 
@@ -127,7 +127,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
         {isOpen ? (
           <Img
             src={upImg}
-            arrow={arrow}
+            $arrow={arrow}
             alt="윗 방향"
             onKeyDown={handleDropdown}
             onClick={handleDropdown}
@@ -135,7 +135,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
         ) : (
           <Img
             src={downImg}
-            arrow={arrow}
+            $arrow={arrow}
             alt="아랫 방향"
             onKeyDown={handleDropdown}
             onClick={handleDropdown}

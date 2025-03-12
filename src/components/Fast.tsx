@@ -51,10 +51,10 @@ const FastBox = styled.ul`
     gap: 10px;
   }
 `;
-const LineColor = styled.div<{ bgcolor: string }>`
+const LineColor = styled.div<{ $bgcolor: string }>`
   width: 5px;
   height: 86px;
-  background: ${props => props.bgcolor};
+  background: ${props => props.$bgcolor};
 `;
 const ChampionList = styled.div`
   display: flex;
@@ -283,7 +283,7 @@ export default function Fast({
         {groupPrice &&
           groupPrice.map(price => (
             <li key={price}>
-              <LineColor bgcolor={useChampionColor(price)}> </LineColor>
+              <LineColor $bgcolor={useChampionColor(price)}> </LineColor>
               <ChampionList>
                 {championData
                   .filter(

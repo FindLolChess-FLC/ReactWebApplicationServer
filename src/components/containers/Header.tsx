@@ -6,12 +6,12 @@ import SearchBar from "../header/SearchBar";
 import UserStatus from "../header/UserStatus";
 import BlackSearchBar from "../header/BlackSearchBar";
 
-const Body = styled.div<{ bgcolor: string }>`
+const Body = styled.div<{ $bgcolor: string }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background: ${props => props.bgcolor};
+  background: ${props => props.$bgcolor};
   height: 6.3125rem; // 101px
   padding-bottom: 0.625rem; // 10px
 `;
@@ -25,7 +25,7 @@ export default function Header({ searchValue }: HeaderProps) {
   const bgcolor = location.pathname === "/" ? "#0D0D0D" : "#fff";
   const logo = location.pathname === "/" ? whitelogoImg : blacklogoImg;
   return (
-    <Body bgcolor={bgcolor}>
+    <Body $bgcolor={bgcolor}>
       <Link to="/">
         <img src={logo} alt="로고 이미지" />
       </Link>

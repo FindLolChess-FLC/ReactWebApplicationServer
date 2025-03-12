@@ -12,16 +12,16 @@ import useChampionColor from "../../hooks/useChampionColor";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 import usePreference from "../../hooks/usePreference";
 
-const Table = styled.table<{ border: string }>`
+const Table = styled.table<{ $border: string }>`
   font-size: 0.875rem; // 14px
-  border-radius: ${props => props.border};
+  border-radius: ${props => props.$border};
   overflow: hidden;
 `;
 
-const Thead = styled.thead<{ bgcolor: string }>`
+const Thead = styled.thead<{ $bgcolor: string }>`
   color: #fff;
   font-weight: 700;
-  background: ${props => props.bgcolor};
+  background: ${props => props.$bgcolor};
   > tr th {
     height: 58px;
     vertical-align: middle;
@@ -53,7 +53,7 @@ const Thead = styled.thead<{ bgcolor: string }>`
   }
 `;
 
-const Tbody = styled.tbody<{ hovercolor: string; evencolor: string }>`
+const Tbody = styled.tbody<{ $hovercolor: string; $evencolor: string }>`
   cursor: pointer;
   > tr {
     &:hover td h2 {
@@ -101,14 +101,14 @@ const Tbody = styled.tbody<{ hovercolor: string; evencolor: string }>`
   > tr:nth-child(odd) {
     background: #fff;
     &:hover {
-      background: ${props => props.hovercolor};
+      background: ${props => props.$hovercolor};
     }
   }
   // 짝수 순서일 때
   > tr:nth-child(even) {
-    background: ${props => props.evencolor};
+    background: ${props => props.$evencolor};
     &:hover {
-      background: ${props => props.hovercolor};
+      background: ${props => props.$hovercolor};
     }
   }
 `;
@@ -189,8 +189,8 @@ export default function Meta({ metaData }: any) {
   };
 
   return (
-    <Table border={border}>
-      <Thead bgcolor={bgcolor}>
+    <Table $border={border}>
+      <Thead $bgcolor={bgcolor}>
         <tr>
           <th> </th>
           <th>제목</th>
@@ -203,8 +203,8 @@ export default function Meta({ metaData }: any) {
       {/* item : meta, synerge */}
       {metaData.map((item: ListForm) => (
         <Tbody
-          hovercolor={hovercolor}
-          evencolor={evencolor}
+          $hovercolor={hovercolor}
+          $evencolor={evencolor}
           onClick={() => handleClick(item?.meta.id)}
         >
           <tr key={item?.meta.id}>

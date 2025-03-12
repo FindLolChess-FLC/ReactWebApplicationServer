@@ -26,16 +26,16 @@ const shakeAnimation = keyframes`
   100% { transform: translateX(0); }
 `;
 
-const CarouselBox = styled.div<{ ordervalue: number; isshaking: boolean }>`
+const CarouselBox = styled.div<{ $order: number; $shaking: boolean }>`
   width: 970px;
   height: 405px;
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: pointer;
-  order: ${({ ordervalue }) => ordervalue};
-  ${({ isshaking }) =>
-    isshaking &&
+  order: ${({ $order }) => $order};
+  ${({ $shaking }) =>
+    $shaking &&
     css`
       animation: ${shakeAnimation} 0.4s ease;
     `}
@@ -139,12 +139,12 @@ const Bar = styled.div`
   left: 50%;
   transform: translate(-50%);
 `;
-const Circle = styled.div<{ active: boolean }>`
+const Circle = styled.div<{ $active: boolean }>`
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #d1d1d1;
-  ${({ active }) => active && `background: #0d0d0d;`}
+  ${({ $active }) => $active && `background: #0d0d0d;`}
 `;
 
 const ArrowRight = styled.img`
@@ -230,7 +230,7 @@ export default function Carousel() {
   return (
     <Body>
       {/* 캐러셀 3 */}
-      <CarouselBox ordervalue={orderValues[0]} isshaking={isShaking}>
+      <CarouselBox $order={orderValues[0]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage3} alt="캐러셀 이미지3" />
         </ImageBox>
@@ -277,7 +277,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 1 */}
-      <CarouselBox ordervalue={orderValues[1]} isshaking={isShaking}>
+      <CarouselBox $order={orderValues[1]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage1} alt="캐러셀 이미지1" />
         </ImageBox>
@@ -324,7 +324,7 @@ export default function Carousel() {
         </MetaBox>
       </CarouselBox>
       {/* 캐러셀 2 */}
-      <CarouselBox ordervalue={orderValues[2]} isshaking={isShaking}>
+      <CarouselBox $order={orderValues[2]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
           <BackImage src={bgImage2} alt="캐러셀 이미지2" />
         </ImageBox>
@@ -385,9 +385,9 @@ export default function Carousel() {
         />
         <ArrowLeft src={arrowLeftImg} alt="왼쪽" onClick={handlePrevSlide} />
         <Bar>
-          <Circle active={slide === 1}> </Circle>
-          <Circle active={slide === 3}> </Circle>
-          <Circle active={slide === 2}> </Circle>
+          <Circle $active={slide === 1}> </Circle>
+          <Circle $active={slide === 3}> </Circle>
+          <Circle $active={slide === 2}> </Circle>
         </Bar>
       </ViewBox>
     </Body>

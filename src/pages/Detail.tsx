@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../components/containers/Header";
-import Footer from "../components/containers/Footer";
 import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm } from "../types/List";
+import Header from "../components/containers/Header";
+import Footer from "../components/containers/Footer";
 import usePreference from "../hooks/usePreference";
 import useSynergyColor from "../hooks/useSynergyColor";
 import useChampionColor from "../hooks/useChampionColor";
@@ -153,10 +153,10 @@ const BaseImg = styled.img`
   object-fit: cover;
   border-radius: 7px;
 `;
-const ChampionImg = styled.div<{ url: string; color: string }>`
+const ChampionImg = styled.div<{ $url: string; color: string }>`
   position: relative;
   overflow: hidden;
-  background: url(${props => props.url});
+  background: url(${props => props.$url});
   background-size: cover;
   border-radius: 7px;
   width: 91px;
@@ -187,9 +187,9 @@ const ItemBox = styled.div`
   top: 3px;
   right: 3px;
 `;
-const ItemImg = styled.div<{ url: string }>`
+const ItemImg = styled.div<{ $url: string }>`
   position: relative;
-  background: url(${props => props.url});
+  background: url(${props => props.$url});
   background-size: cover;
   width: 20px;
   height: 20px;
@@ -311,7 +311,7 @@ export default function Detail() {
         {locationChampion ? (
           <>
             <ChampionImg
-              url={locationChampion.champion.img.img_src}
+              $url={locationChampion.champion.img.img_src}
               // alt="챔피언 이미지"
               color={useChampionColor(
                 locationChampion.champion.price,
@@ -337,7 +337,7 @@ export default function Detail() {
                 {locationChampion.item.map(item =>
                   item ? (
                     <ItemImg
-                      url={item.img.img_src}
+                      $url={item.img.img_src}
                       onMouseEnter={
                         () =>
                           setItemTooltip([item, locationChampion.champion.name]) // item의 정보와 챔피언마다 다른 아이템을 나타내주기 위해 champion.name도 필요
@@ -348,7 +348,7 @@ export default function Detail() {
                       {itemTooltip &&
                         itemTooltip[0].name === item.name &&
                         itemTooltip[1] === locationChampion.champion.name && (
-                          <Tooltip width="125px" height="70px" left="22px">
+                          <Tooltip width="125px" height="70px" $left="22px">
                             <h3>{itemTooltip[0].name}</h3>
                             {itemTooltip[0].item1 ? (
                               <>
@@ -382,7 +382,7 @@ export default function Detail() {
             {championTooltip &&
               championTooltip.name === locationChampion.champion.name &&
               championTooltip.name !== "사이온" && (
-                <Tooltip width="140px" height="90px" top="91px">
+                <Tooltip width="140px" height="90px" $top="91px">
                   <TooltipChampion>
                     <h3>{championTooltip.name}</h3>
                     <img src={moneyImg} alt="돈 이미지" />
@@ -444,7 +444,7 @@ export default function Detail() {
                   {key}
                   {/* 호버 시 시너지 툴팁 */}
                   {synergyTooltip && synergyTooltip.key === key && (
-                    <Tooltip width="328px" height="170px" top="30px">
+                    <Tooltip width="328px" height="170px" $top="30px">
                       <TooltipSynergy>
                         <TooltipImg
                           src={synergyTooltip.value.img_src}

@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import useUserInput from "../hooks/useUserInput";
 import Input from "../components/common/Input";
 import { Api } from "../utils/apis/Api";
-import setCookie from "../utils/setCookie";
+import setCookie from "../utils/cookies/setCookie";
 import { LoginForm } from "../types/Login";
 import Button from "../components/common/Button";
 import kakaoImg from "../assets/icon/kakao_round.svg";
