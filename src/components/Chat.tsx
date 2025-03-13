@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "./common/Button";
@@ -6,6 +6,7 @@ import Input from "./common/Input";
 import getCookie from "../utils/cookies/getCookie";
 import three from "../assets/icon/threebutton.svg";
 import { Api } from "../utils/apis/Api";
+import { ContentForm } from "../types/Content";
 
 const ViewBox = styled.div`
   height: 350px;
@@ -13,25 +14,30 @@ const ViewBox = styled.div`
   display: flex;
   flex-direction: column;
   font-weight: 400;
-  line-height: 165%; /* 19.8px */
   overflow-y: auto;
 `;
 const OtherBox = styled.div`
   width: 294px;
   display: flex;
+  gap: 3px;
   flex-direction: column;
+  align-items: flex-start;
+  padding: 4px 0;
 `;
 const Other = styled.div`
   padding: 12px 22px;
   border-radius: 0px 14px 14px 14px;
   background: #ebebeb;
   font-size: 12px;
+  line-height: 165%; /* 19.8px */
 `;
 const MineBox = styled.div`
   width: 294px;
   display: flex;
+  gap: 2px;
   flex-direction: column;
   align-items: flex-end;
+  padding: 4px 0;
 `;
 const Mine = styled.div`
   padding: 12px 22px;
@@ -39,14 +45,15 @@ const Mine = styled.div`
   background: #5661ff;
   color: #fff;
   font-size: 12px;
+  line-height: 165%; /* 19.8px */
 `;
 
 const Information = styled.div`
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
   color: #5b5b5b;
-  font-size: 10px;
+  font-size: 9px;
   > h3 {
     font-size: 11px;
     font-weight: 500;
@@ -59,7 +66,7 @@ const ThreeButton = styled.div`
   cursor: pointer;
   > img {
     padding-left: 6px;
-    padding-bottom: 6px;
+    padding-top: 3px;
   }
   &:hover {
     background: #e1e1e1;
@@ -75,40 +82,89 @@ const Form = styled.form`
   border-top: 1px solid #c9c9c9;
 `;
 
-export default function Chat(id: any) {
-  const { register, handleSubmit } = useForm();
+export default function Chat(metaid: any) {
+  const { register, handleSubmit, reset } = useForm<ContentForm>();
+  const [messages, setMessages] = useState<ContentForm[]>([]); // content 저장
+  const [nickname, setNickname] = useState("");
+  const token = getCookie("token"); // 현재 토큰
 
-  const token = getCookie("token");
-  const [content, setContent] = useState();
+  useEffect(() => {
+    const searchApi = async () => {
+      const [responseContext, responseNickname] = await Promise.all([
+        Api({
+          method: "GET",
+          lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+        }),
+        Api({
+          method: "GET",
+          lastUrl: "user/updateinfo/",
+        }),
+      ]);
+      if (responseContext.resultcode === "SUCCESS") {
+        setMessages(
+          responseContext.data.map((text: ContentForm) => ({
+            id: text.id, // id
+            writer: text.writer || "", // 작성자
+            content: text.content, // 내용
+            date: text.date, // 날짜
+          })),
+        );
+      } else {
+        console.log("댓글없음");
+      }
+      if (responseNickname.resultcode === "SUCCESS") {
+        setNickname(responseNickname.nickname);
+      } else {
+        console.log("로그인 안되어 있음");
+      }
+    };
+    searchApi();
+  }, []);
 
-  const onSubmit = (data: any) => {
-    Api({
-      bodyData: { ...id, ...data },
+  const onSubmit = async (data: ContentForm) => {
+    const response = await Api({
+      bodyData: { ...metaid, ...data },
       method: "POST",
       lastUrl: "meta/writecomment/",
     });
-    setContent(data.content);
+
+    const newMessage = {
+      id: response.data.id, // 서버에서 받은 ID 사용
+      writer: nickname, // 현재 사용자 닉네임 사용
+      content: data.content, // 입력한 메시지 내용
+      date: response.data.date, // 서버에서 받은 생성 날짜
+    };
+    setMessages(prevMessages => [...prevMessages, newMessage]); // 로컬에 있는 메세지 추가
+
+    reset();
   };
 
   return (
     <>
       <ViewBox>
-        <OtherBox>
-          <Information>
-            <h3>이름</h3>
-            <p>2025.00.00</p>
-          </Information>
-          <Other>상대 채팅 디자인</Other>
-        </OtherBox>
-        <MineBox>
-          <Information>
-            <p>2025.00.00</p>
-            <ThreeButton>
-              <img src={three} alt="햄버거 버튼" />
-            </ThreeButton>
-          </Information>
-          <Mine>{content}</Mine>
-        </MineBox>
+        {messages.map(({ id, writer, content, date }) =>
+          writer === nickname ? (
+            <MineBox key={id}>
+              {/* 내 메시지 */}
+              <Information>
+                <p>{date?.toString().slice(0, 10).replace("T", " ")}</p>
+                <ThreeButton>
+                  <img src={three} alt="햄버거 버튼" />
+                </ThreeButton>
+              </Information>
+              <Mine>{content}</Mine>
+            </MineBox>
+          ) : (
+            <OtherBox key={id}>
+              {/* 상대 메시지 */}
+              <Information>
+                <h3>{writer}</h3>
+                <p>{date?.toString().slice(0, 10).replace("T", " ")}</p>
+              </Information>
+              <Other>{content}</Other>
+            </OtherBox>
+          ),
+        )}
       </ViewBox>
       <Form onSubmit={handleSubmit(onSubmit)}>
         {/* 기본 */}
