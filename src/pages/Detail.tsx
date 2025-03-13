@@ -284,7 +284,6 @@ export default function Detail() {
         lastUrl: "meta/metasearch/",
       });
       setData(response.data[0]);
-      console.log(response.data[0]);
     };
     searchApi();
   }, []);
