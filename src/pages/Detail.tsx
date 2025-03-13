@@ -21,6 +21,7 @@ import dislikeImg from "../assets/icon/dislike.svg";
 import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
 import moneyImg from "../assets/icon/money.svg";
+import Chat from "../components/Chat";
 
 const Body = styled.div`
   display: flex;
@@ -283,7 +284,6 @@ export default function Detail() {
         lastUrl: "meta/metasearch/",
       });
       setData(response.data[0]);
-      console.log(response.data[0]);
     };
     searchApi();
   }, []);
@@ -489,6 +489,7 @@ export default function Detail() {
                 <img src={dislikeImg} alt="싫어요" />
               </LikeButton>
             </CommentTitle>
+            <Chat metaid={id} />
           </Comment>
         </Contents>
       </Main>

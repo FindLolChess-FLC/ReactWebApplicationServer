@@ -6,13 +6,13 @@ const StyleButton = styled.button<ButtonForm>`
   width: ${props => props.width || `25.625rem`}; // 410px
   height: ${props => props.height || `3.75rem`}; // 60px
   background: ${props => props.$bgcolor || `#5144ed`};
+  font-size: 1rem; // 16px
   border-radius: 4px;
   color: #fff;
-  font-size: 1rem; // 16px
-
   &:hover {
     background: #6f63ff;
   }
+
   /* submit 버튼 스타일 */
   ${props =>
     props.type === "submit" &&
@@ -54,8 +54,7 @@ const StyleButton = styled.button<ButtonForm>`
         font-size: 0.9375rem; /* 15px */
       }
     `}
-    
-/* 변경사항 버튼 disabled 스타일 */
+    /* 변경사항 버튼 disabled 스타일 */
     ${props =>
     props.id === "save" &&
     props.disabled === true &&
@@ -63,13 +62,41 @@ const StyleButton = styled.button<ButtonForm>`
       background: #f4f4f4;
       color: #888;
     `}
+
+    /* 채팅 button의 스타일 */
+    ${props =>
+    props.id === "chat" &&
+    css`
+      margin: 5px 0;
+      padding: 9px 15px;
+      border-radius: 7px;
+      background: #5661ff;
+      font-size: 12px;
+      font-weight: 400;
+      &:hover {
+        border: none;
+        border-radius: 7px;
+        background: #3845f9;
+        font-size: 12px;
+        font-weight: 400;
+        color: #fff;
+      }
+    `}
+     /* 채팅 button의 disabled 스타일 */
+    ${props =>
+    props.id === "chat" &&
+    props.disabled === true &&
+    css`
+      background: rgba(86, 97, 255, 0.5);
+    `}
 `;
+
 export default function Button({
   width,
   height,
   $bgcolor,
-  type,
   id,
+  type,
   name,
   disabled,
   onClick,
@@ -80,8 +107,8 @@ export default function Button({
       width={width}
       height={height}
       $bgcolor={$bgcolor}
-      type={type === "submit" ? "submit" : "button"}
       id={id}
+      type={type === "submit" ? "submit" : "button"}
       name={name}
       disabled={disabled}
       onClick={onClick}

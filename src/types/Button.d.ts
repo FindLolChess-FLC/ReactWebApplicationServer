@@ -2,8 +2,9 @@ export type ButtonForm = {
   width?: string;
   height?: string;
   $bgcolor?: string;
-  type: "submit" | "button";
+  $font?: string;
   id: string;
+  type: "submit" | "button";
   name?: string;
   disabled?: boolean;
   children?: React.ReactNode;

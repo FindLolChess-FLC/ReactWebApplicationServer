@@ -8,7 +8,7 @@ import { JoinForm } from "../types/Join";
 import { VerificationCodeForm } from "../types/VerificationCode";
 import UserInput from "../utils/user/UserInput";
 import NumberInput from "../utils/user/NumberInput";
-import checkDuplicate from "../utils/CheckDuplicate";
+import CheckDuplicate from "../utils/CheckDuplicate";
 import Input from "../components/common/Input";
 import CountDown from "../components/CountDown";
 import Button from "../components/common/Button";
@@ -180,7 +180,7 @@ export default function Join() {
             register={register("nickname", {
               // 닉네임 중복 체크
               onBlur: async data => {
-                const response = await checkDuplicate({
+                const response = await CheckDuplicate({
                   key: "nickname",
                   value: data.target.value,
                 });
@@ -206,7 +206,7 @@ export default function Join() {
             register={register("email", {
               // 이메일 중복 체크
               onBlur: async data => {
-                const response = await checkDuplicate({
+                const response = await CheckDuplicate({
                   key: "email",
                   value: data.target.value,
                 });

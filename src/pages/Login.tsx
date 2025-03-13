@@ -106,7 +106,6 @@ export default function Login() {
       method: "POST",
       lastUrl: "user/signin/",
     });
-    console.log(loginData.access); // 토큰이 있는 장소
     setCookie("token", loginData.access, 24); // 24시간 뒤 쿠키 삭제
     if (loginData.resultcode === "SUCCESS") {
       navigate("/");
