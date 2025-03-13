@@ -4,7 +4,7 @@ export type InputForm = {
   width?: string;
   height?: string;
   labelname?: string;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   type: string; // text, password, number 등 다양한 타입
   input: string;
   placeholder?: string;

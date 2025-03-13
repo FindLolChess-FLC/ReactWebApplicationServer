@@ -66,7 +66,17 @@ const StyleInput = styled.input`
         }
       }
     `}
+
+   /* 채팅 input의 스타일 */
+  ${props =>
+    props.id === "chat" &&
+    css`
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 400;
+    `}
 `;
+
 export default function Input({
   width,
   height,
