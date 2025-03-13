@@ -67,6 +67,7 @@ const StyleButton = styled.button<ButtonForm>`
     ${props =>
     props.id === "chat" &&
     css`
+      margin: 5px 0;
       padding: 9px 15px;
       border-radius: 7px;
       background: #5661ff;

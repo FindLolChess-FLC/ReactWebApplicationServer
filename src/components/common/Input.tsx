@@ -4,6 +4,13 @@ import "../../fonts/index.css";
 
 const StyleTitle = styled.p`
   color: #0d0d0d;
+  ${props =>
+    props.id === "edit" &&
+    css`
+      color: #5b5b5b;
+      font-size: 11px;
+      font-weight: 400;
+    `}
 `;
 
 const StyleInput = styled.input`
@@ -71,9 +78,27 @@ const StyleInput = styled.input`
   ${props =>
     props.id === "chat" &&
     css`
+      margin: 5px 0;
       padding: 9px 14px;
       font-size: 12px;
       font-weight: 400;
+      &:focus {
+        border: 1px solid #17171b;
+      }
+    `}
+   /* 채팅 수정 시 input의 스타일 */
+  ${props =>
+    props.id === "edit" &&
+    css`
+      margin: 5px 0;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: 400;
+      background: #efefef;
+      border: none;
+      &:focus {
+        border: 1px solid #17171b;
+      }
     `}
 `;
 
@@ -94,7 +119,7 @@ export default function Input({
 }: InputForm) {
   return (
     <label htmlFor={input}>
-      <StyleTitle>{labelname}</StyleTitle>
+      <StyleTitle id={input}>{labelname}</StyleTitle>
       <div>
         <StyleInput
           width={width}
