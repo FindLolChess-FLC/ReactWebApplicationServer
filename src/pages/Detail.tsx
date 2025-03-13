@@ -490,7 +490,7 @@ export default function Detail() {
                 <img src={dislikeImg} alt="싫어요" />
               </LikeButton>
             </CommentTitle>
-            <Chat />
+            <Chat id={data?.meta.id} />
           </Comment>
         </Contents>
       </Main>

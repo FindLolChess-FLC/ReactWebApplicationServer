@@ -1,7 +1,11 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "./common/Button";
 import Input from "./common/Input";
+import getCookie from "../utils/cookies/getCookie";
 import three from "../assets/icon/threebutton.svg";
+import { Api } from "../utils/apis/Api";
 
 const ViewBox = styled.div`
   height: 350px;
@@ -10,8 +14,7 @@ const ViewBox = styled.div`
   flex-direction: column;
   font-weight: 400;
   line-height: 165%; /* 19.8px */
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow-y: auto;
 `;
 const OtherBox = styled.div`
   width: 294px;
@@ -31,7 +34,6 @@ const MineBox = styled.div`
   align-items: flex-end;
 `;
 const Mine = styled.div`
-  width: 24px;
   padding: 12px 22px;
   border-radius: 14px 14px 0px 14px;
   background: #5661ff;
@@ -73,7 +75,21 @@ const Form = styled.form`
   border-top: 1px solid #c9c9c9;
 `;
 
-export default function Chat() {
+export default function Chat(id: any) {
+  const { register, handleSubmit } = useForm();
+
+  const token = getCookie("token");
+  const [content, setContent] = useState();
+
+  const onSubmit = (data: any) => {
+    Api({
+      bodyData: { ...id, ...data },
+      method: "POST",
+      lastUrl: "meta/writecomment/",
+    });
+    setContent(data.content);
+  };
+
   return (
     <>
       <ViewBox>
@@ -91,10 +107,10 @@ export default function Chat() {
               <img src={three} alt="햄버거 버튼" />
             </ThreeButton>
           </Information>
-          <Mine>내 채팅 디자인 내 채팅 디자인</Mine>
+          <Mine>{content}</Mine>
         </MineBox>
       </ViewBox>
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {/* 기본 */}
         <Input
           width="233px"
@@ -102,6 +118,7 @@ export default function Chat() {
           input="chat"
           type="text"
           placeholder="댓글을 입력해주세요."
+          register={register("content")}
           // disabled={}
         />
         {/* 수정중 */}
@@ -111,6 +128,7 @@ export default function Chat() {
           input="edit"
           type="text"
           labelname="수정 중.."
+          register={register("content")}
           // disabled={}
         /> */}
         <Button
