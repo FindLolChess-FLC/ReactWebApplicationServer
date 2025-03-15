@@ -22,6 +22,7 @@ import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
 import moneyImg from "../assets/icon/money.svg";
 import Chat from "../components/Chat";
+import getCookie from "../utils/cookies/getCookie";
 
 const Body = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Body = styled.div`
 `;
 
 const Main = styled.main`
+  position: relative;
   flex: 1;
   background-color: #f4f4f4;
   display: flex;
@@ -37,6 +39,15 @@ const Main = styled.main`
   align-items: center;
   gap: 19px;
   padding: 25px 0 90px;
+  > small {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translate(125%);
+    font-size: 11px;
+    font-weight: 400;
+    color: #5661ff;
+  }
 `;
 
 const SynergyBox = styled.ul`
@@ -231,9 +242,10 @@ const LikeButton = styled.div`
   font-weight: 500;
   color: #3d3d3d;
   font-family: "Roboto";
-  > img {
-    cursor: pointer;
-  }
+`;
+const Buttons = styled.button`
+  all: unset; /* 버튼의 기본 스타일 제거 */
+  cursor: pointer;
 `;
 const TooltipImg = styled.img`
   filter: invert(1);
@@ -272,9 +284,13 @@ export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [data, setData] = useState<ListForm>(); // api에서 받아온 메타 정보
   const [heart, setHeart] = useState(false); // 빈하트 false
+  const [like, setLike] = useState(false); // 빈좋아요 false
+  const [dislike, setDislike] = useState(false); // 빈좋아요 false
   const [synergyTooltip, setSynergyTooltip] = useState<any>(); // 시너지 툴팁 on/off
   const [championTooltip, setChampionTooltip] = useState<any>(); // 챔피언 툴팁 on/off
   const [itemTooltip, setItemTooltip] = useState<any>(); // 아이템 툴팁 on/off
+
+  const token = getCookie("token"); // 현재 토큰
 
   useEffect(() => {
     const searchApi = async () => {
@@ -399,6 +415,40 @@ export default function Detail() {
     setHeart(!heart);
   };
 
+  const handleLike = () => {
+    if (token && id) {
+      if (like) {
+        setLike(false);
+        setDislike(true);
+      } else {
+        setLike(true);
+        Api({
+          bodyData: { id: parseInt(id, 10), action: "like" },
+          method: "POST",
+          lastUrl: "meta/reaction/",
+        });
+        setDislike(false);
+      }
+    }
+  };
+
+  const handleDislike = () => {
+    if (token && id) {
+      if (dislike) {
+        setDislike(false);
+        setLike(true);
+      } else {
+        setDislike(true);
+        Api({
+          bodyData: { id: parseInt(id, 10), action: "dislike" },
+          method: "POST",
+          lastUrl: "meta/reaction/",
+        });
+        setLike(false);
+      }
+    }
+  };
+
   return (
     <Body>
       <header>
@@ -482,16 +532,27 @@ export default function Detail() {
             <CommentTitle>
               <h4>덱이 마음에 드셨나요?</h4>
               <LikeButton>
-                <img src={likeImg} alt="좋아요" />
+                <Buttons type="button" onClick={handleLike}>
+                  <img src={like ? likeClickImg : likeImg} alt="좋아요" />
+                </Buttons>
                 <img src={lineImg} alt="실선" />
-                {Preference(data?.meta.like_count, data?.meta.dislike_count)}
-                %
-                <img src={dislikeImg} alt="싫어요" />
+                {Preference(data?.meta.like_count, data?.meta.dislike_count)}%
+                <Buttons type="button" onClick={handleDislike}>
+                  <img
+                    src={dislike ? dislikeClickImg : dislikeImg}
+                    alt="싫어요"
+                  />
+                </Buttons>
               </LikeButton>
             </CommentTitle>
             <Chat metaid={id} />
           </Comment>
         </Contents>
+        {!token && (
+          <small>
+            *로그인 시 즐겨찾기, 선호도, 채팅 기능을 이용할 수 있습니다!
+          </small>
+        )}
       </Main>
       <footer>
         <Footer />
