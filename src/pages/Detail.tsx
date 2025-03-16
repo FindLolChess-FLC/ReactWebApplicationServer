@@ -412,7 +412,23 @@ export default function Detail() {
   }
 
   const handleHeart = () => {
-    setHeart(!heart);
+    if (token && id) {
+      if (heart) {
+        setHeart(false);
+        Api({
+          bodyData: { id: parseInt(id, 10) },
+          method: "DELETE",
+          lastUrl: "user/deletefavorite/",
+        });
+      } else {
+        setHeart(true);
+        Api({
+          bodyData: { id: parseInt(id, 10) },
+          method: "POST",
+          lastUrl: "user/favorite/",
+        });
+      }
+    }
   };
 
   const handleLike = () => {
