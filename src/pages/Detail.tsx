@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Api } from "../utils/apis/Api";
-import { ChampionsForm, ListForm } from "../types/List";
+import { ChampionsForm, ListForm, MetaForm } from "../types/List";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import Preference from "../utils/meta/Preference";
@@ -291,18 +291,57 @@ export default function Detail() {
   const [itemTooltip, setItemTooltip] = useState<any>(); // 아이템 툴팁 on/off
 
   const token = getCookie("token"); // 현재 토큰
+  const countLike = data?.meta.like_count;
+  const countDislike = data?.meta.dislike_count;
 
   useEffect(() => {
     const searchApi = async () => {
-      const response = await Api({
-        bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
-        method: "POST",
-        lastUrl: "meta/metasearch/",
-      });
-      setData(response.data[0]);
+      const [responseData, responseHeart] = await Promise.all([
+        Api({
+          bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
+          method: "POST",
+          lastUrl: "meta/metasearch/",
+        }),
+        Api({
+          method: "GET",
+          lastUrl: "user/checkfavorite/",
+        }),
+      ]);
+      setData(responseData.data[0]);
+      // 즐겨찾기 정보를 받아서 처음 화면부터 사용자가 누른 즐겨찾기를 표출
+      if (responseHeart.resultcode === "SUCCESS") {
+        responseHeart.data.favorite.forEach((heartid: MetaForm) => {
+          if (id && heartid.id === parseInt(id, 10)) {
+            setHeart(true);
+          }
+        });
+      }
     };
     searchApi();
   }, []);
+
+  // 내가 누른 선호도 버튼
+  useEffect(() => {
+    const findApi = async () => {
+      const responseReaction = await Api({
+        method: "GET",
+        lastUrl: "meta/checkreaction/",
+      });
+      // 선호도 정보를 받아서 처음 화면부터 사용자가 누른 선호도를 표출
+      if (token && responseReaction.resultcode === "SUCCESS") {
+        if (countLike) {
+          setLike(true);
+        }
+        if (countDislike) {
+          setDislike(true);
+        }
+        console.log(responseReaction);
+        console.log(countLike);
+        console.log(countDislike);
+      }
+    };
+    findApi();
+  }, [countLike, countDislike]);
 
   // 챔피언
   const champions = [];
@@ -552,7 +591,7 @@ export default function Detail() {
                   <img src={like ? likeClickImg : likeImg} alt="좋아요" />
                 </Buttons>
                 <img src={lineImg} alt="실선" />
-                {Preference(data?.meta.like_count, data?.meta.dislike_count)}%
+                {Preference(countLike, countDislike)}%
                 <Buttons type="button" onClick={handleDislike}>
                   <img
                     src={dislike ? dislikeClickImg : dislikeImg}
