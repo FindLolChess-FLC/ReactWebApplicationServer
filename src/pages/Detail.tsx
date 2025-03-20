@@ -282,66 +282,93 @@ const TooltipItem = styled.div`
 
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
+  const [click, setClick] = useState(false); // 클릭
   const [data, setData] = useState<ListForm>(); // api에서 받아온 메타 정보
   const [heart, setHeart] = useState(false); // 빈하트 false
   const [like, setLike] = useState(false); // 빈좋아요 false
   const [dislike, setDislike] = useState(false); // 빈좋아요 false
+  const [comparison, setComparison] = useState<any>();
   const [synergyTooltip, setSynergyTooltip] = useState<any>(); // 시너지 툴팁 on/off
   const [championTooltip, setChampionTooltip] = useState<any>(); // 챔피언 툴팁 on/off
   const [itemTooltip, setItemTooltip] = useState<any>(); // 아이템 툴팁 on/off
 
   const token = getCookie("token"); // 현재 토큰
-  const countLike = data?.meta.like_count;
-  const countDislike = data?.meta.dislike_count;
 
   useEffect(() => {
     const searchApi = async () => {
-      const [responseData, responseHeart] = await Promise.all([
-        Api({
-          bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
-          method: "POST",
-          lastUrl: "meta/metasearch/",
-        }),
-        Api({
-          method: "GET",
-          lastUrl: "user/checkfavorite/",
-        }),
-      ]);
+      const [responseData, responseHeart, responseReaction] = await Promise.all(
+        [
+          // 전체 메타에 대한 정보
+          Api({
+            bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
+            method: "POST",
+            lastUrl: "meta/metasearch/",
+          }),
+          // 즐겨찾기 정보
+          Api({
+            method: "GET",
+            lastUrl: "user/checkfavorite/",
+          }),
+          // 선호도 정보
+          Api({
+            method: "GET",
+            lastUrl: `meta/checkreaction/?meta_id=${id && parseInt(id, 10)}`,
+          }),
+        ],
+      );
+      setComparison(
+        Preference(
+          responseData.data[0].meta.like_count,
+          responseData.data[0].meta.dislike_count,
+        ),
+      );
       setData(responseData.data[0]);
       // 즐겨찾기 정보를 받아서 처음 화면부터 사용자가 누른 즐겨찾기를 표출
       if (responseHeart.resultcode === "SUCCESS") {
-        responseHeart.data.favorite.forEach((heartid: MetaForm) => {
-          if (id && heartid.id === parseInt(id, 10)) {
+        responseHeart.data?.favorite?.forEach((heartid: MetaForm) => {
+          if (id && heartid?.id === parseInt(id, 10)) {
             setHeart(true);
           }
         });
+      }
+      // 선호도 정보를 받아서 처음 화면부터 사용자가 누른 선호도를 표출
+      if (
+        responseReaction.resultcode === "SUCCESS" &&
+        responseReaction.data.length > 0
+      ) {
+        if (responseReaction.data[0]?.is_like) {
+          setLike(true);
+          setDislike(false);
+        } else {
+          setLike(false);
+          setDislike(true);
+        }
+        setClick(true);
+      } else {
+        setLike(false);
+        setDislike(false);
       }
     };
     searchApi();
   }, []);
 
-  // 내가 누른 선호도 버튼
+  // 바뀐 좋아요, 싫어요에 따른 선호도 퍼센트
   useEffect(() => {
-    const findApi = async () => {
-      const responseReaction = await Api({
-        method: "GET",
-        lastUrl: "meta/checkreaction/",
+    const changeApi = async () => {
+      const response = await Api({
+        bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
+        method: "POST",
+        lastUrl: "meta/metasearch/",
       });
-      // 선호도 정보를 받아서 처음 화면부터 사용자가 누른 선호도를 표출
-      if (token && responseReaction.resultcode === "SUCCESS") {
-        if (countLike) {
-          setLike(true);
-        }
-        if (countDislike) {
-          setDislike(true);
-        }
-        console.log(responseReaction);
-        console.log(countLike);
-        console.log(countDislike);
-      }
+      setComparison(
+        Preference(
+          response?.data[0].meta.like_count,
+          response?.data[0].meta.dislike_count,
+        ),
+      );
     };
-    findApi();
-  }, [countLike, countDislike]);
+    changeApi();
+  }, [like, dislike]);
 
   // 챔피언
   const champions = [];
@@ -474,7 +501,17 @@ export default function Detail() {
     if (token && id) {
       if (like) {
         setLike(false);
-        setDislike(true);
+        if (click) {
+          Api({
+            bodyData: { id: parseInt(id, 10) },
+            method: "DELETE",
+            lastUrl: "meta/deletereaction/",
+          });
+          console.log("좋아요 두번클릭");
+        } else {
+          setDislike(true);
+          setClick(true);
+        }
       } else {
         setLike(true);
         Api({
@@ -491,7 +528,17 @@ export default function Detail() {
     if (token && id) {
       if (dislike) {
         setDislike(false);
-        setLike(true);
+        if (click) {
+          Api({
+            bodyData: { id: parseInt(id, 10) },
+            method: "DELETE",
+            lastUrl: "meta/deletereaction/",
+          });
+          console.log("싫어요 두번클릭");
+        } else {
+          setLike(true);
+          setClick(true);
+        }
       } else {
         setDislike(true);
         Api({
@@ -591,7 +638,7 @@ export default function Detail() {
                   <img src={like ? likeClickImg : likeImg} alt="좋아요" />
                 </Buttons>
                 <img src={lineImg} alt="실선" />
-                {Preference(countLike, countDislike)}%
+                {comparison}%
                 <Buttons type="button" onClick={handleDislike}>
                   <img
                     src={dislike ? dislikeClickImg : dislikeImg}

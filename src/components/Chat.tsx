@@ -73,7 +73,7 @@ const ThreeButton = styled.div`
   }
 `;
 const NoBox = styled.div`
-  margin: auto;
+  margin: 120px 45px 10px 30px;
   padding: 12px;
   background: #5661ff;
   border-radius: 8px;
