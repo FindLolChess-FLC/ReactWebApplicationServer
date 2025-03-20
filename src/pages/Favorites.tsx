@@ -1,7 +1,12 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import mypageImg from "../assets/img/mypage.png";
+import Meta from "../components/common/Meta";
+import { ListForm } from "../types/List";
+import { Api } from "../utils/apis/Api";
 
 const Body = styled.div`
   display: flex;
@@ -46,10 +51,50 @@ const Image = styled.img`
 `;
 
 const Contents = styled.div`
-  height: 80vh;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 50px 20px 100px 20px;
 `;
 
 export default function Favorites() {
+  const [metaData, setMetaData] = useState<ListForm[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const searchApi = async () => {
+      setIsLoading(true);
+      const response = await Api({
+        method: "GET",
+        lastUrl: "user/checkfavorite/",
+      });
+      console.log(response.data);
+      setMetaData(response.data);
+      setIsLoading(false);
+    };
+    searchApi();
+  }, []);
+
+  const renderContent = () => {
+    // 로딩 상태
+    if (isLoading) {
+      return (
+        <Skeleton
+          height="550px"
+          width="1004px"
+          baseColor="#DCDCDC"
+          borderRadius="27px"
+        />
+      );
+    }
+    // 데이터가 있을 때
+    if (metaData && metaData.length > 0) {
+      return <Meta metaData={metaData} />;
+    }
+    // 데이터가 없을 때
+    return <h2>아직 즐겨찾기한 항목이 없습니다.</h2>;
+  };
   return (
     <Body>
       <header>
@@ -64,7 +109,7 @@ export default function Favorites() {
             <Image src={mypageImg} alt="즐겨찾기 이미지" />
           </DivBox>
         </ImageBox>
-        <Contents>ㅇ</Contents>
+        <Contents>{renderContent()}</Contents>
       </Main>
       <footer>
         <Footer />
