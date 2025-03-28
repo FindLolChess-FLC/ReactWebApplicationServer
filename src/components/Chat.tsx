@@ -105,6 +105,7 @@ export default function Chat(metaid: any) {
   const token = getCookie("token"); // 현재 토큰
 
   useEffect(() => {
+    if (!token) return;
     const searchApi = async () => {
       const [responseContext, responseNickname] = await Promise.all([
         Api({

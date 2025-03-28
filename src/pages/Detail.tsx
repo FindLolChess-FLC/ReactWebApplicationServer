@@ -294,28 +294,14 @@ export default function Detail() {
 
   const token = getCookie("token"); // 현재 토큰
 
+  // 전체 메타에 대한 정보
   useEffect(() => {
-    const searchApi = async () => {
-      const [responseData, responseHeart, responseReaction] = await Promise.all(
-        [
-          // 전체 메타에 대한 정보
-          Api({
-            bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
-            method: "POST",
-            lastUrl: "meta/metasearch/",
-          }),
-          // 즐겨찾기 정보
-          Api({
-            method: "GET",
-            lastUrl: "user/checkfavorite/",
-          }),
-          // 선호도 정보
-          Api({
-            method: "GET",
-            lastUrl: `meta/checkreaction/?meta_id=${id && parseInt(id, 10)}`,
-          }),
-        ],
-      );
+    const metaApi = async () => {
+      const responseData = await Api({
+        bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
+        method: "POST",
+        lastUrl: "meta/metasearch/",
+      });
       setComparison(
         Preference(
           responseData.data[0].meta.like_count,
@@ -323,10 +309,30 @@ export default function Detail() {
         ),
       );
       setData(responseData.data[0]);
+    };
+    metaApi();
+  }, []);
+
+  // 토큰이 있을때만 실행
+  useEffect(() => {
+    if (!token) return;
+    const searchApi = async () => {
+      const [responseHeart, responseReaction] = await Promise.all([
+        // 즐겨찾기 정보
+        Api({
+          method: "GET",
+          lastUrl: "user/checkfavorite/",
+        }),
+        // 선호도 정보
+        Api({
+          method: "GET",
+          lastUrl: `meta/checkreaction/?meta_id=${id && parseInt(id, 10)}`,
+        }),
+      ]);
       // 즐겨찾기 정보를 받아서 처음 화면부터 사용자가 누른 즐겨찾기를 표출
-      if (responseHeart.resultcode === "SUCCESS") {
-        responseHeart.data?.favorite?.forEach((heartid: MetaForm) => {
-          if (id && heartid?.id === parseInt(id, 10)) {
+      if (token && responseHeart.resultcode === "SUCCESS") {
+        responseHeart.data?.forEach((heartid: ListForm) => {
+          if (id && heartid?.meta?.id === parseInt(id, 10)) {
             setHeart(true);
           }
         });
@@ -349,8 +355,9 @@ export default function Detail() {
         setDislike(false);
       }
     };
+
     searchApi();
-  }, []);
+  }, [token]);
 
   // 바뀐 좋아요, 싫어요에 따른 선호도 퍼센트
   useEffect(() => {
@@ -507,7 +514,6 @@ export default function Detail() {
             method: "DELETE",
             lastUrl: "meta/deletereaction/",
           });
-          console.log("좋아요 두번클릭");
         } else {
           setDislike(true);
           setClick(true);
@@ -534,7 +540,6 @@ export default function Detail() {
             method: "DELETE",
             lastUrl: "meta/deletereaction/",
           });
-          console.log("싫어요 두번클릭");
         } else {
           setLike(true);
           setClick(true);
@@ -584,7 +589,7 @@ export default function Detail() {
                   {key}
                   {/* 호버 시 시너지 툴팁 */}
                   {synergyTooltip && synergyTooltip.key === key && (
-                    <Tooltip width="328px" height="170px" $top="30px">
+                    <Tooltip width="328px" height="182px" $top="30px">
                       <TooltipSynergy>
                         <TooltipImg
                           src={synergyTooltip.value.img_src}
