@@ -68,6 +68,7 @@ const Synergy = styled.li`
   border-radius: 5px;
   background: #fff;
   cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   > p {
     padding-left: 2.5px;
     padding-right: 2px;
@@ -96,7 +97,7 @@ const ChessBox = styled.div`
   width: 845px;
   height: 492px;
   background: #fff;
-  box-shadow: 0px 4px 36px -14px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 const Top = styled.div`
   display: flex;
@@ -221,7 +222,7 @@ const Comment = styled.div`
   width: 334px;
   height: 490px;
   background: #fff;
-  box-shadow: 0px 4px 36px -14px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;
 const CommentTitle = styled.div`
   height: 66px;

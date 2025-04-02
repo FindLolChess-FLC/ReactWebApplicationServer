@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "./common/Button";
@@ -49,6 +49,7 @@ const Mine = styled.div`
 `;
 
 const Information = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 3px;
@@ -72,6 +73,33 @@ const ThreeButton = styled.div`
     background: #e1e1e1;
   }
 `;
+const Ul = styled.ul`
+  position: absolute;
+  top: 14px;
+  right: 0px;
+  z-index: 99;
+  width: 60px;
+  height: 49px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+`;
+const Li = styled.li`
+  padding: 7px 17px;
+  text-align: center;
+  color: #1f1f1f;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  &:nth-child(1) {
+    border-bottom: 1px solid #eaeaea;
+  }
+  &:hover {
+    background: #eaeaea;
+  }
+`;
+
 const NoBox = styled.div`
   margin: 120px 45px 10px 30px;
   padding: 12px;
@@ -100,23 +128,28 @@ const Form = styled.form`
 
 export default function Chat(metaid: any) {
   const { register, handleSubmit, reset } = useForm<ContentForm>();
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
   const [messages, setMessages] = useState<ContentForm[]>([]); // content 저장
   const [nickname, setNickname] = useState("");
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+
   const token = getCookie("token"); // 현재 토큰
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(null);
+    }
+  };
+
   useEffect(() => {
-    if (!token) return;
-    const searchApi = async () => {
-      const [responseContext, responseNickname] = await Promise.all([
-        Api({
-          method: "GET",
-          lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
-        }),
-        Api({
-          method: "GET",
-          lastUrl: "user/updateinfo/",
-        }),
-      ]);
+    const chatApi = async () => {
+      const responseContext = await Api({
+        method: "GET",
+        lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+      });
       if (responseContext?.resultcode === "SUCCESS") {
         setMessages(
           responseContext.data.map((text: ContentForm) => ({
@@ -129,6 +162,24 @@ export default function Chat(metaid: any) {
       } else {
         console.log("댓글없음");
       }
+    };
+    chatApi();
+    // 어딜 클릭하던 실행
+    document.addEventListener("mousedown", handleClickOutside);
+    // 클린업 함수
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // 토큰이 있을때만 실행
+  useEffect(() => {
+    if (!token) return;
+    const searchApi = async () => {
+      const responseNickname = await Api({
+        method: "GET",
+        lastUrl: "user/updateinfo/",
+      });
       if (responseNickname?.resultcode === "SUCCESS") {
         setNickname(responseNickname.nickname);
       } else {
@@ -136,7 +187,7 @@ export default function Chat(metaid: any) {
       }
     };
     searchApi();
-  }, []);
+  }, [token]);
 
   const onSubmit = async (data: ContentForm) => {
     try {
@@ -160,6 +211,12 @@ export default function Chat(metaid: any) {
     }
   };
 
+  const handleDropdown =
+    (id: number) => (event: React.MouseEvent<HTMLImageElement>) => {
+      event.stopPropagation(); // 이벤트 버블링 방지
+      setIsOpen(prev => (prev === id ? null : id));
+    };
+
   return (
     <>
       <ViewBox>
@@ -171,8 +228,25 @@ export default function Chat(metaid: any) {
                 <Information>
                   <p>{date?.toString().slice(0, 10).replace("T", " ")}</p>
                   <ThreeButton>
-                    <img src={three} alt="햄버거 버튼" />
+                    <img
+                      key={id}
+                      src={three}
+                      alt="햄버거 버튼"
+                      onClick={handleDropdown(id)}
+                      onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          handleDropdown(id);
+                        }
+                      }}
+                    />
                   </ThreeButton>
+                  {/* 드롭다운 */}
+                  {isOpen === id && (
+                    <Ul ref={dropdownRef}>
+                      <Li>수정</Li>
+                      <Li>삭제</Li>
+                    </Ul>
+                  )}
                 </Information>
                 <Mine>{content}</Mine>
               </MineBox>
@@ -225,7 +299,6 @@ export default function Chat(metaid: any) {
           id="chat"
           type="submit"
           disabled={!token}
-          // onClick={() =>}
         >
           등록
         </Button>
