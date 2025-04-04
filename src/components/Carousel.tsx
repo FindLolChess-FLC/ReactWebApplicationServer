@@ -117,9 +117,6 @@ const Text = styled.div`
     font-weight: 600;
     margin: 0.6875rem 0; // 11px
   }
-  > :nth-child(2) {
-    color: #9cf4fd;
-  }
   > :nth-child(4) {
     color: #fff;
     font-size: 14px;
@@ -373,7 +370,7 @@ export default function Carousel() {
 
       <ViewBox>
         <Text>
-          <PTitle>&lt;TFT 시즌 13: 아케인의 세계로&gt;</PTitle>
+          <PTitle>&lt;TFT 시즌 14: 사이버 시티&gt;</PTitle>
           <h2>FIND LOL CHESS</h2>
           <h2>추천 메타 TOP3</h2>
           <p>자세히 보기&gt;</p>
