@@ -1,7 +1,13 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import mypageImg from "../assets/img/mypage.png";
+import Meta from "../components/common/Meta";
+import { ListForm } from "../types/List";
+import { Api } from "../utils/apis/Api";
+import infoImg from "../assets/icon/info.svg";
 
 const Body = styled.div`
   display: flex;
@@ -46,10 +52,94 @@ const Image = styled.img`
 `;
 
 const Contents = styled.div`
-  height: 80vh;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 50px 20px 100px 20px;
+`;
+
+const InfoBox = styled.div`
+  padding: 100px;
+  width: 1004px;
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: #3b3b3b;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.048px;
+  > img {
+    width: 66px;
+    height: 66px;
+  }
+  > h2 {
+    color: #0d0d0d;
+    font-size: 33px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 148%; /* 48.84px */
+    letter-spacing: -0.099px;
+  }
+  > a {
+    text-decoration: none;
+    color: #3884ff;
+    font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
 export default function Favorites() {
+  const [metaData, setMetaData] = useState<ListForm[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const searchApi = async () => {
+      setIsLoading(true);
+      const response = await Api({
+        method: "GET",
+        lastUrl: "user/checkfavorite/",
+      });
+      console.log(response.data);
+      setMetaData(response.data);
+      setIsLoading(false);
+    };
+    searchApi();
+  }, []);
+
+  const renderContent = () => {
+    // 로딩 상태
+    if (isLoading) {
+      return (
+        <Skeleton
+          height="300px"
+          width="1004px"
+          baseColor="#DCDCDC"
+          borderRadius="27px"
+        />
+      );
+    }
+    // 데이터가 있을 때
+    if (metaData && metaData.length > 0) {
+      return <Meta metaData={metaData} />;
+    }
+    // 데이터가 없을 때
+    return (
+      <InfoBox>
+        <img src={infoImg} alt="즐겨찾기없음" />
+        <h2>즐겨찾기</h2>
+        <p>즐겨찾는 메타가 없습니다. 메타를 추가해보세요.</p>
+        <a href="https://www.findlolchess.kro.kr/recommend-list">
+          추천메타 바로가기
+        </a>
+      </InfoBox>
+    );
+  };
+
   return (
     <Body>
       <header>
@@ -64,7 +154,7 @@ export default function Favorites() {
             <Image src={mypageImg} alt="즐겨찾기 이미지" />
           </DivBox>
         </ImageBox>
-        <Contents>ㅇ</Contents>
+        <Contents>{renderContent()}</Contents>
       </Main>
       <footer>
         <Footer />

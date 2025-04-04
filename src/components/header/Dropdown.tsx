@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { DropdownForm } from "../../types/Dropdown";
@@ -88,6 +88,7 @@ const LogoutButton = styled.button`
 
 export default function Dropdown({ handleLogout }: DropdownForm) {
   const location = useLocation();
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
 
   // 경로에 따른 동적 색상 설정
   const color = location.pathname === "/" ? "#fff" : "#333";
@@ -97,6 +98,16 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
   // 상태 관리: 목록이 보이는지 여부를 결정하는 state
   const [isOpen, setIsOpen] = useState(false);
   const [nicknameData, setNicknameData] = useState("");
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
   useEffect(() => {
     const nicknameAPI = async () => {
       const nicknameData = await Api({
@@ -110,6 +121,12 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
       }
     };
     nicknameAPI();
+    // 어딜 클릭하던 실행
+    document.addEventListener("mousedown", handleClickOutside);
+    // 클린업 함수
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   // 토글 함수
@@ -144,7 +161,7 @@ export default function Dropdown({ handleLogout }: DropdownForm) {
       </DropText>
       {/* 상태에 따라 목록 표시 */}
       {isOpen && (
-        <Ul>
+        <Ul ref={dropdownRef}>
           <Li>
             <StyledLink to="/mypage">
               <img src={myImg} alt="마이페이지" />

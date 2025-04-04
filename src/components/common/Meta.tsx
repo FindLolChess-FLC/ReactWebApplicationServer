@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMetaContext } from "../../hooks/Context";
@@ -11,6 +11,8 @@ import heartFillImg from "../../assets/icon/heart_fill.svg";
 import arrowImg from "../../assets/icon/arrow_right_small.svg";
 import restartImg from "../../assets/icon/restart.svg";
 import sionImg from "../../assets/img/sion.jpg";
+import getCookie from "../../utils/cookies/getCookie";
+import { Api } from "../../utils/apis/Api";
 
 const Table = styled.table<{ $border: string }>`
   font-size: 0.875rem; // 14px
@@ -149,13 +151,16 @@ const SynergyImg = styled.img`
 
 export default function Meta({ metaData }: any) {
   const location = useLocation();
+  const navigate = useNavigate();
   const border = location.pathname === "/" ? "none" : "20px 20px";
   const bgcolor = location.pathname === "/" ? "#1c1a25" : "#7d92e7";
   const hovercolor = location.pathname === "/" ? "#dedede" : "#e2e2ee";
   const evencolor = location.pathname === "/" ? "#eee" : "#f1f1fb";
   const cache = `cache_buster=${Date.now()}`; // 남아 있는 캐시 데이터 지우기
+  const token = getCookie("token"); // 현재 토큰
 
   const { setPickData } = useMetaContext(); // setPickData를 통해 Meta에서 Fast로 정보 보내기
+  const [heart, setHeart] = useState<number[]>([]);
 
   // Fast에 다시 보낼 중복없는 챔피언 배열 만들기
   useEffect(() => {
@@ -182,7 +187,25 @@ export default function Meta({ metaData }: any) {
     }
   }, [metaData, setPickData]);
 
-  const navigate = useNavigate();
+  // 토큰이 있을때만 실행
+  useEffect(() => {
+    if (!token) return;
+    const searchApi = async () => {
+      const responseHeart = await Api({
+        method: "GET",
+        lastUrl: "user/checkfavorite/",
+      });
+      // 즐겨찾기 정보를 받아서 처음 화면부터 사용자가 누른 즐겨찾기를 표출
+      if (token && responseHeart.resultcode === "SUCCESS") {
+        const heartArray = responseHeart.data?.map(
+          (heartid: ListForm) => heartid?.meta?.id,
+        );
+        setHeart(heartArray);
+      }
+    };
+
+    searchApi();
+  }, [token]);
 
   const handleClick = (id: number) => {
     navigate(`/detail/${id}`);
@@ -210,8 +233,11 @@ export default function Meta({ metaData }: any) {
           <tr key={item?.meta.id}>
             {/* 즐겨찾기 */}
             <td>
-              <img src={heartEmptyImg} alt="기본 하트" />
-              {/* <img src={starFillImg} alt="채워진 하트" /> */}
+              {heart.includes(item.meta.id) ? (
+                <img src={heartFillImg} alt="채워진 하트" />
+              ) : (
+                <img src={heartEmptyImg} alt="기본 하트" />
+              )}
             </td>
             {/* 제목 */}
             <td>

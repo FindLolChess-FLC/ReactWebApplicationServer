@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "./common/Button";
@@ -49,6 +49,7 @@ const Mine = styled.div`
 `;
 
 const Information = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 3px;
@@ -72,8 +73,35 @@ const ThreeButton = styled.div`
     background: #e1e1e1;
   }
 `;
+const Ul = styled.ul`
+  position: absolute;
+  top: 14px;
+  right: 0px;
+  z-index: 99;
+  width: 60px;
+  height: 49px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+`;
+const Li = styled.li`
+  padding: 7px 17px;
+  text-align: center;
+  color: #1f1f1f;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  &:nth-child(1) {
+    border-bottom: 1px solid #eaeaea;
+  }
+  &:hover {
+    background: #eaeaea;
+  }
+`;
+
 const NoBox = styled.div`
-  margin: auto;
+  margin: 120px 45px 10px 30px;
   padding: 12px;
   background: #5661ff;
   border-radius: 8px;
@@ -100,34 +128,61 @@ const Form = styled.form`
 
 export default function Chat(metaid: any) {
   const { register, handleSubmit, reset } = useForm<ContentForm>();
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
   const [messages, setMessages] = useState<ContentForm[]>([]); // content 저장
   const [nickname, setNickname] = useState("");
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isEdit, setIsEdit] = useState(0);
+
   const token = getCookie("token"); // 현재 토큰
 
+  // 서버에 있는 값 받아오기
+  const chatApi = async () => {
+    const responseContext = await Api({
+      method: "GET",
+      lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+    });
+    if (responseContext?.resultcode === "SUCCESS") {
+      setMessages(
+        responseContext.data.map((text: ContentForm) => ({
+          id: text.id, // id
+          writer: text.writer || "", // 작성자
+          content: text.content, // 내용
+          date: text.date, // 날짜
+        })),
+      );
+    }
+  };
+
+  // 드롭다운 바깥부분 클릭 시
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(null);
+    }
+  };
+
   useEffect(() => {
+    // 서버에 있는 값 받아오기
+    chatApi();
+    // 어딜 클릭하던 실행
+    document.addEventListener("mousedown", handleClickOutside);
+    // 클린업 함수
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // 토큰이 있을때만 실행
+  useEffect(() => {
+    if (!token) return;
     const searchApi = async () => {
-      const [responseContext, responseNickname] = await Promise.all([
-        Api({
-          method: "GET",
-          lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
-        }),
-        Api({
-          method: "GET",
-          lastUrl: "user/updateinfo/",
-        }),
-      ]);
-      if (responseContext?.resultcode === "SUCCESS") {
-        setMessages(
-          responseContext.data.map((text: ContentForm) => ({
-            id: text.id, // id
-            writer: text.writer || "", // 작성자
-            content: text.content, // 내용
-            date: text.date, // 날짜
-          })),
-        );
-      } else {
-        console.log("댓글없음");
-      }
+      const responseNickname = await Api({
+        method: "GET",
+        lastUrl: "user/updateinfo/",
+      });
       if (responseNickname?.resultcode === "SUCCESS") {
         setNickname(responseNickname.nickname);
       } else {
@@ -135,28 +190,49 @@ export default function Chat(metaid: any) {
       }
     };
     searchApi();
-  }, []);
+  }, [token]);
 
   const onSubmit = async (data: ContentForm) => {
     try {
-      const response = await Api({
-        bodyData: { id: Object.values(metaid)[0], content: data.content },
-        method: "POST",
-        lastUrl: "meta/writecomment/",
-      });
-
-      const newMessage = {
-        id: response.data.id, // 서버에서 받은 ID 사용
-        writer: nickname, // 현재 사용자 닉네임 사용
-        content: response.data.content, // 입력한 메시지 내용
-        date: response.data.date, // 서버에서 받은 생성 날짜
-      };
-      setMessages(prevMessages => [...prevMessages, newMessage]); // 로컬에 있는 메세지 추가
-
-      reset();
+      const sendContext =
+        isEdit === 0
+          ? await Api({
+              // input에 있는 값 서버로 보내기(최초)
+              bodyData: { id: Object.values(metaid)[0], content: data.content },
+              method: "POST",
+              lastUrl: "meta/writecomment/",
+            })
+          : await Api({
+              // input에 있는 값 서버로 보내기(수정)
+              bodyData: { id: isEdit, content: data.content },
+              method: "PATCH",
+              lastUrl: "meta/updatecomment/",
+            });
+      // 서버에 있는 값 받아오기
+      if (sendContext?.resultcode === "SUCCESS") {
+        chatApi();
+        reset(); // input 박스 리셋
+        setIsEdit(0);
+      }
     } catch {
       console.log("API 요청 중 오류 발생");
     }
+  };
+
+  const handleDropdown =
+    (id: number) => (event: React.MouseEvent<HTMLImageElement>) => {
+      event.stopPropagation(); // 이벤트 버블링 방지
+      setIsOpen(prev => (prev === id ? null : id));
+    };
+
+  const handleDelete = (id: number) => {
+    Api({
+      bodyData: { id },
+      method: "DELETE",
+      lastUrl: "meta/deletecomment/",
+    });
+    setMessages(prev => prev.filter(a => a.id !== id));
+    console.log(messages);
   };
 
   return (
@@ -170,8 +246,29 @@ export default function Chat(metaid: any) {
                 <Information>
                   <p>{date?.toString().slice(0, 10).replace("T", " ")}</p>
                   <ThreeButton>
-                    <img src={three} alt="햄버거 버튼" />
+                    <img
+                      key={id}
+                      src={three}
+                      alt="햄버거 버튼"
+                      onClick={handleDropdown(id)}
+                      onKeyDown={e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          handleDropdown(id);
+                        }
+                      }}
+                    />
                   </ThreeButton>
+                  {/* 드롭다운 */}
+                  {isOpen === id && (
+                    <Ul ref={dropdownRef}>
+                      <Li key={id} onClick={() => setIsEdit(id)}>
+                        수정
+                      </Li>
+                      <Li key={id} onClick={() => handleDelete(id)}>
+                        삭제
+                      </Li>
+                    </Ul>
+                  )}
                 </Information>
                 <Mine>{content}</Mine>
               </MineBox>
@@ -194,37 +291,39 @@ export default function Chat(metaid: any) {
         )}
       </ViewBox>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* 기본 */}
-        <Input
-          width="233px"
-          height="34px"
-          input="chat"
-          type="text"
-          placeholder="댓글을 입력해주세요."
-          register={register("content", {
-            required: "댓글을 입력해주세요.",
-            validate: value =>
-              value.trim() !== "" || "공백만 입력할 수 없습니다.",
-          })}
-          disabled={!token}
-        />
-        {/* 수정중 */}
-        {/* <Input
-          width="233px"
-          height="34px"
-          input="edit"
-          type="text"
-          labelname="수정 중.."
-          register={register("content")}
-          disabled={!token}
-        /> */}
+        {isEdit === 0 ? (
+          <Input
+            width="233px"
+            height="34px"
+            input="chat"
+            type="text"
+            placeholder="댓글을 입력해주세요."
+            register={register("content", {
+              required: "댓글을 입력해주세요.",
+              validate: value =>
+                value.trim() !== "" || "공백만 입력할 수 없습니다.",
+            })}
+            disabled={!token}
+          />
+        ) : (
+          <Input
+            width="233px"
+            height="34px"
+            input="edit"
+            type="text"
+            placeholder={messages.find(msg => msg.id === isEdit)?.content}
+            labelname="수정 중.."
+            register={register("content")}
+            disabled={!token}
+          />
+        )}
+
         <Button
           width="53px"
           height="34px"
           id="chat"
           type="submit"
           disabled={!token}
-          // onClick={() =>}
         >
           등록
         </Button>
