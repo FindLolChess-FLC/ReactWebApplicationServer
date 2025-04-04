@@ -1,6 +1,6 @@
 export default function ChampionColor(price: number, name?: string) {
   // 사이온
-  if (name === "사이온") {
+  if (name === "T-43X" || name === "R-080T" || name === "공허생물") {
     return "#000";
   }
   // 1코인
