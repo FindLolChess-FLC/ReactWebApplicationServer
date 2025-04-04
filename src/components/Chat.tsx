@@ -132,6 +132,7 @@ export default function Chat(metaid: any) {
   const [messages, setMessages] = useState<ContentForm[]>([]); // content 저장
   const [nickname, setNickname] = useState("");
   const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isEdit, setIsEdit] = useState(0);
 
   const token = getCookie("token"); // 현재 토큰
 
@@ -191,30 +192,57 @@ export default function Chat(metaid: any) {
 
   const onSubmit = async (data: ContentForm) => {
     try {
-      // input에 있는 값 서버로 보내기
-      const sendContext = await Api({
-        bodyData: { id: Object.values(metaid)[0], content: data.content },
-        method: "POST",
-        lastUrl: "meta/writecomment/",
-      });
-      // 서버에 있는 값 받아오기
-      if (sendContext?.resultcode === "SUCCESS") {
-        const responseContext = await Api({
-          method: "GET",
-          lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+      if (isEdit === 0) {
+        // input에 있는 값 서버로 보내기(최초)
+        const sendContext = await Api({
+          bodyData: { id: Object.values(metaid)[0], content: data.content },
+          method: "POST",
+          lastUrl: "meta/writecomment/",
         });
-        if (responseContext?.resultcode === "SUCCESS") {
-          setMessages(
-            responseContext.data.map((text: ContentForm) => ({
-              id: text.id, // id
-              writer: text.writer || "", // 작성자
-              content: text.content, // 내용
-              date: text.date, // 날짜
-            })),
-          );
+        // 서버에 있는 값 받아오기
+        if (sendContext?.resultcode === "SUCCESS") {
+          const responseContext = await Api({
+            method: "GET",
+            lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+          });
+          if (responseContext?.resultcode === "SUCCESS") {
+            setMessages(
+              responseContext.data.map((text: ContentForm) => ({
+                id: text.id, // id
+                writer: text.writer || "", // 작성자
+                content: text.content, // 내용
+                date: text.date, // 날짜
+              })),
+            );
+          }
+        }
+      } else {
+        // input에 있는 값 서버로 보내기(수정)
+        const sendContext = await Api({
+          bodyData: { id: isEdit, content: data.content },
+          method: "PATCH",
+          lastUrl: "meta/updatecomment/",
+        });
+        // 서버에 있는 값 받아오기
+        if (sendContext?.resultcode === "SUCCESS") {
+          const responseContext = await Api({
+            method: "GET",
+            lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+          });
+          if (responseContext?.resultcode === "SUCCESS") {
+            setMessages(
+              responseContext.data.map((text: ContentForm) => ({
+                id: text.id, // id
+                writer: text.writer || "", // 작성자
+                content: text.content, // 내용
+                date: text.date, // 날짜
+              })),
+            );
+          }
         }
       }
       reset(); // input 박스 리셋
+      setIsEdit(0);
     } catch {
       console.log("API 요청 중 오류 발생");
     }
@@ -262,7 +290,9 @@ export default function Chat(metaid: any) {
                   {/* 드롭다운 */}
                   {isOpen === id && (
                     <Ul ref={dropdownRef}>
-                      <Li>수정</Li>
+                      <Li key={id} onClick={() => setIsEdit(id)}>
+                        수정
+                      </Li>
                       <Li key={id} onClick={() => handleDelete(id)}>
                         삭제
                       </Li>
@@ -290,30 +320,33 @@ export default function Chat(metaid: any) {
         )}
       </ViewBox>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* 기본 */}
-        <Input
-          width="233px"
-          height="34px"
-          input="chat"
-          type="text"
-          placeholder="댓글을 입력해주세요."
-          register={register("content", {
-            required: "댓글을 입력해주세요.",
-            validate: value =>
-              value.trim() !== "" || "공백만 입력할 수 없습니다.",
-          })}
-          disabled={!token}
-        />
-        {/* 수정중 */}
-        {/* <Input
-          width="233px"
-          height="34px"
-          input="edit"
-          type="text"
-          labelname="수정 중.."
-          register={register("content")}
-          disabled={!token}
-        /> */}
+        {isEdit === 0 ? (
+          <Input
+            width="233px"
+            height="34px"
+            input="chat"
+            type="text"
+            placeholder="댓글을 입력해주세요."
+            register={register("content", {
+              required: "댓글을 입력해주세요.",
+              validate: value =>
+                value.trim() !== "" || "공백만 입력할 수 없습니다.",
+            })}
+            disabled={!token}
+          />
+        ) : (
+          <Input
+            width="233px"
+            height="34px"
+            input="edit"
+            type="text"
+            placeholder={messages.find(msg => msg.id === isEdit)?.content}
+            labelname="수정 중.."
+            register={register("content")}
+            disabled={!token}
+          />
+        )}
+
         <Button
           width="53px"
           height="34px"
