@@ -3,7 +3,6 @@ import { TooltipForm } from "../../types/Tooltip";
 
 const TooltipBox = styled.div<TooltipForm>`
   width: ${props => props.width};
-  height: ${props => props.height};
   position: absolute;
   top: ${props => props.$top};
   left: ${props => props.$left};
@@ -21,15 +20,9 @@ const TooltipBox = styled.div<TooltipForm>`
   }
 `;
 
-export default function Tooltip({
-  width,
-  height,
-  $top,
-  $left,
-  children,
-}: TooltipForm) {
+export default function Tooltip({ width, $top, $left, children }: TooltipForm) {
   return (
-    <TooltipBox width={width} height={height} $top={$top} $left={$left}>
+    <TooltipBox width={width} $top={$top} $left={$left}>
       {children}
     </TooltipBox>
   );

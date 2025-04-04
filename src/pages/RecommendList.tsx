@@ -134,7 +134,7 @@ export default function RecommendList() {
         <ImageBox>
           <DivBox>
             <Text>
-              <h1>시즌 13 추천메타</h1>
+              <h1>시즌 14 추천메타</h1>
               <p>FIND LOL CHESS에서 최신 정보를 확인해보세요!</p>
             </Text>
             <Image src={recommendImg} alt="추천 이미지" />

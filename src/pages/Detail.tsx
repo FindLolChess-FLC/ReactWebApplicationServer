@@ -426,7 +426,7 @@ export default function Detail() {
                       {itemTooltip &&
                         itemTooltip[0].name === item.name &&
                         itemTooltip[1] === locationChampion.champion.name && (
-                          <Tooltip width="125px" height="70px" $left="22px">
+                          <Tooltip width="125px" $left="22px">
                             <h3>{itemTooltip[0].name}</h3>
                             {itemTooltip[0].item1 ? (
                               <>
@@ -459,8 +459,10 @@ export default function Detail() {
             {/* 호버 시 챔피언 툴팁 */}
             {championTooltip &&
               championTooltip.name === locationChampion.champion.name &&
-              championTooltip.name !== "사이온" && (
-                <Tooltip width="140px" height="90px" $top="91px">
+              championTooltip.name !== "T-43X" &&
+              championTooltip.name !== "R-080T" &&
+              championTooltip.name !== "공허생물" && (
+                <Tooltip width="140px" $top="91px">
                   <TooltipChampion>
                     <h3>{championTooltip.name}</h3>
                     <img src={moneyImg} alt="돈 이미지" />
@@ -590,7 +592,7 @@ export default function Detail() {
                   {key}
                   {/* 호버 시 시너지 툴팁 */}
                   {synergyTooltip && synergyTooltip.key === key && (
-                    <Tooltip width="328px" height="182px" $top="30px">
+                    <Tooltip width="328px" $top="30px">
                       <TooltipSynergy>
                         <TooltipImg
                           src={synergyTooltip.value.img_src}
