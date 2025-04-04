@@ -136,6 +136,25 @@ export default function Chat(metaid: any) {
 
   const token = getCookie("token"); // 현재 토큰
 
+  // 서버에 있는 값 받아오기
+  const chatApi = async () => {
+    const responseContext = await Api({
+      method: "GET",
+      lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+    });
+    if (responseContext?.resultcode === "SUCCESS") {
+      setMessages(
+        responseContext.data.map((text: ContentForm) => ({
+          id: text.id, // id
+          writer: text.writer || "", // 작성자
+          content: text.content, // 내용
+          date: text.date, // 날짜
+        })),
+      );
+    }
+  };
+
+  // 드롭다운 바깥부분 클릭 시
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -146,24 +165,7 @@ export default function Chat(metaid: any) {
   };
 
   useEffect(() => {
-    const chatApi = async () => {
-      const responseContext = await Api({
-        method: "GET",
-        lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
-      });
-      if (responseContext?.resultcode === "SUCCESS") {
-        setMessages(
-          responseContext.data.map((text: ContentForm) => ({
-            id: text.id, // id
-            writer: text.writer || "", // 작성자
-            content: text.content, // 내용
-            date: text.date, // 날짜
-          })),
-        );
-      } else {
-        console.log("댓글없음");
-      }
-    };
+    // 서버에 있는 값 받아오기
     chatApi();
     // 어딜 클릭하던 실행
     document.addEventListener("mousedown", handleClickOutside);
@@ -192,57 +194,26 @@ export default function Chat(metaid: any) {
 
   const onSubmit = async (data: ContentForm) => {
     try {
-      if (isEdit === 0) {
-        // input에 있는 값 서버로 보내기(최초)
-        const sendContext = await Api({
-          bodyData: { id: Object.values(metaid)[0], content: data.content },
-          method: "POST",
-          lastUrl: "meta/writecomment/",
-        });
-        // 서버에 있는 값 받아오기
-        if (sendContext?.resultcode === "SUCCESS") {
-          const responseContext = await Api({
-            method: "GET",
-            lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
-          });
-          if (responseContext?.resultcode === "SUCCESS") {
-            setMessages(
-              responseContext.data.map((text: ContentForm) => ({
-                id: text.id, // id
-                writer: text.writer || "", // 작성자
-                content: text.content, // 내용
-                date: text.date, // 날짜
-              })),
-            );
-          }
-        }
-      } else {
-        // input에 있는 값 서버로 보내기(수정)
-        const sendContext = await Api({
-          bodyData: { id: isEdit, content: data.content },
-          method: "PATCH",
-          lastUrl: "meta/updatecomment/",
-        });
-        // 서버에 있는 값 받아오기
-        if (sendContext?.resultcode === "SUCCESS") {
-          const responseContext = await Api({
-            method: "GET",
-            lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
-          });
-          if (responseContext?.resultcode === "SUCCESS") {
-            setMessages(
-              responseContext.data.map((text: ContentForm) => ({
-                id: text.id, // id
-                writer: text.writer || "", // 작성자
-                content: text.content, // 내용
-                date: text.date, // 날짜
-              })),
-            );
-          }
-        }
+      const sendContext =
+        isEdit === 0
+          ? await Api({
+              // input에 있는 값 서버로 보내기(최초)
+              bodyData: { id: Object.values(metaid)[0], content: data.content },
+              method: "POST",
+              lastUrl: "meta/writecomment/",
+            })
+          : await Api({
+              // input에 있는 값 서버로 보내기(수정)
+              bodyData: { id: isEdit, content: data.content },
+              method: "PATCH",
+              lastUrl: "meta/updatecomment/",
+            });
+      // 서버에 있는 값 받아오기
+      if (sendContext?.resultcode === "SUCCESS") {
+        chatApi();
+        reset(); // input 박스 리셋
+        setIsEdit(0);
       }
-      reset(); // input 박스 리셋
-      setIsEdit(0);
     } catch {
       console.log("API 요청 중 오류 발생");
     }

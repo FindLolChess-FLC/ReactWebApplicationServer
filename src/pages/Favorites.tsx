@@ -60,8 +60,9 @@ const Contents = styled.div`
 `;
 
 const InfoBox = styled.div`
+  padding: 100px;
   width: 1004px;
-  height: 300px;
+  height: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
