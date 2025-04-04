@@ -191,21 +191,30 @@ export default function Chat(metaid: any) {
 
   const onSubmit = async (data: ContentForm) => {
     try {
-      const response = await Api({
+      // input에 있는 값 서버로 보내기
+      const sendContext = await Api({
         bodyData: { id: Object.values(metaid)[0], content: data.content },
         method: "POST",
         lastUrl: "meta/writecomment/",
       });
-
-      const newMessage = {
-        id: response.data.id, // 서버에서 받은 ID 사용
-        writer: nickname, // 현재 사용자 닉네임 사용
-        content: response.data.content, // 입력한 메시지 내용
-        date: response.data.date, // 서버에서 받은 생성 날짜
-      };
-      setMessages(prevMessages => [...prevMessages, newMessage]); // 로컬에 있는 메세지 추가
-
-      reset();
+      // 서버에 있는 값 받아오기
+      if (sendContext?.resultcode === "SUCCESS") {
+        const responseContext = await Api({
+          method: "GET",
+          lastUrl: `meta/checkcomment/?meta_id=${Object.values(metaid)[0]}`,
+        });
+        if (responseContext?.resultcode === "SUCCESS") {
+          setMessages(
+            responseContext.data.map((text: ContentForm) => ({
+              id: text.id, // id
+              writer: text.writer || "", // 작성자
+              content: text.content, // 내용
+              date: text.date, // 날짜
+            })),
+          );
+        }
+      }
+      reset(); // input 박스 리셋
     } catch {
       console.log("API 요청 중 오류 발생");
     }
@@ -216,6 +225,16 @@ export default function Chat(metaid: any) {
       event.stopPropagation(); // 이벤트 버블링 방지
       setIsOpen(prev => (prev === id ? null : id));
     };
+
+  const handleDelete = (id: number) => {
+    Api({
+      bodyData: { id },
+      method: "DELETE",
+      lastUrl: "meta/deletecomment/",
+    });
+    setMessages(prev => prev.filter(a => a.id !== id));
+    console.log(messages);
+  };
 
   return (
     <>
@@ -244,7 +263,9 @@ export default function Chat(metaid: any) {
                   {isOpen === id && (
                     <Ul ref={dropdownRef}>
                       <Li>수정</Li>
-                      <Li>삭제</Li>
+                      <Li key={id} onClick={() => handleDelete(id)}>
+                        삭제
+                      </Li>
                     </Ul>
                   )}
                 </Information>
