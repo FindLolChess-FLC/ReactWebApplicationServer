@@ -370,7 +370,7 @@ export default function Carousel() {
 
       <ViewBox>
         <Text>
-          <PTitle>&lt;TFT 시즌 14: 사이버 시티&gt;</PTitle>
+          <PTitle>&lt;TFT 시즌 15: K.O. 콜로세움&gt;</PTitle>
           <h2>FIND LOL CHESS</h2>
           <h2>추천 메타 TOP3</h2>
           <p>자세히 보기&gt;</p>
