@@ -289,9 +289,8 @@ export default function Fast({
                   .filter(
                     (item: ChampionDataForm) =>
                       item.price === price &&
-                      item.name !== "T-43X" &&
-                      item.name !== "R-080T" &&
-                      item.name !== "공허생물",
+                      item.name !== "휘감는뿌리" &&
+                      item.name !== "거대메크로봇",
                   )
                   .map((item: ChampionDataForm) => (
                     <Champion

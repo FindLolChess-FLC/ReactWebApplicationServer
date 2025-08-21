@@ -1,7 +1,7 @@
 export default function ChampionColor(price: number, name?: string) {
-  // 사이온
-  if (name === "T-43X" || name === "R-080T" || name === "공허생물") {
-    return "#000";
+  // 시즌13:사이온, 시즌14:T-43X,R-080T,공허생물, 시즌15:휘감는뿌리,거대메크로봇
+  if (name === "휘감는뿌리" || name === "거대메크로봇") {
+    return "#0d0d0d";
   }
   // 1코인
   if (price === 1) {
