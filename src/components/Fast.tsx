@@ -168,7 +168,7 @@ export default function Fast({
 }: {
   setPickMeta: (value: string) => void;
 }) {
-  const [championData, setChampionData] = useState([]); // Fast표에 챔피언을 보여주기 위한 데이터
+  const [championData, setChampionData] = useState<ChampionDataForm[]>([]); // Fast표에 챔피언을 보여주기 위한 데이터
   const [championPickData, setChampionPickData] = useState<string[]>([]); // Fast표에 챔피언 흑백나눠서 보여주기 위한 데이터
   const [groupPrice, setGroupPrice] = useState<number[]>([]); // Fast표에서 가격별로 구분해주기 위한 그룹
   const [selectName, setSelectName] = useState<string[]>([]); // 내가 선택한 챔피언의 이름을 모아둔 배열
@@ -292,6 +292,7 @@ export default function Fast({
                       item.name !== "휘감는뿌리" &&
                       item.name !== "거대메크로봇",
                   )
+                  .sort((a, b) => a.name.localeCompare(b.name, "ko-KR")) // 가나다 순 정렬
                   .map((item: ChampionDataForm) => (
                     <Champion
                       key={item?.name}
