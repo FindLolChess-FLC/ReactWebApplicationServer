@@ -6,6 +6,9 @@ import { useMetaContext } from "../hooks/Context";
 import ChampionColor from "../utils/meta/ChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
+import arrowMoveLeft from "../assets/img/arrowmoveleft.png";
+import arrowMoveRight from "../assets/img/arrowmoveright.png";
+import arrowMoveNone from "../assets/img/arrowmovenone.png";
 import downImg from "../assets/icon/arrow_down.svg";
 import checkImg from "../assets/icon/check.svg";
 import resetImg from "../assets/icon/reset.svg";
@@ -48,20 +51,22 @@ const FastBox = styled.ul`
     height: 90px;
     display: flex;
     align-items: center;
-    gap: 10px;
   }
 `;
 const LineColor = styled.div<{ $bgcolor: string }>`
   width: 5px;
   height: 86px;
+  margin-right: 12px;
   background: ${props => props.$bgcolor};
 `;
 const ChampionList = styled.div`
   display: flex;
   gap: 15px;
-  padding: 16px 48px 9px;
-  width: 978px;
+  padding: 16px 0 9px;
+  margin: 0 15px 0;
+  width: 906px; // 데스크탑 버전
   border-bottom: 1px solid #d9d9d9;
+  overflow: hidden;
 `;
 const Champion = styled.div`
   position: relative;
@@ -275,35 +280,49 @@ export default function Fast({
           <h2>빠른 챔피언 찾기</h2>
           <div>
             <img src={arrowFillImg} alt="화살표" />
-            <p>챔피언을 누르고 관련 메타를 확인해보세요!</p>
+            <p>
+              챔피언을 누르고 관련 메타를 확인해보세요. 룰루는 괴물을 대신
+              내보냅니다.
+            </p>
           </div>
         </Text>
       </SubTitle>
       <FastBox>
         {groupPrice &&
-          groupPrice.map(price => (
-            <li key={price}>
-              <LineColor $bgcolor={ChampionColor(price)}> </LineColor>
-              <ChampionList>
-                {championData
-                  .filter(
-                    (item: ChampionDataForm) =>
-                      item.price === price &&
-                      item.name !== "휘감는뿌리" &&
-                      item.name !== "거대메크로봇",
-                  )
-                  .sort((a, b) => a.name.localeCompare(b.name, "ko-KR")) // 가나다 순 정렬
-                  .map((item: ChampionDataForm) => (
+          groupPrice.map(price => {
+            // 해당 줄의 챔피언 데이터 뽑아내기
+            const championsInRow = championData
+              .filter(
+                (item: ChampionDataForm) =>
+                  item.price === price &&
+                  item.name !== "휘감는뿌리" &&
+                  item.name !== "거대메크로봇",
+              )
+              .sort((a, b) => a.name.localeCompare(b.name, "ko-KR")); // 가나다 순 정렬
+
+            return (
+              <li key={price}>
+                <LineColor $bgcolor={ChampionColor(price)} />
+
+                {/* 챔피언이 14개 초과일 때만 화살표 노출 */}
+                {championsInRow.length > 14 ? (
+                  <img src={arrowMoveLeft} alt="왼쪽이동화살표" />
+                ) : (
+                  <img src={arrowMoveNone} alt="화살표없음" />
+                )}
+
+                <ChampionList>
+                  {championsInRow.map((item: ChampionDataForm) => (
                     <Champion
-                      key={item?.name}
+                      key={item.name}
                       onClick={
                         handleMono(item.name)
-                          ? () => handleClick(item?.name)
+                          ? () => handleClick(item.name)
                           : undefined
                       }
                     >
                       <ChampionImg
-                        src={item?.img.img_src}
+                        src={item.img.img_src}
                         alt="챔피언"
                         color={ChampionColor(item.price)}
                         filter={handleMono(item.name) ? "none" : "grayscale(1)"}
@@ -311,13 +330,21 @@ export default function Fast({
                       {selectName.includes(item.name) && (
                         <CheckImg src={checkImg} alt="체크 표시" />
                       )}
-                      <p>{item?.name}</p>
-                      <Tooltip className="tooltip">{item?.name}</Tooltip>
+                      <p>{item.name}</p>
+                      <Tooltip className="tooltip">{item.name}</Tooltip>
                     </Champion>
                   ))}
-              </ChampionList>
-            </li>
-          ))}
+                </ChampionList>
+
+                {/* 챔피언이 14개 초과일 때만 화살표 노출 */}
+                {championsInRow.length > 14 ? (
+                  <img src={arrowMoveRight} alt="오른쪽이동화살표" />
+                ) : (
+                  <img src={arrowMoveNone} alt="화살표없음" />
+                )}
+              </li>
+            );
+          })}
         <ScrollButton onClick={() => handleDown()}>
           <img src={downImg} alt="아래 화살표" />
           <p>Scroll</p>
