@@ -459,9 +459,8 @@ export default function Detail() {
             {/* 호버 시 챔피언 툴팁 */}
             {championTooltip &&
               championTooltip.name === locationChampion.champion.name &&
-              championTooltip.name !== "T-43X" &&
-              championTooltip.name !== "R-080T" &&
-              championTooltip.name !== "공허생물" && (
+              championTooltip.name !== "휘감는뿌리" &&
+              championTooltip.name !== "거대메크로봇" && (
                 <Tooltip width="140px" $top="91px">
                   <TooltipChampion>
                     <h3>{championTooltip.name}</h3>

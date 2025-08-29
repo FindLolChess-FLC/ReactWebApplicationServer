@@ -6,6 +6,9 @@ import { useMetaContext } from "../hooks/Context";
 import ChampionColor from "../utils/meta/ChampionColor";
 import championBannerImg from "../assets/img/champion_banner.jpg";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
+import arrowMoveLeft from "../assets/icon/arrowmoveleft.svg";
+import arrowMoveRight from "../assets/icon/arrowmoveright.svg";
+import arrowMoveNone from "../assets/img/arrowmovenone.png";
 import downImg from "../assets/icon/arrow_down.svg";
 import checkImg from "../assets/icon/check.svg";
 import resetImg from "../assets/icon/reset.svg";
@@ -48,7 +51,6 @@ const FastBox = styled.ul`
     height: 90px;
     display: flex;
     align-items: center;
-    gap: 10px;
   }
 `;
 const LineColor = styled.div<{ $bgcolor: string }>`
@@ -56,12 +58,19 @@ const LineColor = styled.div<{ $bgcolor: string }>`
   height: 86px;
   background: ${props => props.$bgcolor};
 `;
-const ChampionList = styled.div`
+const ITEM_WIDTH = 65; // 챔피언 카드 가로 크기(px)
+const ChampionListWrapper = styled.div<{ visibleCount: number }>`
+  width: ${({ visibleCount }) => visibleCount * ITEM_WIDTH}px;
+  overflow: hidden;
+  border-bottom: 1px solid #d9d9d9;
+`;
+const ChampionList = styled.div<{ offset: number; itemWidth: number }>`
   display: flex;
   gap: 15px;
-  padding: 16px 48px 9px;
-  width: 978px;
-  border-bottom: 1px solid #d9d9d9;
+  padding: 16px 0 9px;
+  // margin: 0 15px 0;
+  transform: translateX(-${props => props.offset * props.itemWidth}px);
+  transition: transform 0.5s ease;
 `;
 const Champion = styled.div`
   position: relative;
@@ -163,17 +172,53 @@ const ResetButton = styled.div`
   }
 `;
 
+const ArrowLeft = styled.div`
+  width: 15px;
+  height: 40px;
+  margin-left: 18px;
+  margin-right: 18px;
+`;
+
+const ArrowRight = styled.div`
+  width: 15px;
+  height: 40px;
+  margin-left: 18px;
+  margin-right: 18px;
+`;
+
 export default function Fast({
   setPickMeta,
 }: {
   setPickMeta: (value: string) => void;
 }) {
-  const [championData, setChampionData] = useState([]); // Fast표에 챔피언을 보여주기 위한 데이터
+  const [championData, setChampionData] = useState<ChampionDataForm[]>([]); // Fast표에 챔피언을 보여주기 위한 데이터
   const [championPickData, setChampionPickData] = useState<string[]>([]); // Fast표에 챔피언 흑백나눠서 보여주기 위한 데이터
   const [groupPrice, setGroupPrice] = useState<number[]>([]); // Fast표에서 가격별로 구분해주기 위한 그룹
   const [selectName, setSelectName] = useState<string[]>([]); // 내가 선택한 챔피언의 이름을 모아둔 배열
+  const [visibleCount, setVisibleCount] = useState(14); // 화살표 스크롤할 범위
+  const [rowOffsets, setRowOffsets] = useState<{ [key: number]: number }>({}); // 챔피언 줄별(price별) offset 저장
 
   const { pickData } = useMetaContext(); // PickData를 통해 Meta에 받아온 정보가 저장되어 있음
+
+  // 반응형
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth; // 현재 window 넓이
+      if (width >= 1025) {
+        setVisibleCount(14); // 데스크탑
+      } else if (width >= 769) {
+        setVisibleCount(10); // 태블릿
+      } else if (width >= 426) {
+        setVisibleCount(8); // 모바일 가로
+      } else {
+        setVisibleCount(5); // 모바일 세로
+      }
+    };
+
+    handleResize(); // 초기 실행
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // 처음 실행
   useEffect(() => {
@@ -268,6 +313,25 @@ export default function Fast({
     setPickMeta("");
   };
 
+  // 화살표 스크롤 오른쪽으로 이동 (최대 visibleCount 단위씩)
+  const handleRightClick = (price: number, total: number) => {
+    setRowOffsets(prev => {
+      const current = prev[price] || 0;
+      const maxOffset = total - visibleCount;
+      const next = Math.min(current + visibleCount, maxOffset);
+      return { ...prev, [price]: next };
+    });
+  };
+
+  // 화살표 스크롤 왼쪽으로 이동 (최소 0까지)
+  const handleLeftClick = (price: number) => {
+    setRowOffsets(prev => {
+      const current = prev[price] || 0;
+      const next = Math.max(current - visibleCount, 0);
+      return { ...prev, [price]: next };
+    });
+  };
+
   return (
     <Body>
       <SubTitle>
@@ -275,48 +339,83 @@ export default function Fast({
           <h2>빠른 챔피언 찾기</h2>
           <div>
             <img src={arrowFillImg} alt="화살표" />
-            <p>챔피언을 누르고 관련 메타를 확인해보세요!</p>
+            <p>
+              챔피언을 누르고 관련 메타를 확인해보세요. 룰루는 괴물을 대신
+              내보냅니다.
+            </p>
           </div>
         </Text>
       </SubTitle>
       <FastBox>
         {groupPrice &&
-          groupPrice.map(price => (
-            <li key={price}>
-              <LineColor $bgcolor={ChampionColor(price)}> </LineColor>
-              <ChampionList>
-                {championData
-                  .filter(
-                    (item: ChampionDataForm) =>
-                      item.price === price &&
-                      item.name !== "휘감는뿌리" &&
-                      item.name !== "거대메크로봇",
-                  )
-                  .map((item: ChampionDataForm) => (
-                    <Champion
-                      key={item?.name}
-                      onClick={
-                        handleMono(item.name)
-                          ? () => handleClick(item?.name)
-                          : undefined
-                      }
-                    >
-                      <ChampionImg
-                        src={item?.img.img_src}
-                        alt="챔피언"
-                        color={ChampionColor(item.price)}
-                        filter={handleMono(item.name) ? "none" : "grayscale(1)"}
-                      />
-                      {selectName.includes(item.name) && (
-                        <CheckImg src={checkImg} alt="체크 표시" />
-                      )}
-                      <p>{item?.name}</p>
-                      <Tooltip className="tooltip">{item?.name}</Tooltip>
-                    </Champion>
-                  ))}
-              </ChampionList>
-            </li>
-          ))}
+          groupPrice.map(price => {
+            // 해당 줄의 챔피언 데이터 뽑아내기
+            const championsInRow = championData
+              .filter(
+                (item: ChampionDataForm) =>
+                  item.price === price &&
+                  item.name !== "휘감는뿌리" &&
+                  item.name !== "거대메크로봇",
+              )
+              .sort((a, b) => a.name.localeCompare(b.name, "ko-KR")); // 가나다 순 정렬
+
+            return (
+              <li key={price}>
+                <LineColor $bgcolor={ChampionColor(price)} />
+
+                <ArrowLeft onClick={() => handleLeftClick(price)}>
+                  {(rowOffsets[price] || 0) > 0 ? ( // 왼쪽 화살표: offset > 0 일 때만 보임
+                    <img src={arrowMoveLeft} alt="왼쪽이동화살표" />
+                  ) : (
+                    <img src={arrowMoveNone} alt="화살표없음" />
+                  )}
+                </ArrowLeft>
+
+                <ChampionListWrapper visibleCount={visibleCount}>
+                  <ChampionList
+                    offset={rowOffsets[price] || 0}
+                    itemWidth={65} // 카드 폭 (px)
+                  >
+                    {championsInRow.map((item: ChampionDataForm) => (
+                      <Champion
+                        key={item.name}
+                        onClick={
+                          handleMono(item.name)
+                            ? () => handleClick(item.name)
+                            : undefined
+                        }
+                      >
+                        <ChampionImg
+                          src={item.img.img_src}
+                          alt="챔피언"
+                          color={ChampionColor(item.price)}
+                          filter={
+                            handleMono(item.name) ? "none" : "grayscale(1)"
+                          }
+                        />
+                        {selectName.includes(item.name) && (
+                          <CheckImg src={checkImg} alt="체크 표시" />
+                        )}
+                        <p>{item.name}</p>
+                        <Tooltip className="tooltip">{item.name}</Tooltip>
+                      </Champion>
+                    ))}
+                  </ChampionList>
+                </ChampionListWrapper>
+
+                <ArrowRight
+                  onClick={() => handleRightClick(price, championsInRow.length)}
+                >
+                  {(rowOffsets[price] || 0) <
+                  championsInRow.length - visibleCount ? ( // 오른쪽 화살표: offset < (전체 - visibleCount) 일 때만 보임
+                    <img src={arrowMoveRight} alt="오른쪽이동화살표" />
+                  ) : (
+                    <img src={arrowMoveNone} alt="화살표없음" />
+                  )}
+                </ArrowRight>
+              </li>
+            );
+          })}
         <ScrollButton onClick={() => handleDown()}>
           <img src={downImg} alt="아래 화살표" />
           <p>Scroll</p>
