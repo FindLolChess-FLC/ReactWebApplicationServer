@@ -23,6 +23,7 @@ import dislikeClickImg from "../assets/icon/dislike_click.svg";
 import lineImg from "../assets/icon/line.svg";
 import moneyImg from "../assets/icon/money.svg";
 import Chat from "../components/Chat";
+import DetailInfo from "../components/DetailInfo";
 import getCookie from "../utils/cookies/getCookie";
 
 const Body = styled.div`
@@ -93,18 +94,6 @@ const SynergyImg = styled.img`
 const Contents = styled.div`
   display: flex;
   gap: 16px;
-`;
-const DetailInfo = styled.section`
-  width: 1195px;
-  margin: 5px 0 0;
-  padding: 24px 36px;
-  background: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  color: #333;
-  font-size: 14px;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 `;
 const ChessBox = styled.div`
   width: 845px;
@@ -671,9 +660,7 @@ export default function Detail() {
             <Chat metaid={id} />
           </Comment>
         </Contents>
-        {data?.detail_info?.trim() && (
-          <DetailInfo aria-label="덱 상세 설명">{data.detail_info}</DetailInfo>
-        )}
+        {data?.detail_info?.trim() && <DetailInfo text={data.detail_info} />}
         {!token && (
           <small>
             *로그인 시 즐겨찾기, 선호도, 채팅 기능을 이용할 수 있습니다!
