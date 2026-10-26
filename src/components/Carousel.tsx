@@ -2,9 +2,9 @@ import styled, { keyframes, css } from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import bgImage1 from "../assets/img/c1.jpg";
-import bgImage2 from "../assets/img/c2.jpg";
-import bgImage3 from "../assets/img/c3.jpg";
+import bgImage1 from "../assets/img/carousel/carousel-season18-1.png";
+import bgImage2 from "../assets/img/carousel/carousel-season18-2.png";
+import bgImage3 from "../assets/img/carousel/carousel-season18-3.png";
 import arrowRightImg from "../assets/icon/arrow_button_right.svg";
 import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
 import { Api } from "../utils/apis/Api";
@@ -42,16 +42,34 @@ const CarouselBox = styled.div<{ $order: number; $shaking: boolean }>`
 `;
 
 const ImageBox = styled.div`
+  position: relative;
   height: 320px;
   overflow: hidden;
-  &:hover img {
-    transform: scale(1.05); // 이미지 확대
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 40%,
+      transparent 75%
+    );
   }
 `;
-const BackImage = styled.img`
+const BackImage = styled.img<{ $zoom: number; $offsetY: number }>`
+  display: block;
   width: 100%;
   height: 320px;
+  object-fit: cover;
+  object-position: center
+    calc(50% + ${({ $offsetY, $zoom }) => $offsetY / $zoom}px);
+  transform: scale(${({ $zoom }) => $zoom});
   transition: transform 0.3s ease-in-out; // 부드러운 확대 애니메이션
+  ${ImageBox}:hover & {
+    transform: scale(${({ $zoom }) => $zoom * 1.05});
+  }
 `;
 
 const MetaBox = styled.div`
@@ -229,7 +247,12 @@ export default function Carousel() {
       {/* 캐러셀 3 */}
       <CarouselBox $order={orderValues[0]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
-          <BackImage src={bgImage3} alt="캐러셀 이미지3" />
+          <BackImage
+            src={bgImage3}
+            alt="캐러셀 이미지3"
+            $zoom={1.08}
+            $offsetY={-30}
+          />
         </ImageBox>
         <MetaBox onClick={() => handleClick(metaData[2]?.meta?.id)}>
           <p>{metaData[2]?.meta?.title}</p>
@@ -276,7 +299,12 @@ export default function Carousel() {
       {/* 캐러셀 1 */}
       <CarouselBox $order={orderValues[1]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
-          <BackImage src={bgImage1} alt="캐러셀 이미지1" />
+          <BackImage
+            src={bgImage1}
+            alt="캐러셀 이미지1"
+            $zoom={1.12}
+            $offsetY={50}
+          />
         </ImageBox>
         <MetaBox onClick={() => handleClick(metaData[0]?.meta?.id)}>
           <p>{metaData[0]?.meta?.title}</p>
@@ -323,7 +351,12 @@ export default function Carousel() {
       {/* 캐러셀 2 */}
       <CarouselBox $order={orderValues[2]} $shaking={isShaking}>
         <ImageBox onClick={() => handleImage()}>
-          <BackImage src={bgImage2} alt="캐러셀 이미지2" />
+          <BackImage
+            src={bgImage2}
+            alt="캐러셀 이미지2"
+            $zoom={1.12}
+            $offsetY={30}
+          />
         </ImageBox>
         <MetaBox onClick={() => handleClick(metaData[1]?.meta?.id)}>
           <p>{metaData[1]?.meta?.title}</p>

@@ -4,7 +4,7 @@ import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
 import { useMetaContext } from "../hooks/Context";
 import ChampionColor from "../utils/meta/ChampionColor";
-import championBannerImg from "../assets/img/champion_banner.jpg";
+import championBannerImg from "../assets/img/banner/champion-banner-season18.png";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import arrowMoveLeft from "../assets/icon/arrowmoveleft.svg";
 import arrowMoveRight from "../assets/icon/arrowmoveright.svg";
@@ -25,8 +25,19 @@ const SubTitle = styled.div`
   display: flex;
   width: 1004px;
   height: 152px;
-  background: url(${championBannerImg});
-  background-size: cover;
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.65),
+      transparent 75%
+    ),
+    url(${championBannerImg});
+  background-size:
+    cover,
+    115% auto;
+  background-position:
+    center,
+    center 71%;
+  background-repeat: no-repeat;
 `;
 const Text = styled.div`
   font-size: 15px;
