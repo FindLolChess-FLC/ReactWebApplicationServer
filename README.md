@@ -1,6 +1,8 @@
 # ReactWebApplication
 FLC 리액트 웹 애플리케이션
 
+커밋 메시지와 브랜치·머지 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참고하세요.
+
 # Information
 라이엇에서 출시한 Teamfight Tactics(전략적 팀 전투) 게임 자체가 체스를 하듯 전략적으로 팀을 구상해야하는데, 길라잡이가 되어 주는 정보 탐색 사이트입니다.
 
