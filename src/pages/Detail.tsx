@@ -8,6 +8,7 @@ import Footer from "../components/containers/Footer";
 import Preference from "../utils/meta/Preference";
 import SynergyColor from "../utils/meta/SynergyColor";
 import ChampionColor from "../utils/meta/ChampionColor";
+import isBoardOnlyUnit from "../utils/meta/IsBoardOnlyUnit";
 import Tooltip from "../components/common/Tooltip";
 import ItemImage from "../utils/meta/ItemImage";
 import ChampionStar from "../utils/meta/ChampionStar";
@@ -460,7 +461,8 @@ export default function Detail() {
             {championTooltip &&
               championTooltip.name === locationChampion.champion.name &&
               championTooltip.name !== "휘감는뿌리" &&
-              championTooltip.name !== "거대메크로봇" && (
+              championTooltip.name !== "거대메크로봇" &&
+              !isBoardOnlyUnit(championTooltip.name) && (
                 <Tooltip width="140px" $top="91px">
                   <TooltipChampion>
                     <h3>{championTooltip.name}</h3>

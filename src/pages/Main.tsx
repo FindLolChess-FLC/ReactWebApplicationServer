@@ -5,6 +5,7 @@ import Carousel from "../components/Carousel";
 import Fast from "../components/Fast";
 import Footer from "../components/containers/Footer";
 import Meta from "../components/common/Meta";
+import { ListForm } from "../types/List";
 
 const Body = styled.div`
   display: flex;
@@ -27,7 +28,7 @@ const Contents = styled.main`
 `;
 
 export default function Main() {
-  const [pickMeta, setPickMeta] = useState<string>(""); // setPickData를 통해 Fast에서 Meta로 정보 보내기
+  const [pickMeta, setPickMeta] = useState<ListForm[]>([]); // setPickData를 통해 Fast에서 Meta로 정보 보내기
 
   return (
     <Body>

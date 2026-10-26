@@ -10,6 +10,7 @@ import arrowLeftImg from "../assets/icon/arrow_button_left.svg";
 import { Api } from "../utils/apis/Api";
 import { ChampionsForm, ListForm, SynergysListForm } from "../types/List";
 import ChampionColor from "../utils/meta/ChampionColor";
+import isBoardOnlyUnit from "../utils/meta/IsBoardOnlyUnit";
 import SynergyColor from "../utils/meta/SynergyColor";
 
 const CAROUSEL_WIDTH = 1004;
@@ -285,18 +286,22 @@ export default function Carousel() {
           </SynergyBox>
           <ChampionBox>
             {metaData[2]?.meta?.champions &&
-              metaData[2]?.meta?.champions.map((data: ChampionsForm) => (
-                <div key={data.location}>
-                  <ChampionColors
-                    src={`${data.champion.img.img_src}?${cache}`}
-                    alt="챔피언"
-                    color={ChampionColor(
-                      data.champion.price,
-                      data.champion.name,
-                    )}
-                  />
-                </div>
-              ))}
+              metaData[2]?.meta?.champions
+                .filter(
+                  (data: ChampionsForm) => !isBoardOnlyUnit(data.champion.name),
+                )
+                .map((data: ChampionsForm) => (
+                  <div key={data.location}>
+                    <ChampionColors
+                      src={`${data.champion.img.img_src}?${cache}`}
+                      alt="챔피언"
+                      color={ChampionColor(
+                        data.champion.price,
+                        data.champion.name,
+                      )}
+                    />
+                  </div>
+                ))}
           </ChampionBox>
         </MetaBox>
       </CarouselBox>
@@ -337,18 +342,22 @@ export default function Carousel() {
           </SynergyBox>
           <ChampionBox>
             {metaData[0]?.meta?.champions &&
-              metaData[0]?.meta?.champions.map((data: ChampionsForm) => (
-                <div key={data.location}>
-                  <ChampionColors
-                    src={`${data.champion.img.img_src}?${cache}`}
-                    alt="챔피언"
-                    color={ChampionColor(
-                      data.champion.price,
-                      data.champion.name,
-                    )}
-                  />
-                </div>
-              ))}
+              metaData[0]?.meta?.champions
+                .filter(
+                  (data: ChampionsForm) => !isBoardOnlyUnit(data.champion.name),
+                )
+                .map((data: ChampionsForm) => (
+                  <div key={data.location}>
+                    <ChampionColors
+                      src={`${data.champion.img.img_src}?${cache}`}
+                      alt="챔피언"
+                      color={ChampionColor(
+                        data.champion.price,
+                        data.champion.name,
+                      )}
+                    />
+                  </div>
+                ))}
           </ChampionBox>
         </MetaBox>
       </CarouselBox>
@@ -389,18 +398,22 @@ export default function Carousel() {
           </SynergyBox>
           <ChampionBox>
             {metaData[1]?.meta?.champions &&
-              metaData[1]?.meta?.champions.map((data: ChampionsForm) => (
-                <div key={data.location}>
-                  <ChampionColors
-                    src={`${data.champion.img.img_src}?${cache}`}
-                    alt="챔피언"
-                    color={ChampionColor(
-                      data.champion.price,
-                      data.champion.name,
-                    )}
-                  />
-                </div>
-              ))}
+              metaData[1]?.meta?.champions
+                .filter(
+                  (data: ChampionsForm) => !isBoardOnlyUnit(data.champion.name),
+                )
+                .map((data: ChampionsForm) => (
+                  <div key={data.location}>
+                    <ChampionColors
+                      src={`${data.champion.img.img_src}?${cache}`}
+                      alt="챔피언"
+                      color={ChampionColor(
+                        data.champion.price,
+                        data.champion.name,
+                      )}
+                    />
+                  </div>
+                ))}
           </ChampionBox>
         </MetaBox>
       </CarouselBox>

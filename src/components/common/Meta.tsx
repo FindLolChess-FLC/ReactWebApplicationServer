@@ -5,6 +5,7 @@ import { useMetaContext } from "../../hooks/Context";
 import { ChampionsForm, ListForm, SynergysListForm } from "../../types/List";
 import SynergyColor from "../../utils/meta/SynergyColor";
 import ChampionColor from "../../utils/meta/ChampionColor";
+import isBoardOnlyUnit from "../../utils/meta/IsBoardOnlyUnit";
 import Preference from "../../utils/meta/Preference";
 import heartEmptyImg from "../../assets/icon/heart_empty.svg";
 import heartFillImg from "../../assets/icon/heart_fill.svg";
@@ -169,7 +170,10 @@ export default function Meta({ metaData }: any) {
       const getUniqueChampions = (champions: ChampionsForm[]) => {
         const championNames = new Set<string>();
         champions.forEach(champion => {
-          if (champion?.champion?.name) {
+          if (
+            champion?.champion?.name &&
+            !isBoardOnlyUnit(champion.champion.name)
+          ) {
             championNames.add(champion.champion.name);
           }
         });
@@ -276,23 +280,28 @@ export default function Meta({ metaData }: any) {
             {/* 챔피언 */}
             <td>
               {item?.meta.champions &&
-                item?.meta.champions.map((data: ChampionsForm) => (
-                  <div key={data.location}>
-                    <ChampionColors
-                      src={
-                        data.champion.name === "사이온"
-                          ? sionImg
-                          : `${data.champion.img.img_src}?${cache}`
-                      }
-                      alt="챔피언"
-                      color={ChampionColor(
-                        data.champion.price,
-                        data.champion.name,
-                      )}
-                    />
-                    <p>{data.champion.name}</p>
-                  </div>
-                ))}
+                item?.meta.champions
+                  .filter(
+                    (data: ChampionsForm) =>
+                      !isBoardOnlyUnit(data.champion.name),
+                  )
+                  .map((data: ChampionsForm) => (
+                    <div key={data.location}>
+                      <ChampionColors
+                        src={
+                          data.champion.name === "사이온"
+                            ? sionImg
+                            : `${data.champion.img.img_src}?${cache}`
+                        }
+                        alt="챔피언"
+                        color={ChampionColor(
+                          data.champion.price,
+                          data.champion.name,
+                        )}
+                      />
+                      <p>{data.champion.name}</p>
+                    </div>
+                  ))}
             </td>
             {/* 선호도 */}
             <td>

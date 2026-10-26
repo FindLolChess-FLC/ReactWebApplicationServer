@@ -1,9 +1,15 @@
 import styled, { keyframes } from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Api } from "../utils/apis/Api";
 import { ChampionDataForm } from "../types/ChampionData";
+import { ListForm } from "../types/List";
+import {
+  getQuickChampionName,
+  getQuickChampions,
+} from "../utils/meta/QuickChampions";
 import { useMetaContext } from "../hooks/Context";
 import ChampionColor from "../utils/meta/ChampionColor";
+import isBoardOnlyUnit from "../utils/meta/IsBoardOnlyUnit";
 import championBannerImg from "../assets/img/banner/champion-banner-season18.png";
 import arrowFillImg from "../assets/icon/arrow_fill.svg";
 import arrowMoveLeft from "../assets/icon/arrowmoveleft.svg";
@@ -200,7 +206,7 @@ const ArrowRight = styled.div`
 export default function Fast({
   setPickMeta,
 }: {
-  setPickMeta: (value: string) => void;
+  setPickMeta: (value: ListForm[]) => void;
 }) {
   const [championData, setChampionData] = useState<ChampionDataForm[]>([]); // Fast표에 챔피언을 보여주기 위한 데이터
   const [championPickData, setChampionPickData] = useState<string[]>([]); // Fast표에 챔피언 흑백나눠서 보여주기 위한 데이터
@@ -208,6 +214,11 @@ export default function Fast({
   const [selectName, setSelectName] = useState<string[]>([]); // 내가 선택한 챔피언의 이름을 모아둔 배열
   const [visibleCount, setVisibleCount] = useState(14); // 화살표 스크롤할 범위
   const [rowOffsets, setRowOffsets] = useState<{ [key: number]: number }>({}); // 챔피언 줄별(price별) offset 저장
+  const latestSearch = useRef(0);
+  const quickChampions = useMemo(
+    () => getQuickChampions(championData),
+    [championData],
+  );
 
   const { pickData } = useMetaContext(); // PickData를 통해 Meta에 받아온 정보가 저장되어 있음
 
@@ -261,41 +272,38 @@ export default function Fast({
   }, [pickData]);
 
   const handleClick = (name: string) => {
-    setSelectName(prevNames => {
-      const updatedNames = [...prevNames];
-      const index = updatedNames.indexOf(name); // 배열안에 name이 있는지 확인 (0이하면 없음 양수면 있음)
-      if (index < 0) {
-        updatedNames.push(name); // 이전 값에 새 name 추가
-      } else {
-        updatedNames.splice(index, 1); // 중복이면 배열에서 제거 (index번째로부터 1개)
-      }
-      if (updatedNames) {
-        pickData.includes(name);
-      }
-      const names = updatedNames.join(","); // 배열을 ','로 합친 문자열로 변경하고 생성
-      sendPickMeta(names); // API 호출
-      return updatedNames; // 상태 업데이트
-    });
+    const updatedNames = selectName.includes(name)
+      ? selectName.filter(selected => selected !== name)
+      : [...selectName, name];
+    setSelectName(updatedNames);
+    sendPickMeta(updatedNames);
   };
 
   // 메타 불러오기
-  const sendPickMeta = async (names: string) => {
-    const pickData = await Api({
-      bodyData: { data: names },
+  const sendPickMeta = async (names: string[]) => {
+    latestSearch.current += 1;
+    const searchId = latestSearch.current;
+    const response = await Api({
+      bodyData: { data: names.join(",") },
       method: "POST",
       lastUrl: "meta/metasearch/",
     });
-    if (pickData.resultcode === "SUCCESS") {
-      setPickMeta(pickData.data);
-    } else {
-      setPickMeta("");
-    }
+    if (searchId !== latestSearch.current) return;
+    setPickMeta(
+      response?.resultcode === "SUCCESS" && Array.isArray(response.data)
+        ? response.data
+        : [],
+    );
   };
 
   // 반환값이 false면 흑백
   const handleMono = (name: string) => {
     // 처음 들어오는 챔피언 자체가 덱에 있는지 여부 없으면 흑백
-    if (!championPickData.includes(name)) {
+    if (
+      !championPickData.some(
+        champion => getQuickChampionName(champion) === name,
+      )
+    ) {
       return false;
     }
     // 선택된게 아무것도 없을때 컬러, 다시 다 취소해도 컬러 유지
@@ -320,8 +328,9 @@ export default function Fast({
 
   // 리셋
   const handleReset = () => {
+    latestSearch.current += 1;
     setSelectName([]);
-    setPickMeta("");
+    setPickMeta([]);
   };
 
   // 화살표 스크롤 오른쪽으로 이동 (최대 visibleCount 단위씩)
@@ -361,12 +370,13 @@ export default function Fast({
         {groupPrice &&
           groupPrice.map(price => {
             // 해당 줄의 챔피언 데이터 뽑아내기
-            const championsInRow = championData
+            const championsInRow = quickChampions
               .filter(
                 (item: ChampionDataForm) =>
                   item.price === price &&
                   item.name !== "휘감는뿌리" &&
-                  item.name !== "거대메크로봇",
+                  item.name !== "거대메크로봇" &&
+                  !isBoardOnlyUnit(item.name),
               )
               .sort((a, b) => a.name.localeCompare(b.name, "ko-KR")); // 가나다 순 정렬
 
