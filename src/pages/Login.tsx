@@ -74,14 +74,18 @@ const Section = styled.div`
 `;
 
 const ImgDiv = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  align-items: center;
   justify-content: center;
   gap: 1.5rem; // 24px;
   margin: auto;
 `;
 
 const Img = styled.img`
+  display: block;
+  width: 48px;
+  height: 48px;
   cursor: pointer;
 `;
 

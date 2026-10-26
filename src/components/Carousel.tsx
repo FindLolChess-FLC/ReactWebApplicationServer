@@ -12,9 +12,12 @@ import { ChampionsForm, ListForm, SynergysListForm } from "../types/List";
 import ChampionColor from "../utils/meta/ChampionColor";
 import SynergyColor from "../utils/meta/SynergyColor";
 
+const CAROUSEL_WIDTH = 1004;
+const CAROUSEL_GAP = 70;
+
 const Body = styled.div`
   display: flex;
-  gap: 70px;
+  gap: ${CAROUSEL_GAP}px;
   position: relative;
 `;
 
@@ -27,7 +30,8 @@ const shakeAnimation = keyframes`
 `;
 
 const CarouselBox = styled.div<{ $order: number; $shaking: boolean }>`
-  width: 970px;
+  width: ${CAROUSEL_WIDTH}px;
+  flex-shrink: 0;
   height: 405px;
   border-radius: 1.4375rem; // 23px
   box-shadow: 0rem 0.3125rem 0.25rem 0rem rgba(0, 0, 0, 0.25);
@@ -115,10 +119,10 @@ const ChampionColors = styled.img<{ color: string }>`
 `;
 
 const ViewBox = styled.div`
-  width: 970px;
+  width: ${CAROUSEL_WIDTH}px;
   height: 320px;
   position: absolute;
-  left: 1040px;
+  left: ${CAROUSEL_WIDTH + CAROUSEL_GAP}px;
   pointer-events: none;
 `;
 const Text = styled.div`
@@ -235,7 +239,7 @@ export default function Carousel() {
     return (
       <Skeleton
         height="429px"
-        width="1030px"
+        width={`${CAROUSEL_WIDTH}px`}
         baseColor="#DCDCDC"
         borderRadius="27px"
       />
@@ -251,7 +255,7 @@ export default function Carousel() {
             src={bgImage3}
             alt="캐러셀 이미지3"
             $zoom={1.08}
-            $offsetY={-30}
+            $offsetY={-50}
           />
         </ImageBox>
         <MetaBox onClick={() => handleClick(metaData[2]?.meta?.id)}>
@@ -303,7 +307,7 @@ export default function Carousel() {
             src={bgImage1}
             alt="캐러셀 이미지1"
             $zoom={1.12}
-            $offsetY={50}
+            $offsetY={100}
           />
         </ImageBox>
         <MetaBox onClick={() => handleClick(metaData[0]?.meta?.id)}>
