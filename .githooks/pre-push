@@ -1,0 +1,39 @@
+#!/bin/sh
+# Only publish develop commits, or a clean merge of develop, to main.
+set -eu
+remote_url=$2
+zero=0000000000000000000000000000000000000000
+
+reject() {
+  echo "FLC: $*" >&2
+  exit 1
+}
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$remote_ref" = refs/heads/main ] || continue
+  [ "$local_sha" != "$zero" ] || reject "Deleting main is not allowed."
+  [ "$remote_sha" != "$zero" ] || reject "Creating main requires separate setup."
+
+  # Read the actual push destination, not a potentially stale tracking ref.
+  git fetch --quiet --no-tags "$remote_url" refs/heads/develop </dev/null ||
+    reject "Cannot read remote develop. Push develop first, then retry main."
+  develop_sha=$(git rev-parse FETCH_HEAD)
+  git merge-base --is-ancestor "$remote_sha" "$local_sha" ||
+    reject "main must be fast-forward; force pushes are not allowed."
+
+  if git merge-base --is-ancestor "$local_sha" "$develop_sha"; then
+    continue
+  fi
+
+  # Also allow git merge --no-ff: exactly one clean merge on remote main.
+  parents=$(git show -s --format=%P "$local_sha")
+  if [ "$parents" = "$remote_sha $develop_sha" ]; then
+    if merge_output=$(git merge-tree --write-tree "$remote_sha" "$develop_sha"); then
+      expected_tree=$(printf '%s\n' "$merge_output" | head -n 1)
+      actual_tree=$(git rev-parse "$local_sha^{tree}")
+      [ "$actual_tree" = "$expected_tree" ] && continue
+    fi
+  fi
+
+  reject "Push changes to develop first, then merge origin/develop into main. Resolve conflicts on develop."
+done
