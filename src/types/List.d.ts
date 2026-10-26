@@ -70,4 +70,5 @@ export type SynergysForm = {
 export type ListForm = {
   meta: MetaForm;
   synergys: Array<SynergysForm>;
+  detail_info?: string | null;
 };

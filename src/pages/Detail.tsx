@@ -94,6 +94,18 @@ const Contents = styled.div`
   display: flex;
   gap: 16px;
 `;
+const DetailInfo = styled.section`
+  width: 1195px;
+  margin: 5px 0 0;
+  padding: 24px 36px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+`;
 const ChessBox = styled.div`
   width: 845px;
   height: 492px;
@@ -659,6 +671,9 @@ export default function Detail() {
             <Chat metaid={id} />
           </Comment>
         </Contents>
+        {data?.detail_info?.trim() && (
+          <DetailInfo aria-label="덱 상세 설명">{data.detail_info}</DetailInfo>
+        )}
         {!token && (
           <small>
             *로그인 시 즐겨찾기, 선호도, 채팅 기능을 이용할 수 있습니다!
