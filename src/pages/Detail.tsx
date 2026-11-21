@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Api } from "../utils/apis/Api";
-import { ChampionsForm, ListForm, MetaForm } from "../types/List";
+import { ChampionsForm, ListForm } from "../types/List";
 import Header from "../components/containers/Header";
 import Footer from "../components/containers/Footer";
 import Preference from "../utils/meta/Preference";
@@ -12,7 +12,6 @@ import isBoardOnlyUnit from "../utils/meta/IsBoardOnlyUnit";
 import Tooltip from "../components/common/Tooltip";
 import ItemImage from "../utils/meta/ItemImage";
 import ChampionStar from "../utils/meta/ChampionStar";
-import restartImg from "../assets/icon/restart.svg";
 import chessImg from "../assets/icon/chess.svg";
 import blackImg from "../assets/icon/heart_black.svg";
 import redImg from "../assets/icon/heart_red.svg";
@@ -25,6 +24,9 @@ import moneyImg from "../assets/icon/money.svg";
 import Chat from "../components/Chat";
 import DetailInfo from "../components/DetailInfo";
 import getCookie from "../utils/cookies/getCookie";
+import useMetaDetail from "../hooks/useMetaDetail";
+
+const BOARD_LEVELS = [5, 6, 7, 8, 9, 10];
 
 const Body = styled.div`
   display: flex;
@@ -105,6 +107,7 @@ const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   padding-left: 36px;
   padding-right: 28px;
   height: 66px;
@@ -116,19 +119,76 @@ const Title = styled.h1`
   font-size: 22px;
   font-weight: 600;
   cursor: pointer;
+  min-width: 0;
+  flex: 1;
+  > img {
+    flex-shrink: 0;
+  }
+  > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: inherit;
+  }
 `;
-const RestartBox = styled.div`
+const LevelControls = styled.div`
   display: flex;
-  align-items: inherit;
-  gap: 0.125rem; // 2px
-  width: 49px;
-  height: 23px;
-  border-radius: 0.3125rem; // 5px
-  border: 0.0625rem solid #000; // 1px
-  padding: 4px 8px;
-  margin-top: 4px;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 4px;
+`;
+const LevelButton = styled.button`
+  min-width: 53px;
+  height: 29px;
+  padding: 0 7px;
+  border: 1px solid #d9dce7;
+  border-radius: 5px;
+  background: #fff;
+  color: #4b4d5c;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &[aria-pressed="true"] {
+    border-color: #5b55ff;
+    background: #5b55ff;
+    color: #fff;
+  }
+  &:hover:not(:disabled) {
+    border-color: #5b55ff;
+  }
+  &:focus-visible {
+    outline: 2px solid #5b55ff;
+    outline-offset: 2px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+  &:disabled:not([aria-pressed="true"]) {
+    border-color: #e5e7ee;
+    background: #f5f5f7;
+    color: #a6a8b3;
+  }
+`;
+const LoadError = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 1195px;
+  padding: 12px 16px;
+  background: #fff;
+  color: #a32b36;
+  font-size: 14px;
+  > button {
+    padding: 6px 10px;
+    border-radius: 5px;
+    background: #eeeefa;
+    color: #5144b8;
+    font-size: 13px;
+    cursor: pointer;
+  }
 `;
 const Line = styled.div`
   width: 819px;
@@ -143,6 +203,9 @@ const ChampionContents = styled.div`
   grid-template-rows: repeat(4, 91px); // 고정된 칸 높이
   column-gap: 10px; // 한 줄 내 칸 사이 간격
   row-gap: 8px; // 줄과 줄 사이 간격
+  &[aria-busy="true"] {
+    opacity: 0.6;
+  }
 `;
 const ChessChampion = styled.div`
   position: relative;
@@ -286,7 +349,16 @@ const TooltipItem = styled.div`
 export default function Detail() {
   const { id } = useParams(); // URL에서 id 값 가져오기
   const [click, setClick] = useState(false); // 클릭
-  const [data, setData] = useState<ListForm>(); // api에서 받아온 메타 정보
+  const {
+    data,
+    isLoading,
+    error,
+    selectedLevel,
+    availableLevels,
+    recommendedLevel,
+    selectLevel,
+    retry,
+  } = useMetaDetail(id);
   const [heart, setHeart] = useState(false); // 빈하트 false
   const [like, setLike] = useState(false); // 빈좋아요 false
   const [dislike, setDislike] = useState(false); // 빈좋아요 false
@@ -297,24 +369,15 @@ export default function Detail() {
 
   const token = getCookie("token"); // 현재 토큰
 
-  // 전체 메타에 대한 정보
+  // 배치가 바뀌면 해당 배치의 선호도를 표시하고 이전 툴팁을 닫습니다.
   useEffect(() => {
-    const metaApi = async () => {
-      const responseData = await Api({
-        bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
-        method: "POST",
-        lastUrl: "meta/metasearch/",
-      });
-      setComparison(
-        Preference(
-          responseData.data[0].meta.like_count,
-          responseData.data[0].meta.dislike_count,
-        ),
-      );
-      setData(responseData.data[0]);
-    };
-    metaApi();
-  }, []);
+    if (data) {
+      setComparison(Preference(data.meta.like_count, data.meta.dislike_count));
+    }
+    setChampionTooltip(null);
+    setItemTooltip(null);
+    setSynergyTooltip(null);
+  }, [data]);
 
   // 토큰이 있을때만 실행
   useEffect(() => {
@@ -364,21 +427,29 @@ export default function Detail() {
 
   // 바뀐 좋아요, 싫어요에 따른 선호도 퍼센트
   useEffect(() => {
+    let active = true;
     const changeApi = async () => {
       const response = await Api({
         bodyData: { data: id }, // 내 코드에선 search라는 이름이지만 DB에선 data라는 이름으로 받아서 변경해줌
         method: "POST",
         lastUrl: "meta/metasearch/",
       });
-      setComparison(
-        Preference(
-          response?.data[0].meta.like_count,
-          response?.data[0].meta.dislike_count,
-        ),
-      );
+      const meta = response?.data?.[0]?.meta;
+      if (active && meta) {
+        setComparison(Preference(meta.like_count, meta.dislike_count));
+      }
     };
     changeApi();
-  }, [like, dislike]);
+    return () => {
+      active = false;
+    };
+  }, [id, like, dislike]);
+
+  const getLevelTitle = (level: number) => {
+    if (!availableLevels.includes(level)) return "이 레벨의 배치가 없습니다.";
+    if (level === recommendedLevel) return "추천 배치";
+    return `${level}레벨 배치`;
+  };
 
   // 챔피언
   const champions = [];
@@ -629,16 +700,32 @@ export default function Detail() {
                     }
                   }}
                 />
-                {data?.meta.title}
+                <span title={data?.meta.title}>{data?.meta.title}</span>
               </Title>
-              <RestartBox>
-                <img src={restartImg} alt="리롤" />
-                lvl{data?.meta.reroll_lv}
-              </RestartBox>
+              <LevelControls
+                role="group"
+                aria-label="배치 레벨 선택"
+                aria-busy={isLoading}
+              >
+                {BOARD_LEVELS.map(level => (
+                  <LevelButton
+                    key={level}
+                    type="button"
+                    aria-pressed={selectedLevel === level}
+                    disabled={isLoading || !availableLevels.includes(level)}
+                    title={getLevelTitle(level)}
+                    onClick={() => selectLevel(level)}
+                  >
+                    Level {level}
+                  </LevelButton>
+                ))}
+              </LevelControls>
             </Top>
             <Line />
             {/* 챔피언 */}
-            <ChampionContents>{champions}</ChampionContents>
+            <ChampionContents aria-busy={isLoading}>
+              {champions}
+            </ChampionContents>
           </ChessBox>
           <Comment>
             <CommentTitle>
@@ -660,6 +747,14 @@ export default function Detail() {
             <Chat metaid={id} />
           </Comment>
         </Contents>
+        {error && (
+          <LoadError role="alert">
+            {error}
+            <button type="button" onClick={retry} disabled={isLoading}>
+              다시 시도
+            </button>
+          </LoadError>
+        )}
         {data?.detail_info?.trim() && <DetailInfo text={data.detail_info} />}
         {!token && (
           <small>

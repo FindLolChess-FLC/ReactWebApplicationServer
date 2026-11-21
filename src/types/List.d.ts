@@ -58,6 +58,7 @@ export type MetaForm = {
   like_count: number;
   dislike_count: number;
   reroll_lv: number;
+  default_level?: number;
   champions: Array<ChampionsForm>;
 };
 
@@ -71,4 +72,6 @@ export type ListForm = {
   meta: MetaForm;
   synergys: Array<SynergysForm>;
   detail_info?: string | null;
+  selected_level?: number;
+  available_levels?: number[];
 };
